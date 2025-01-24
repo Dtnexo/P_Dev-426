@@ -2,9 +2,15 @@ import express from "express";
 
 const app = express();
 const port = 3003;
+app.set("views", "src/views");
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.send("hello world");
+  res.render("home", {});
+});
+
+app.get("/login", (req, res) => {
+  res.render("login", {});
 });
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
