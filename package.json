@@ -1,0 +1,18 @@
+{
+  "name": "site-unesco",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "module 426 - site unesco",
+  "main": "src/app.mjs",
+  "scripts": {
+    "start": "nodemon src/app.mjs"
+  },
+  "author": "po77qxd",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
