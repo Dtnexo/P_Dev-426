@@ -7,9 +7,18 @@
   <body>
     <h1>Connection</h1>
     <form id="login-form" method="post" action="/login">
-      <input type="text" placeholder="nom d'utilisateur" id="name" />
-      <input type="password" placeholder="mot de passe" id="password" />
+      <input type="text" required placeholder="nom d'utilisateur" id="name" />
+      <input
+        type="password"
+        required
+        placeholder="mot de passe"
+        id="password"
+      />
       <button type="submit">Se connecter</button>
     </form>
+    <p>
+      Je n'ai pas de compte!
+      <a href="">Créer un compte</a>
+    </p>
   </body>
 </html>
