@@ -12,6 +12,7 @@ body {
 }
 
 /* Arrière-plan avec formes décoratives */
+/* Arrière-plan avec formes décoratives */
 .background-shapes {
   position: absolute;
   width: 100%;
@@ -24,24 +25,43 @@ body {
 
 .shape {
   position: absolute;
-  border-radius: 50%;
   opacity: 0.6;
 }
 
 .shape1 {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   background-color: #800080;
-  top: 10%;
-  left: 5%;
+  border-radius: 50%;
+  top: -30px;
+  left: -30px;
 }
 
 .shape2 {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
+  background-color: #4b0082;
+  border-radius: 50%;
+  top: -60px;
+  right: -50px;
+}
+
+.shape3 {
+  width: 100px;
+  height: 100px;
   background-color: #a020f0;
-  bottom: 15%;
-  right: 10%;
+  border-radius: 50%;
+  bottom: 10%;
+  left: 10%;
+}
+
+.shape4 {
+  width: 300px;
+  height: 50px;
+  background-color: #800080;
+  transform: rotate(45deg);
+  bottom: 5%;
+  right: -50px;
 }
 
 .shape3 {
@@ -49,25 +69,28 @@ body {
   height: 100px;
   background-color: #ff00ff;
   bottom: 5%;
-  left: 50%;
+  left: 80%;
   transform: translateX(-50%);
 }
 
 /* Conteneur principal */
 .title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
-  background-color: #4b0082;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-  width: 400px;
-  height: 450px;
-  box-sizing: border-box;
+  align-items: center;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Logo et titre */
 .title img {
-  width: 60px;
+  width: 80px;
+  border-radius: 15px;
 }
 .title p {
   color: white;
@@ -77,60 +100,68 @@ body {
 
 /* Formulaire */
 form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-top: 20px;
-  box-sizing: border-box;
+  background-color: #3A0CA3;
+  padding: 30px;
+  border-radius: 15px;
+  width: 400px;
+  height: 350px;
 }
+
 h1 {
   color: white;
   font-size: 22px;
 }
-
+#Firstname{
+  margin-top: 25px;
+}
+#Email{
+  margin-bottom: 20px;
+}
 /* Champs de saisie */
 .login-field {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  height: 40px;
+  padding: 15px;
   border-radius: 5px;
+  margin-top: 15px;
   border: none;
   background: white;
+  font-size: 15px;
   box-sizing: border-box;
 }
-
-/* Bouton de connexion */
-.Next {
+.Next{
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background: #800080;
+  background: #670CA3;
   color: white;
-  font-size: 16px;
+  font-size: 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: 0.5s;
-}
-.Next:hover {
-  transform: scale(1.04);
-  background: #a020f0;
+  padding: 10px;
+  margin: 20px;
+  margin-top:20px ;
 }
 
-/* Liens */
-.forgotPassword,
+.Next:hover{
+  transform: scale(1.04);
+  background: #460770;
+}
+/* Bouton de connexion */
 .login {
-  display: block;
-  color: white;
-  margin-top: 10px;
   text-decoration: none;
-  font-size: 14px;
-  transition: 0.5s;
-}
-.forgotPassword:hover {
-  color: rgb(138, 123, 123);
-}
-.login {
-  color: #ff00ff;
+  color: #f72585;
   transition: 0.5s;
 }
 .login:hover {
-  color: #970b97;
+  color: #7209b7;
 }
+
+.name{
+  font-family: 'Major Mono Display';font-size: 26px;
+}
+
