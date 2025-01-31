@@ -15,7 +15,8 @@ async function fetchAndDisplaySites() {
     const sites = await res.json(); // Pas besoin de JSON.parse(), fetch().json() le fait déjà
 
     for (const site of sites) {
-      //console.log(`Longitude: ${site.coordinates.lon}, Latitude: ${site.coordinates.lat}`);
+      //dans le json:  lon et lat
+      //Mais il faut inverser => [lat, lon];
       L.circle([site.coordinates.lat, site.coordinates.lon], {
         radius: 1,
         color: "red",
@@ -26,8 +27,9 @@ async function fetchAndDisplaySites() {
             site.site +
             "</b>" +
             "<br>" +
-            site.short_description.slice(0, 100) + //only shows the first 100chars
-            "..."
+            '<p style="text-overflow: ellipsis; max-height: 100px; white-space: nowrap; max-width: 300px; overflow: hidden;">' +
+            site.short_description +
+            "</p>"
         );
     }
   } catch (error) {
@@ -35,12 +37,4 @@ async function fetchAndDisplaySites() {
   }
 }
 
-// Appel de la fonction
 fetchAndDisplaySites();
-
-// let circle = L.circle([46.523268, 6.615687], {
-//   radius: 1,
-//   color: "red",
-// }).addTo(map);
-//inverser lon et lat
-//[lat, lon];
