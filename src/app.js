@@ -13,6 +13,10 @@ app.get("/login", (req, res) => {
   res.render("login", {});
 });
 
+app.get("/register", (req, res) => {
+  res.render("register", {});
+});
+
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
 app.use(({ res }) => {
