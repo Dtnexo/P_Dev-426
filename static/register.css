@@ -1,74 +1,136 @@
-* {
-  font-family: Arial;
-}
+/* Styles généraux */
 body {
+  background-color: #000;
+  font-family: Arial, sans-serif;
   display: flex;
-  height: 100vh;
-}
-form {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff65;
-  border-radius: 30px;
-  width: 500px;
-  height: 450px;
-  box-shadow: 1px 10px 41px -3px rgba(0, 0, 0, 0.58);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
 }
-.login-field {
-  width: 300px;
-  height: 28px;
+
+/* Arrière-plan avec formes décoratives */
+.background-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
 }
-input {
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.shape1 {
+  width: 150px;
+  height: 150px;
+  background-color: #800080;
+  top: 10%;
+  left: 5%;
+}
+
+.shape2 {
+  width: 200px;
+  height: 200px;
+  background-color: #a020f0;
+  bottom: 15%;
+  right: 10%;
+}
+
+.shape3 {
+  width: 100px;
+  height: 100px;
+  background-color: #ff00ff;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Conteneur principal */
+.title {
   text-align: center;
-  background-color: #ecf0f1;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  font-size: 17px;
-  font-weight: 200;
+  background-color: #4b0082;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  width: 400px;
+  height: 450px;
+  box-sizing: border-box;
+}
+
+/* Logo et titre */
+.title img {
+  width: 60px;
+}
+.title p {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Formulaire */
+form {
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+h1 {
+  color: white;
+  font-size: 22px;
+}
+
+/* Champs de saisie */
+.login-field {
+  width: 100%;
   padding: 10px;
-  width: 250px;
-  transition: border 0.5s;
-  margin: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: none;
+  background: white;
+  box-sizing: border-box;
 }
-input:focus {
-  border: 2px solid #3498db;
-  box-shadow: none;
+
+/* Bouton de connexion */
+.Next {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #800080;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.5s;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.Next:hover {
+  transform: scale(1.04);
+  background: #a020f0;
+}
+
+/* Liens */
+.forgotPassword,
+.login {
+  display: block;
+  color: white;
+  margin-top: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.5s;
+}
+.forgotPassword:hover {
+  color: rgb(138, 123, 123);
 }
 .login {
-  width: 225px;
-  height: 45px;
-  border-radius: 10px;
-  border: none;
-  background-color: blue;
-  font-size: 18px;
-  color: white;
-  margin-bottom: 10px;
-  transition: color 0.5s;
-  transition: background-color 0.5s;
-  margin-top: 10px;
+  color: #ff00ff;
   transition: 0.5s;
 }
 .login:hover {
-  transform: scale(1.1);
-  background-color: rgb(17, 17, 189);
-  color: rgb(231, 223, 223);
-  cursor: pointer;
-}
-.connect {
-  margin-top: 5px;
-  text-decoration: none;
-  color: blue;
-  transition: color 0.5s;
-  font-size: 18px;
-}
-.connect :hover {
-  color: rgb(7, 7, 119);
+  color: #970b97;
 }
