@@ -19,7 +19,16 @@ async function fetchAndDisplaySites() {
       L.circle([site.coordinates.lat, site.coordinates.lon], {
         radius: 1,
         color: "red",
-      }).addTo(map);
+      })
+        .addTo(map)
+        .bindPopup(
+          "<b>" +
+            site.site +
+            "</b>" +
+            "<br>" +
+            site.short_description.slice(0, 100) + //only shows the first 100chars
+            "..."
+        );
     }
   } catch (error) {
     console.error("Erreur lors de la récupération des sites:", error);
