@@ -1,0 +1,88 @@
+* {
+  font-family: Arial;
+}
+body {
+  display: flex;
+  height: 100vh;
+}
+form {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff65;
+  border-radius: 30px;
+  width: 500px;
+  height: 450px;
+  box-shadow: 1px 10px 41px -3px rgba(0, 0, 0, 0.58);
+}
+.login-field {
+  width: 300px;
+  height: 28px;
+}
+input {
+  text-align: center;
+  background-color: #ecf0f1;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 200;
+  padding: 10px;
+  width: 250px;
+  transition: border 0.5s;
+  margin: 10px;
+}
+input:focus {
+  border: 2px solid #3498db;
+  box-shadow: none;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login {
+  width: 225px;
+  height: 45px;
+  border-radius: 10px;
+  border: none;
+  background-color: blue;
+  font-size: 18px;
+  color: white;
+  margin-bottom: 10px;
+  transition: color 0.5s;
+  transition: background-color 0.5s;
+  transition: 0.5s;
+}
+.login:hover {
+  transform: scale(1.1);
+  background-color: rgb(17, 17, 189);
+  color: rgb(204, 197, 197);
+  cursor: pointer;
+}
+.login::after {
+  transform: scale(1.1);
+}
+.forgotPassword {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: black;
+  transition: color 0.5s;
+  font-size: 18px;
+}
+.forgotPassword:hover {
+  color: #444;
+}
+.createCompte {
+  margin-top: 5px;
+  text-decoration: none;
+  color: blue;
+  transition: color 0.5s;
+  font-size: 18px;
+}
+.createCompte:hover {
+  color: rgb(7, 7, 119);
+}

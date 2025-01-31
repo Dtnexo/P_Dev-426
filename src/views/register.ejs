@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Page d'enregistrement</title>
+    <title>Login</title>
+    <link href="/static/register.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Création du compte</h1>
-    <form id="register-form" method="post" action="/register">
-      <input type="text" required placeholder="nom d'utilisateur" id="name" />
-      <input type="email" required placeholder="email" id="email" />
-      <input
-        type="password"
-        required
-        placeholder="mot de passe"
-        id="password"
-      />
-      <input
-        type="confirmationpassword"
-        required
-        placeholder="Confirmation du mot de passe"
-        id="confirmationpassword"
-      />
-      <button type="submit">Créer</button>
+    <form action="#">
+      <h1>Créer un compte</h1>
+      <div class="Username">
+        <input
+          type="text"
+          class="login-field"
+          placeholder="Username"
+          id="login-name"
+        />
+        <label class="login-field-icon fui-user" for="login-name"></label>
+      </div>
+      <div class="Password">
+        <input
+          type="password"
+          class="login-field"
+          placeholder="Password"
+          id="login-pass"
+        />
+        <label class="login-field-icon fui-lock" for="login-pass"></label>
+      </div>
+      <div class="container">
+        <button type="button" class="login">Enregistrer</button>
+        <a class="connect" href="/login">Se connecter</a>
+      </div>
     </form>
-    <p>
-      J'ai déjà un compte
-      <a href="login">connexion</a>
-    </p>
   </body>
 </html>
