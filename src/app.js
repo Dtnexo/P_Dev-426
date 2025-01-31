@@ -2,20 +2,20 @@ import express from "express";
 
 const app = express();
 const port = 3003;
+
+// Routes
+const homeRouter = require("./routes/home");
+const loginRouter = require("./routes/login");
+const registerRouter = require("./routes/register");
+
 app.set("views", "src/views");
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-  res.render("home", {});
-});
+app.use("/", homeRouter);
 
-app.get("/login", (req, res) => {
-  res.render("login", {});
-});
+app.use("/login", loginRouter);
 
-app.get("/register", (req, res) => {
-  res.render("register", {});
-});
+app.use("/register", registerRouter);
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
