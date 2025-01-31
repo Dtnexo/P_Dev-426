@@ -1,4 +1,4 @@
-import express from "express";
+import express, { urlencoded } from "express";
 
 const app = express();
 const port = 3003;
@@ -10,6 +10,7 @@ const registerRouter = require("./routes/register");
 
 app.set("views", "src/views");
 app.set("view engine", "ejs");
+app.use(urlencoded());
 
 app.use("/", homeRouter);
 
