@@ -1,32 +1,44 @@
-const { queryDatabase } = require("../db/dbConnect.js");
-const crypto = require("crypto");
-// Example query
-module.exports = {
-  get: (req, res) => {
-    res.render("../views/login");
-  },
-  authenticateUser: async (req, res) => {
-    // Récupérer le sel de l'utilisateur sur la base de données
-    const sel = await queryDatabase(
-      `SELECT Sel FROM t_user WHERE Username = '${req.body.username}';`
-    );
-    // Stocker la valeur du sel
-    const selResult = sel[0].Sel;
+import { queryDatabase } from "../db/dbConnect.js";
+import crypto from "crypto";
 
-    // Récupérer le mot de passe sur le form et la base de donnée,
-    // hasher le mdp du form avec le sel et le comparer au mdp de la db
-    const password = await queryDatabase(
-      `SELECT Password FROM t_user WHERE Username = '${
-        req.body.username
-      }' AND Password LIKE '${crypto
-        .createHash("sha256")
-        .update(selResult + req.body.password)
-        .digest("hex")}';`
-    );
-    if (password == "") {
-      console.log("le mot de passe ou le username est incorrect!");
-    } else {
-      console.log("Bravo vous êtes authentifié!");
-    }
-  },
+const get = (req, res) => {
+  res.render("../views/login");
 };
+
+const authenticateUser = async (req, res) => {
+  try {
+    // Récupérer le sel de l'utilisateur depuis la base de données
+    const selResult = await queryDatabase(
+      `SELECT Sel FROM t_user WHERE Username = ?;`,
+      [req.body.username]
+    );
+
+    if (!selResult.length) {
+      console.log("Le mot de passe ou le username est incorrect!");
+      return;
+    }
+
+    const sel = selResult[0].Sel;
+
+    // Hasher le mot de passe saisi avec le sel récupéré
+    const hashedPassword = crypto
+      .createHash("sha256")
+      .update(sel + req.body.password)
+      .digest("hex");
+
+    // Vérifier si le mot de passe hashé correspond à celui stocké en base de données
+    const passwordResult = await queryDatabase(
+      `SELECT Password FROM t_user WHERE Username = ? AND Password = ?;`,
+      [req.body.username, hashedPassword]
+    );
+
+    if (!passwordResult.length) {
+      console.log("Le mot de passe ou le username est incorrect!");
+    } else {
+      console.log("Bravo, vous êtes authentifié!");
+    }
+  } catch (error) {
+    console.error("Erreur d'authentification :", error);
+  }
+};
+export { get, authenticateUser };

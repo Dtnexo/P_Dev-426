@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
+import { get, authenticateUser } from "../controllers/loginController.js";
 
-const router = express.Router();
-const controller = require("../controllers/loginController");
-router.get("/", controller.get);
-router.post("/", controller.authenticateUser);
-module.exports = router;
+const loginRouter = express.Router();
+loginRouter.get("/", get);
+loginRouter.post("/", authenticateUser);
+
+export { loginRouter };

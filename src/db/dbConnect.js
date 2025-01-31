@@ -1,4 +1,4 @@
-const mysql = require("mysql2/promise");
+import mysql from "mysql2/promise";
 
 const dbConfig = {
   host: "db_container",
@@ -26,4 +26,4 @@ async function queryDatabase(query) {
   }
 }
 
-module.exports = { queryDatabase };
+export { queryDatabase };

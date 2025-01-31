@@ -1,5 +1,4 @@
-module.exports = {
-  get: (req, res) => {
-    res.render("../views/home");
-  },
+const get = (req, res) => {
+  res.render("../views/home");
 };
+export { get };

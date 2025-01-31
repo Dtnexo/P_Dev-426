@@ -1,16 +1,14 @@
 import express, { urlencoded } from "express";
+import { loginRouter } from "./routes/login.js";
+import { homeRouter } from "./routes/home.js";
+import { registerRouter } from "./routes/register.js";
 
 const app = express();
 const port = 3003;
 
-// Routes
-const homeRouter = require("./routes/home");
-const loginRouter = require("./routes/login");
-const registerRouter = require("./routes/register");
-
 app.set("views", "src/views");
 app.set("view engine", "ejs");
-app.use(urlencoded());
+app.use(express.urlencoded());
 
 app.use("/", homeRouter);
 
