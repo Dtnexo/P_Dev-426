@@ -6,6 +6,14 @@ import { registerRouter } from "./routes/register.js";
 const app = express();
 const port = 3003;
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use("/static", express.static(path.join(__dirname, "../static")));
+
 app.set("views", "src/views");
 app.set("view engine", "ejs");
 app.use(express.urlencoded());
