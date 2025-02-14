@@ -46,8 +46,8 @@ CREATE TABLE SITES(
    site_id INT AUTO_INCREMENT,
    nom VARCHAR(100),
    description TEXT,
-   lon DECIMAL(5,5),
-   lat DECIMAL(5,5),
+   lon DECIMAL(10,8),
+   lat DECIMAL(10,8),
    categorie VARCHAR(50),
    PRIMARY KEY(site_id)
 );
