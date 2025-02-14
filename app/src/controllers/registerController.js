@@ -1,5 +1,7 @@
 import { queryDatabase } from "../db/dbConnect.js";
 import crypto from "crypto";
+import jwt from "jsonwebtoken"
+import 'dotenv/config'
 
 const get = (req, res) => {
   res.render("../views/register");
@@ -27,11 +29,12 @@ const createUser = async (req, res) => {
         `INSERT INTO t_user (prenom, salt, password, email) VALUES(?,?,?,?);`,
         [username, salt, hashedPassword, mail]
       );
-   /*   const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
+ 
+      const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
       // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
-      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });*/
+      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
       res.redirect("/accueil");
     } else {
       res.render("../views/register", {

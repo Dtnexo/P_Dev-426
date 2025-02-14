@@ -2,6 +2,8 @@ import express, { urlencoded } from "express";
 import { loginRouter } from "./routes/login.js";
 import { homeRouter } from "./routes/home.js";
 import { registerRouter } from "./routes/register.js";
+import { auth } from "./controllers/authController.js";
+import cookie from "cookie-parser"
 
 const app = express();
 const port = 3003;
@@ -12,13 +14,14 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(cookie())
 app.use("/static", express.static(path.join(__dirname, "../static")));
 
 app.set("views", "src/views");
 app.set("view engine", "ejs");
 app.use(express.urlencoded());
 
-app.use("/accueil", homeRouter);
+app.use("/accueil", auth, homeRouter);
 
 app.use("/login", loginRouter);
 
