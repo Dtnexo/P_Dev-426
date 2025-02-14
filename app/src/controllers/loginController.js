@@ -10,7 +10,7 @@ const authenticateUser = async (req, res) => {
     const username = req.body.username;
     // Récupérer le sel de l'utilisateur sur la base de données
     const sel = await queryDatabase(
-      `SELECT salt FROM t_user WHERE username = ?;`,
+      `SELECT salt FROM t_user WHERE prenom = ?;`,
       [username]
     );
     console.log(sel);
@@ -25,7 +25,7 @@ const authenticateUser = async (req, res) => {
     // Récupérer le mot de passe sur le form et la base de donnée,
     // hasher le mdp du form avec le sel et le comparer au mdp de la db
     const password = await queryDatabase(
-      `SELECT password FROM t_user WHERE username = ? AND password LIKE ?;`,
+      `SELECT password FROM t_user WHERE prenom = ? AND password LIKE ?;`,
       [username, hashedPassword]
     );
     if (password.length === 0) {
@@ -34,12 +34,12 @@ const authenticateUser = async (req, res) => {
         error: "The username or the password is incorrect !",
       });
     } else {
-      const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
+   /*   const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
       // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
-      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-      res.redirect("/user");
+      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });*/
+      res.redirect("/accueil");
     }
   } catch (error) {
     console.log(error);
