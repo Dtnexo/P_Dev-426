@@ -23,14 +23,20 @@ async function fetchAndDisplaySites() {
       })
         .addTo(map)
         .bindPopup(
-          "<b>" +
+          "<div id=" +
+            site.id_number +
+            "><b>" +
             site.site +
             "</b>" +
             "<br>" +
             '<p style="text-overflow: ellipsis; max-height: 100px; white-space: nowrap; max-width: 300px; overflow: hidden;">' +
             site.short_description +
-            "</p>"
+            "</p></div>"
         );
+      // const element = document.getElementById(site.id_number);
+      // element.addEventListener("click", function (event) {
+      //   alert("hello world");
+      // }); //l'element n'existe pas
     }
   } catch (error) {
     console.error("Erreur lors de la récupération des sites:", error);

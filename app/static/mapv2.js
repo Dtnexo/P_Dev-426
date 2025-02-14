@@ -1,4 +1,4 @@
-const MAPTILER_KEY = " ";
+const MAPTILER_KEY = "";
 const map = new maplibregl.Map({
   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
   center: [-74.0066, 40.7135],
@@ -8,6 +8,50 @@ const map = new maplibregl.Map({
   container: "map",
   canvasContextAttributes: { antialias: true },
 });
+const pathToJson = "/static/sites.json";
+async function fetchAndDisplaySites() {
+  try {
+    const res = await fetch(pathToJson);
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+    const sites = await res.json();
+
+    const features = sites.map((site) => ({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [site.coordinates.lon, site.coordinates.lat], // Correction ici
+      },
+    }));
+
+    // Vérifie si la source existe déjà, sinon la crée
+    if (map.getSource("unescoSites")) {
+      map.getSource("unescoSites").setData({
+        type: "FeatureCollection",
+        features: features,
+      });
+    } else {
+      map.addSource("unescoSites", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: features,
+        },
+      });
+
+      map.addLayer({
+        id: "unescoSitesLayer",
+        type: "circle",
+        source: "unescoSites",
+        paint: {
+          "circle-radius": 6,
+          "circle-color": "#ff0000",
+        },
+      });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sites:", error);
+  }
+}
 
 // The 'building' layer in the streets vector source contains building-height
 // data from OpenStreetMap.
@@ -67,29 +111,6 @@ map.on("load", () => {
     },
     labelLayerId
   );
-  map.addSource("point", {
-    type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [100.4933, 13.7551],
-          },
-        },
-      ],
-    },
-  });
 
-  map.addLayer({
-    id: "point",
-    source: "point",
-    type: "circle",
-    paint: {
-      "circle-radius": 10,
-      "circle-color": "#007cbf",
-    },
-  });
+  fetchAndDisplaySites();
 });
