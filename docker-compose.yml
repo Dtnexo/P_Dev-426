@@ -16,6 +16,7 @@ services:
     ports:
       - "6035:3306"
     volumes:
+      - ./db/db_unesco.sql:/docker-entrypoint-initdb.d/db_unesco.sql
       - dbdata:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin:5.2.0

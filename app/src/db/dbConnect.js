@@ -1,11 +1,11 @@
 import mysql from "mysql2/promise";
 
 const dbConfig = {
-  host: "db_container",
+  host: "P_DEV_426",
   user: "root",
   password: "root",
-  port: 3306,
-  database: "db_app183",
+  port: 6035,
+  database: "db_unesco",
 };
 
 async function queryDatabase(query) {
