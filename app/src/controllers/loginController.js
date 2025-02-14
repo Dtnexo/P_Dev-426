@@ -13,8 +13,9 @@ const authenticateUser = async (req, res) => {
       `SELECT salt FROM t_user WHERE username = ?;`,
       [username]
     );
+    console.log(sel);
     // Stocker la valeur du sel
-    const selResult = sel[0].Sel;
+    const selResult = sel[0].salt;
 
     const hashedPassword = crypto
       .createHash("sha256")
@@ -28,6 +29,7 @@ const authenticateUser = async (req, res) => {
       [username, hashedPassword]
     );
     if (password.length === 0) {
+      console.log(password);
       res.render("../views/login", {
         error: "The username or the password is incorrect !",
       });
@@ -39,7 +41,8 @@ const authenticateUser = async (req, res) => {
       res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
       res.redirect("/user");
     }
-  } catch {
+  } catch (error) {
+    console.log(error);
     res.render("../views/login", {
       error: "The username or the password is incorrect !",
     });
