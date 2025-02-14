@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Inscription</title>
-    <link href="/static/register.css" rel="stylesheet" type="text/css" />
-    <script src="/static/register.js"></script>
+    <link href="/static/css/register.css" rel="stylesheet" type="text/css" />
+    <script src="/static/register.js" defer></script>
     <link
       rel="shortcut icon"
       type="image/x-icon"
@@ -42,7 +42,7 @@
               <input
                 type="email"
                 class="login-field"
-                placeholder="email"
+                placeholder="Email"
                 name="email"
                 id="email"
               />
@@ -55,6 +55,9 @@
           </div>
         </div>
         <div id="page2" style="display: none">
+          <div class="divPrev">
+          <button type="button" class="Prev">Précednet</button>
+        </div>
           <h1>Inscription</h1>
           <div class="info">
             <div class="password">
@@ -78,7 +81,7 @@
               <label class="login-field-icon fui-lock" for="Email"></label>
             </div>
             <div class="container">
-              <button type="submit" class="Next">Envoyé</button>
+              <button type="submit" class="Next">Envoyé</button> 
               <a class="login" href="/login">J'ai déjà un compte ! Connexion</a>
             </div>
           </div>
