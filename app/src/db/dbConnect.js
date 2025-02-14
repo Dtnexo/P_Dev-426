@@ -8,13 +8,13 @@ const dbConfig = {
   database: "db_unesco",
 };
 
-async function queryDatabase(query) {
+async function queryDatabase(query, params) {
   let connection;
   try {
     connection = await mysql.createConnection(dbConfig);
 
     // Example query
-    const [results] = await connection.query(`${query}`);
+    const [results] = await connection.query(query, params);
     return results;
   } catch (error) {
     console.error("Database query failed:", error);
