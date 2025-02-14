@@ -7,38 +7,42 @@ const get = (req, res) => {
 
 const authenticateUser = async (req, res) => {
   try {
-    // Récupérer le sel de l'utilisateur depuis la base de données
-    const selResult = await queryDatabase(
+    const username = req.body.username;
+    // Récupérer le sel de l'utilisateur sur la base de données
+    const sel = await queryDatabase(
       `SELECT Sel FROM t_user WHERE Username = ?;`,
-      [req.body.username]
+      [username]
     );
+    // Stocker la valeur du sel
+    const selResult = sel[0].Sel;
 
-    if (!selResult.length) {
-      console.log("Le mot de passe ou le username est incorrect!");
-      return;
-    }
-
-    const sel = selResult[0].Sel;
-
-    // Hasher le mot de passe saisi avec le sel récupéré
     const hashedPassword = crypto
       .createHash("sha256")
-      .update(sel + req.body.password)
+      .update(selResult + req.body.password)
       .digest("hex");
 
-    // Vérifier si le mot de passe hashé correspond à celui stocké en base de données
-    const passwordResult = await queryDatabase(
-      `SELECT Password FROM t_user WHERE Username = ? AND Password = ?;`,
-      [req.body.username, hashedPassword]
+    // Récupérer le mot de passe sur le form et la base de donnée,
+    // hasher le mdp du form avec le sel et le comparer au mdp de la db
+    const password = await queryDatabase(
+      `SELECT Password FROM t_user WHERE Username = ? AND Password LIKE ?;`,
+      [username, hashedPassword]
     );
-
-    if (!passwordResult.length) {
-      console.log("Le mot de passe ou le username est incorrect!");
+    if (password.length === 0) {
+      res.render("../views/login", {
+        error: "The username or the password is incorrect !",
+      });
     } else {
-      console.log("Bravo, vous êtes authentifié!");
+      const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
+      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
+      res.redirect("/user");
     }
-  } catch (error) {
-    console.error("Erreur d'authentification :", error);
+  } catch {
+    res.render("../views/login", {
+      error: "The username or the password is incorrect !",
+    });
   }
 };
 export { get, authenticateUser };
