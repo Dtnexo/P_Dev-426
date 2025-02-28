@@ -1,75 +1,12 @@
 /* Styles généraux */
 body {
-  background-color: #000;
+  background-color: white;
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Arrière-plan avec formes décoratives */
-.background-shapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.shape {
-  position: absolute;
-  opacity: 0.6;
-}
-
-.shape1 {
-  width: 180px;
-  height: 180px;
-  background-color: #800080;
-  border-radius: 50%;
-  top: -30px;
-  left: -30px;
-}
-
-.shape2 {
-  width: 250px;
-  height: 250px;
-  background-color: #4b0082;
-  border-radius: 50%;
-  top: -60px;
-  right: -50px;
-}
-
-.shape3 {
-  width: 100px;
-  height: 100px;
-  background-color: #a020f0;
-  border-radius: 50%;
-  bottom: 10%;
-  left: 10%;
-}
-
-.shape4 {
-  width: 300px;
-  height: 50px;
-  background-color: #800080;
-  transform: rotate(45deg);
-  bottom: 5%;
-  right: -50px;
-}
-
-.shape3 {
-  width: 100px;
-  height: 100px;
-  background-color: #ff00ff;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 /* Conteneur principal */
@@ -79,101 +16,91 @@ body {
   align-items: center;
   text-align: center;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 /* Logo et titre */
 .title img {
-  width: 80px;
-  border-radius: 15px;
+  width: 150px;
+  margin-bottom: 20px;
 }
 .title p {
-  color: white;
+  color: #2e3a59;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
 }
 
-/* Formulaire */
+/* Formulaire de connexion */
 form {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  text-align: center;
-  background-color: #3a0ca3;
-  padding: 30px;
-  border-radius: 15px;
+  background-color: #2e3a59;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
   height: 350px;
 }
+
 h1 {
   color: white;
-  font-size: 22px;
+  margin-bottom: 20px;
+  font-size: 30px;
 }
 
+#id {
+  margin-top: 10px;
+}
 /* Champs de saisie */
 .login-field {
   width: 100%;
-  height: 40px;
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 15px;
+  height: 45px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
   border: none;
-  background: white;
-  font-size: 15px;
+  font-size: 16px;
   box-sizing: border-box;
 }
 
 /* Bouton de connexion */
 .login {
+  margin-bottom: 10px;
+  margin-top: 10px;
   width: 100%;
-  background: #670ca3;
+  height: 50px;
+  background-color: #6c757d;
   color: white;
-  font-size: 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 18px;
   cursor: pointer;
-  transition: 0.5s;
-  padding: 10px;
-}
-.login:hover {
-  transform: scale(1.04);
-  background: #460770;
+  transition: 0.3s;
 }
 
-/* Liens */
+.login:hover {
+  background-color: #5a6268;
+}
+
+/* Liens supplémentaires */
 .forgotPassword,
 .createCompte {
-  display: block;
   color: white;
-  margin-top: 10px;
   text-decoration: none;
   font-size: 16px;
-  transition: 0.5s;
-  width: 115x;
-  margin: 15px;
-}
-.forgotPassword {
-  width: 140px;
-}
-.forgotPassword:hover {
-  color: rgb(138, 123, 123);
-}
-.createCompte {
-  color: #f72585;
-  transition: 0.5s;
-}
-.createCompte:hover {
-  color: #7209b7;
-}
-.name {
-  font-family: "Major Mono Display";
-  font-size: 26px;
 }
 
+.createCompte {
+  color: #38a1db;
+}
+
+.createCompte:hover {
+  color: #1d72b8;
+}
+
+.forgotPassword:hover {
+  color: #ddd;
+}
 .alert {
   padding: 15px 20px;
   border-radius: 10px;
@@ -189,6 +116,7 @@ h1 {
   opacity: 0.95;
   min-width: 300px;
   max-width: 500px;
+  margin-bottom: 20px;
 }
 
 @keyframes fadeIn {
