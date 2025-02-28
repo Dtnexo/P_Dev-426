@@ -1,0 +1,63 @@
+/* Import de la police Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Styles du header */
+.header {
+    font-family: 'Roboto', sans-serif;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Texte "Accueil Unlogged" en haut à gauche */
+.unlogged {
+    display: block;
+    font-size: 12px;
+    color: gray;
+    padding-left: 10px;
+}
+
+/* Contenu du header : logo + navigation */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Logo */
+.logo {
+    max-height: 50px;
+}
+
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 10px;
+}
+
+/* Boutons de navigation */
+.nav a {
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color: white;
+    background-color: #444;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Effet au survol */
+.nav a:hover {
+    background-color: #666;
+}
+
+/* Bouton "Connexion" en noir */
+.nav a.connexion {
+    background-color: black;
+}
+
+.nav a.connexion:hover {
+    background-color: #222;
+}
