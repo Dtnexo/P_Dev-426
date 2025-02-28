@@ -5,6 +5,7 @@ import { loginRouter } from "./routes/login.js";
 import { homeRouter } from "./routes/home.js";
 import { registerRouter } from "./routes/register.js";
 import { auth } from "./controllers/authController.js";
+import { forumRouter } from "./routes/forum.js";
 import cookie from "cookie-parser";
 
 const app = express();
@@ -49,6 +50,8 @@ app.use("/accueil", homeRouter);
 app.use("/login", loginRouter);
 
 app.use("/register", registerRouter);
+
+app.use("/forum", auth, forumRouter);
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404

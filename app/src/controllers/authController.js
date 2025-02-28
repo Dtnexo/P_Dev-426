@@ -1,7 +1,6 @@
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 
-import jwt from "jsonwebtoken"
-import 'dotenv/config'
- 
 const auth = (req, res, next) => {
   if (!req.cookies.token) {
     const message = `Vous n'avez pas fourni de jeton d'authentification. Ajoutez-en un dans les cookies.`;
