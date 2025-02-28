@@ -1,9 +1,11 @@
 import express, { urlencoded } from "express";
+import session from "express-session";
+import flash from "connect-flash";
 import { loginRouter } from "./routes/login.js";
 import { homeRouter } from "./routes/home.js";
 import { registerRouter } from "./routes/register.js";
 import { auth } from "./controllers/authController.js";
-import cookie from "cookie-parser"
+import cookie from "cookie-parser";
 
 const app = express();
 const port = 3003;
@@ -14,7 +16,28 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(cookie())
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+app.use(
+  session({
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 },
+  })
+);
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  next();
+});
+
+app.use(cookie());
 app.use("/static", express.static(path.join(__dirname, "../static")));
 
 app.set("views", "src/views");
