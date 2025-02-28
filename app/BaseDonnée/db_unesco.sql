@@ -43,12 +43,12 @@ CREATE TABLE t_historique(
 );
 
 CREATE TABLE SITES(
-   site_id INT AUTO_INCREMENT,
-   nom VARCHAR(100),
-   description TEXT,
-   lon DECIMAL(10,8),
-   lat DECIMAL(10,8),
+   site_id INT,
    categorie VARCHAR(50),
+   nom VARCHAR(255),
+   description TEXT,
+   lon DECIMAL(7,4),
+   lat DECIMAL(7,4),
    PRIMARY KEY(site_id)
 );
 
