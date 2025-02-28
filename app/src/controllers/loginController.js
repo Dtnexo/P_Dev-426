@@ -37,6 +37,9 @@ const authenticateUser = async (req, res) => {
       );
       res.redirect("/login");
       return;
+    } else if (username == "" || password == "") {
+      req.flash("error_msg", "Les champs ne doivent pas être vides !");
+      res.redirect("/login");
     } else {
       console.log(process.env.SECRET_KEY);
       const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
