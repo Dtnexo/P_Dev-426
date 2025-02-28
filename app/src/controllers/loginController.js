@@ -31,10 +31,12 @@ const authenticateUser = async (req, res) => {
       [username, hashedPassword]
     );
     if (password.length === 0) {
-      console.log(password);
-      res.render("../views/login", {
-        error: "The username or the password is incorrect !",
-      });
+      req.flash(
+        "error_msg",
+        "le nom d'utilisateur ou le mot de passe est incorrect !"
+      );
+      res.redirect("/login");
+      return;
     } else {
       console.log(process.env.SECRET_KEY);
       const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
@@ -45,10 +47,11 @@ const authenticateUser = async (req, res) => {
       res.redirect("/accueil");
     }
   } catch (error) {
-    console.log(error);
-    res.render("../views/login", {
-      error: "The username or the password is incorrect !",
-    });
+    req.flash(
+      "error_msg",
+      "le nom d'utilisateur ou le mot de passe est incorrect !"
+    );
+    res.redirect("/login");
   }
 };
 export { get, authenticateUser };
