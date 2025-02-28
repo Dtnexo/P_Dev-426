@@ -16,14 +16,7 @@
     />
   </head>
   <body>
-    <div class="background-shapes">
-      <div class="shape shape1"></div>
-      <div class="shape shape2"></div>
-      <div class="shape shape3"></div>
-    </div>
     <div class="title">
-      <img src="/static/image/logoUnesco.png" alt="logo" />
-      <p class="name">UNESCO explorer</p>
       <form action="/register" method="POST">
         <div id="page1">
           <h1>Inscription</h1>
@@ -35,7 +28,7 @@
               <input
                 type="text"
                 class="login-field"
-                placeholder="Prénom"
+                placeholder="Nom d'utilisateur"
                 id="username"
                 name="username"
               />
@@ -53,7 +46,9 @@
             </div>
             <div class="container">
               <button type="button" class="Next" id="Next">Suivant</button>
-              <a class="login" href="/login">J'ai déjà un compte ! Connexion</a>
+              <a class="register" href="/login"
+                >J'ai déjà un compte ! Connexion</a
+              >
             </div>
           </div>
         </div>
@@ -85,7 +80,9 @@
             </div>
             <div class="container">
               <button type="submit" class="Next">Envoyé</button>
-              <a class="login" href="/login">J'ai déjà un compte ! Connexion</a>
+              <a class="register" href="/login"
+                >J'ai déjà un compte ! Connexion</a
+              >
             </div>
           </div>
         </div>
