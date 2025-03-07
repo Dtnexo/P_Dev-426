@@ -6,10 +6,17 @@
       <a href="/accueil">Accueil</a>
       <a href="/forum">Forum</a>
       <% if (user) { %>
-      <a href="/logout" class="deconnexion">Déconnexion</a>
       <% } else { %>
       <a href="/login" class="connexion">Connexion</a>
       <% } %>
     </nav>
+    <% if (user) { %>
+    <div class="profile-circle">
+        <span>P</span> <!-- Première lettre de "Profile" ou image -->
+    </div>
+    <% } else { %>
+    <div>
+    </div>
+    <% } %>
   </div>
 </header>

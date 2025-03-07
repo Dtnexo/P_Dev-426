@@ -1,0 +1,34 @@
+.partners {
+  background-color: #4f4f56;
+  padding: 20px;
+  text-align: center;
+}
+
+h3 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.partners-grid img {
+  width: 120px;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.contact-info {
+  color: white;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}

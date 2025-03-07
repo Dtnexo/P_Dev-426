@@ -26,8 +26,7 @@ body {
 .nav {
     display: flex;
     gap: 15px; /* Réduit l'espace entre les liens */
-    margin-left: 950px; /* Rapproche les liens du cercle */
-
+    margin-right: 950px;
 }
 
 .nav a {
