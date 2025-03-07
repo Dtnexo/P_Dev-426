@@ -20,6 +20,17 @@ async function fetchAndDisplaySites() {
 
     const features = sites.map((site) => ({
       type: "Feature",
+      properties: {
+        description:
+          "<strong>" +
+          site.nom +
+          "</strong>" +
+          site.description +
+          "<button onclick='showMore(" +
+          site.site_id +
+          ")'>more</button>",
+      },
+
       geometry: {
         type: "Point",
         coordinates: [site.lon, site.lat], // Correction ici
@@ -60,6 +71,28 @@ async function fetchAndDisplaySites() {
 // data from OpenStreetMap.
 map.on("load", () => {
   fetchAndDisplaySites();
+});
+
+map.on("click", "unescoSitesLayer", (e) => {
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  const description = e.features[0].properties.description;
+
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+
+  new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+});
+map.on("mouseenter", "unescoSitesLayer", () => {
+  map.getCanvas().style.cursor = "pointer";
+});
+
+// Change it back to a pointer when it leaves.
+map.on("mouseleave", "unescoSitesLayer", () => {
+  map.getCanvas().style.cursor = "";
 });
 
 // document
@@ -138,4 +171,9 @@ function switchMaps() {
   }
 }
 
+function showMore(id) {
+  console.log(id);
+}
+
 window.switchMaps = switchMaps;
+window.showMore = showMore;

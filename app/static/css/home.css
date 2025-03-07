@@ -23,6 +23,12 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.maplibregl-popup {
+  max-width: 400px;
+  font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  height: 100px;
+}
+
 /* Section d’intro */
 .intro {
   max-width: 800px;
