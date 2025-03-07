@@ -4,8 +4,9 @@ import flash from "connect-flash";
 import { loginRouter } from "./routes/login.js";
 import { homeRouter } from "./routes/home.js";
 import { registerRouter } from "./routes/register.js";
-import { auth } from "./controllers/authController.js";
+import { auth, authHome } from "./controllers/authController.js";
 import { forumRouter } from "./routes/forum.js";
+import { logoutRouter } from "./routes/logout.js";
 import cookie from "cookie-parser";
 
 const app = express();
@@ -48,6 +49,8 @@ app.use(express.urlencoded());
 app.use("/accueil", homeRouter);
 
 app.use("/login", loginRouter);
+
+app.use("/logout", logoutRouter);
 
 app.use("/register", registerRouter);
 

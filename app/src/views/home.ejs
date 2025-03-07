@@ -22,9 +22,11 @@
     <link rel="stylesheet" href="../../static/css/home.css" />
   </head>
   <body>
-    <%- include('partials/headerConnected') %>
+
+    <%- include('partials/Header', { user: user }) %>
+    <h1>Accueil</h1>
     <div id="map" style="width: 1200px; height: 700px"></div>
-    <script src="/static/mapv2.js"></script>
+    <button id="switch-map-button" onclick="switchMaps()">3d</button>
 
     <section class="intro">
       <h2>Bienvenue sur UNESCO Explorer</h2>
@@ -37,7 +39,6 @@
 
     <section class="owner">
       <!-- Remplace "avatar.png" par la vraie photo ou un avatar -->
-
       <img
         src="avatar.png"
         alt="Photo du propriétaire du site"
@@ -49,5 +50,7 @@
         </div>
        </div>
     </section>
+    <script type="module" src="/static/map-key.js"></script>
+    <script type="module" src="/static/mapv2.js"></script>
   </body>
 </html>

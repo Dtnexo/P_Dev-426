@@ -26,4 +26,31 @@ const auth = (req, res, next) => {
     );
   }
 };
-export { auth };
+
+const authHome = (req, res, next) => {
+  if (!req.cookies.token) {
+    const message = `Vous n'avez pas fourni de jeton d'authentification. Ajoutez-en un dans les cookies.`;
+    next();
+  } else {
+    jwt.verify(
+      req.cookies.token,
+      process.env.SECRET_KEY,
+      (error, decodedToken) => {
+        if (error) {
+          const message = `L'utilisateur n'est pas autorisé à accéder à cette ressource.`;
+          next();
+        }
+        const username = decodedToken.username;
+        if (req.body.username && req.body.username !== username) {
+          const message = `Le nom d'utilisateur est invalide`;
+          return res.status(401).json({ message });
+        } else {
+          req.username = username;
+          next();
+        }
+      }
+    );
+  }
+};
+
+export { auth, authHome };
