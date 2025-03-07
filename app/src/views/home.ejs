@@ -24,7 +24,7 @@
   <body>
     <%- include('partials/Header') %>
     <div id="map" style="width: 1200px; height: 700px"></div>
-    <script src="/static/mapv2.js"></script>
+    <button id="switch-map-button" onclick="switchMaps()">3d</button>
 
     <section class="intro">
       <h2>Bienvenue sur UNESCO Explorer</h2>
@@ -49,5 +49,7 @@
         </div>
        </div>
     </section>
+    <script type="module" src="/static/map-key.js"></script>
+    <script type="module" src="/static/mapv2.js"></script>
   </body>
 </html>
