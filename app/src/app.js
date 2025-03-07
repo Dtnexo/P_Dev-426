@@ -26,8 +26,6 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.redirect("/accueil");
 });
-
-// Configuration des sessions utilisateur
 app.use(
   session({
     secret: "your_secret_key", // Il est préférable d'utiliser une variable d'environnement pour la clé secrète
@@ -91,3 +89,5 @@ app.use(({ res }) => {
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
 });
+
+app.use(express.json());

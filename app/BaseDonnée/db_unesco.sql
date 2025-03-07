@@ -5,8 +5,6 @@ use db_unesco;
 CREATE TABLE t_user(
    user_id INT AUTO_INCREMENT,
    username VARCHAR(50),
-   prenom VARCHAR(50) NOT NULL,
-   nom VARCHAR(50) NOT NULL,
    email VARCHAR(50) NOT NULL,
    password VARCHAR(256) NOT NULL,
    salt VARCHAR(50) NOT NULL,
@@ -17,10 +15,9 @@ CREATE TABLE t_user(
 
 CREATE TABLE t_publication(
    publication_id INT AUTO_INCREMENT,
+   sujet VARCHAR(256) NOT NULL,
    contenu TEXT,
    datePublication DATETIME NOT NULL,
-   nbLikes INT NOT NULL,
-   sujet VARCHAR(256) NOT NULL,
    user_id INT NOT NULL,
    PRIMARY KEY(publication_id),
    FOREIGN KEY(user_id) REFERENCES t_user(user_id)
@@ -42,7 +39,7 @@ CREATE TABLE t_historique(
    FOREIGN KEY(user_id) REFERENCES t_user(user_id)
 );
 
-CREATE TABLE SITES(
+CREATE TABLE t_sites(
    site_id INT,
    categorie VARCHAR(50),
    nom VARCHAR(255),
@@ -52,18 +49,18 @@ CREATE TABLE SITES(
    PRIMARY KEY(site_id)
 );
 
-CREATE TABLE contenir(
+CREATE TABLE t_contenir(
    historique_id INT,
    site_id INT,
    PRIMARY KEY(historique_id, site_id),
    FOREIGN KEY(historique_id) REFERENCES t_historique(historique_id),
-   FOREIGN KEY(site_id) REFERENCES SITES(site_id)
+   FOREIGN KEY(site_id) REFERENCES t_sites(site_id)
 );
 
-CREATE TABLE avoir(
+CREATE TABLE t_avoir(
    liste_favoris_id INT,
    site_id INT,
    PRIMARY KEY(liste_favoris_id, site_id),
    FOREIGN KEY(liste_favoris_id) REFERENCES t_liste_favoris(liste_favoris_id),
-   FOREIGN KEY(site_id) REFERENCES SITES(site_id)
+   FOREIGN KEY(site_id) REFERENCES t_sites(site_id)
 );

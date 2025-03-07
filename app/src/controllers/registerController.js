@@ -42,7 +42,7 @@ const createUser = async (req, res) => {
     .digest("hex");
 
   const isName = await queryDatabase(
-    `SELECT prenom FROM t_user WHERE prenom LIKE ?`,
+    `SELECT username FROM t_user WHERE username LIKE ?`,
     [username]
   );
   const isEmail = await queryDatabase(
@@ -52,7 +52,7 @@ const createUser = async (req, res) => {
   console.log(isEmail);
   if (isName.length === 0 && isEmail.length === 0) {
     await queryDatabase(
-      `INSERT INTO t_user (prenom, salt, password, email) VALUES(?,?,?,?);`,
+      `INSERT INTO t_user (username, salt, password, email, dateCreation) VALUES(?,?,?,?, NOW());`,
       [username, salt, hashedPassword, mail]
     );
 
