@@ -13,15 +13,16 @@ const map = new maplibregl.Map({
 const pathToJson = "/static/sites.json";
 async function fetchAndDisplaySites() {
   try {
-    const res = await fetch(pathToJson);
+    const res = await fetch("http://localhost:3003/api/sites"); // Appelle l'API
     if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-    const sites = await res.json();
+
+    let sites = await res.json();
 
     const features = sites.map((site) => ({
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [site.coordinates.lon, site.coordinates.lat], // Correction ici
+        coordinates: [site.lon, site.lat], // Correction ici
       },
     }));
 

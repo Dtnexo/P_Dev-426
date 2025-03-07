@@ -8,6 +8,8 @@ import { auth } from "./controllers/authController.js";
 import { forumRouter } from "./routes/forum.js";
 import { logoutRouter } from "./routes/logout.js";
 import cookie from "cookie-parser";
+import { queryDatabase } from "../src/db/dbConnect.js";
+import cors from "cors";
 
 const app = express();
 const port = 3003;
@@ -17,6 +19,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.redirect("/accueil");
@@ -55,6 +58,15 @@ app.use("/logout", logoutRouter);
 app.use("/register", registerRouter);
 
 app.use("/forum", auth, forumRouter);
+
+app.get("/api/sites", async (req, res) => {
+  try {
+    const sites = await queryDatabase("SELECT * FROM SITES");
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
