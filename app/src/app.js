@@ -45,7 +45,7 @@ app.set("views", "src/views");
 app.set("view engine", "ejs");
 app.use(express.urlencoded());
 
-app.use("/accueil", auth, homeRouter);
+app.use("/accueil", homeRouter);
 
 app.use("/login", loginRouter);
 
