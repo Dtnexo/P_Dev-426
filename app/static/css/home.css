@@ -47,6 +47,7 @@ html, body {
   justify-content: center;
   align-items: center;
   margin-top: 50px;
+  margin-bottom: 150px;
 }
 .owner div {
   display: flex;

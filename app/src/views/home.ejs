@@ -22,7 +22,9 @@
     <link rel="stylesheet" href="../../static/css/home.css" />
   </head>
   <body>
-    <%- include('partials/Header') %>
+
+    <%- include('partials/Header', { user: user }) %>
+    <h1>Accueil</h1>
     <div id="map" style="width: 1200px; height: 700px"></div>
     <button id="switch-map-button" onclick="switchMaps()">3d</button>
 
@@ -37,7 +39,6 @@
 
     <section class="owner">
       <!-- Remplace "avatar.png" par la vraie photo ou un avatar -->
-
       <img
         src="avatar.png"
         alt="Photo du propriétaire du site"
