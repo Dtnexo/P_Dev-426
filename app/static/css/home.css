@@ -43,14 +43,19 @@ html, body {
 
 /* Section propriétaire */
 .owner {
-  max-width: 800px;
-  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+.owner div {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 0 10px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 600px;
 }
-
 /* Photo propriétaire */
 .owner-photo {
   width: 100px;
@@ -62,7 +67,9 @@ html, body {
 
 /* Texte à côté de la photo */
 .owner-text {
-  flex: 1;
+  display: flex;
+  flex-direction: column; /* Met le texte en colonne */
+  text-align: left;
 }
 
 .owner-text h3 {
