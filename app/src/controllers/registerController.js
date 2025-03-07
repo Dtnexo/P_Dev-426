@@ -46,9 +46,10 @@ const createUser = async (req, res) => {
     [username]
   );
   const isEmail = await queryDatabase(
-    `SELECT prenom FROM t_user WHERE prenom LIKE ?`,
+    `SELECT email FROM t_user WHERE email LIKE ?`,
     [mail]
   );
+  console.log(isEmail);
   if (isName.length === 0 && isEmail.length === 0) {
     await queryDatabase(
       `INSERT INTO t_user (prenom, salt, password, email) VALUES(?,?,?,?);`,
