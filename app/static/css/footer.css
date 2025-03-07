@@ -1,27 +1,27 @@
 .partners {
   background-color: #4f4f56;
   padding: 20px;
+  width: 100%;
   text-align: center;
 }
 
 h3 {
   color: white;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .partners-grid {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+  margin-bottom: 20px;
 }
 
 .partners-grid img {
   width: 120px;
-  height: auto;
   max-height: 80px;
   object-fit: contain;
-  background: white;
   padding: 10px;
   border-radius: 5px;
 }
