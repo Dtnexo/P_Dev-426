@@ -1,17 +1,24 @@
 # P_Dev-426
 
-## how to run
+## démarrer l'application
 
-go to /P_DEV-426
-
-```
-npm install
-```
-
-and after
+executer ces commandes
 
 ```
+git clone https://github.com/Dtnexo/P_Dev-426.git
+cd ./P_Dev-426/app/
+npm i
+cd ./static
+copy map-key.js.example map-key.js
+```
+
+ensuite aller sur `https://cloud.maptiler.com/account/keys/` et créer un compte, si il n'y en a pas, créer une clé, sinon copier la clé dans `map-key.js`
+
+Ensuite pour démarrer l'application
+
+```
+cd ..
 npm start
 ```
 
-app run on port 3003
+l'application est accesible sur `http://localhost:3003`
