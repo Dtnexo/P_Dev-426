@@ -59,6 +59,7 @@ const createUser = async (req, res) => {
       expiresIn: "1h",
     });
     // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
+    req.session.user = { username: isName };
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
     res.redirect("/accueil");
   } else {
