@@ -15,16 +15,7 @@
     />
   </head>
   <body>
-    <div class="background-shapes">
-      <div class="shape shape1"></div>
-      <div class="shape shape2"></div>
-      <div class="shape shape3"></div>
-      <div class="shape shape4"></div>
-    </div>
-
     <div class="title">
-      <img src="/static/image/logoUnesco.png" alt="logo" />
-      <p class="name">UNESCO explorer</p>
       <form action="/login" method="POST">
         <h1>Connexion</h1>
         <% if (error_msg != "") { %>
@@ -35,7 +26,7 @@
             <input
               type="text"
               class="login-field"
-              placeholder="Username"
+              placeholder="Nom d'utilisateur"
               id="Username"
               name="username"
             />
@@ -45,14 +36,14 @@
             <input
               type="password"
               class="login-field"
-              placeholder="Password"
+              placeholder="Mot de passe"
               name="password"
               id="password"
             />
             <label class="login-field-icon fui-lock" for="password"></label>
           </div>
           <div class="container">
-            <a class="forgotPassword" href="#">Forgot password ?</a>
+            <a class="forgotPassword" href="#">Mot de passe oublier ?</a>
             <button type="submit" class="login" value="submit">Log in</button>
             <a class="createCompte" href="/register">Créer un compte</a>
           </div>
