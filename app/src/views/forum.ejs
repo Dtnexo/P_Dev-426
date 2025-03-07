@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Forum</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .post {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+      }
+      .error {
+        color: red;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simple Forum</h1>
+
+    <!-- Display error message if any -->
+    <% if (error) { %>
+    <div class="error"><%= error %></div>
+    <% } %>
+
+    <div id="posts-container">
+      <!-- Loop through posts and display each one -->
+      <% posts.forEach(post => { %>
+      <div class="post">
+        <h3><%= post.sujet %></h3>
+        <p><%= post.contenu %></p>
+        <small
+          >Posted on <%= new Date(post.datePublication).toLocaleString()
+          %></small
+        >
+      </div>
+      <% }) %>
+    </div>
+
+    <h2>Create a new post</h2>
+    <form action="/forum" method="POST">
+      <input type="text" name="sujet" placeholder="Subject" required />
+      <textarea name="contenu" placeholder="Content" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

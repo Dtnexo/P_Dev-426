@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 app.get("/", (req, res) => {
   res.redirect("/accueil");
 });
-
+app.use(express.json());
 app.use(
   session({
     secret: "your_secret_key",

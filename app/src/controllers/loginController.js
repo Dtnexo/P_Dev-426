@@ -10,14 +10,18 @@ const get = (req, res) => {
 const authenticateUser = async (req, res) => {
   try {
     const username = req.body.username;
-    // Récupérer le sel de l'utilisateur sur la base de données
-    const sel = await queryDatabase(
-      `SELECT salt FROM t_user WHERE prenom = ?;`,
+    const user = await queryDatabase(
+      `SELECT user_id, salt FROM t_user WHERE username = ?`,
       [username]
     );
-    console.log(sel);
+    // Récupérer le sel de l'utilisateur sur la base de données
+    const sel = await queryDatabase(
+      `SELECT salt FROM t_user WHERE username = ?;`,
+      [username]
+    );
     // Stocker la valeur du sel
-    const selResult = sel[0].salt;
+    const user_id = user[0].user_id; // Extract user_id from the result
+    const selResult = user[0].salt;
 
     const hashedPassword = crypto
       .createHash("sha256")
@@ -27,7 +31,7 @@ const authenticateUser = async (req, res) => {
     // Récupérer le mot de passe sur le form et la base de donnée,
     // hasher le mdp du form avec le sel et le comparer au mdp de la db
     const password = await queryDatabase(
-      `SELECT password FROM t_user WHERE prenom = ? AND password LIKE ?;`,
+      `SELECT password FROM t_user WHERE username = ? AND password LIKE ?;`,
       [username, hashedPassword]
     );
     if (password.length === 0) {
@@ -42,9 +46,13 @@ const authenticateUser = async (req, res) => {
       res.redirect("/login");
     } else {
       console.log(process.env.SECRET_KEY);
-      const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
-        expiresIn: "1h",
-      });
+      const token = jwt.sign(
+        { username: username, user_id: user_id },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
       // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
       res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
       res.redirect("/accueil");

@@ -14,12 +14,12 @@ const auth = (req, res, next) => {
           const message = `L'utilisateur n'est pas autorisé à accéder à cette ressource.`;
           return res.status(401).json({ message, data: error });
         }
-        const username = decodedToken.username;
+        const { username, user_id } = decodedToken;
         if (req.body.username && req.body.username !== username) {
           const message = `Le nom d'utilisateur est invalide`;
           return res.status(401).json({ message });
         } else {
-          req.username = username;
+          req.user = { username, user_id };
           next();
         }
       }
