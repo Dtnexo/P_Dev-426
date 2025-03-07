@@ -46,9 +46,10 @@ const createUser = async (req, res) => {
     [username]
   );
   const isEmail = await queryDatabase(
-    `SELECT username FROM t_user WHERE username LIKE ?`,
+    `SELECT email FROM t_user WHERE email LIKE ?`,
     [mail]
   );
+  console.log(isEmail);
   if (isName.length === 0 && isEmail.length === 0) {
     await queryDatabase(
       `INSERT INTO t_user (username, salt, password, email, dateCreation) VALUES(?,?,?,?, NOW());`,
@@ -59,6 +60,7 @@ const createUser = async (req, res) => {
       expiresIn: "1h",
     });
     // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
+    req.session.user = { username: isName };
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
     res.redirect("/accueil");
   } else {

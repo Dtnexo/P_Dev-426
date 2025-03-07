@@ -1,0 +1,86 @@
+/* Import d'une police moderne (ex. Roboto) */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+/* Section carte */
+.map-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.map-image {
+  max-width: 90%;
+  height: auto;
+  border: 2px solid #ccc; /* Optionnel, pour donner un petit cadre */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Section d’intro */
+.intro {
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.intro h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.intro p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+/* Section propriétaire */
+.owner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 150px;
+}
+.owner div {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 600px;
+}
+/* Photo propriétaire */
+.owner-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Texte à côté de la photo */
+.owner-text {
+  display: flex;
+  flex-direction: column; /* Met le texte en colonne */
+  text-align: left;
+}
+
+.owner-text h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+}
+
+.owner-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}

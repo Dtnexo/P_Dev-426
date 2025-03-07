@@ -19,12 +19,39 @@
       href="https://unpkg.com/maplibre-gl@^5.1.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="../../static/css/home.css" />
   </head>
   <body>
-    <%- include('partials/Header') %>
+
+    <%- include('partials/Header', { user: user }) %>
     <h1>Accueil</h1>
-    <a href="/login">page de connection</a>
     <div id="map" style="width: 1200px; height: 700px"></div>
-    <script src="/static/mapv2.js"></script>
+    <button id="switch-map-button" onclick="switchMaps()">3d</button>
+
+    <section class="intro">
+      <h2>Bienvenue sur UNESCO Explorer</h2>
+      <p>
+        Votre guide interactif pour explorer les sites classés au patrimoine
+        mondial de l'UNESCO. Grâce à notre carte dynamique, plongez dans
+        l’histoire et la beauté des lieux emblématiques à travers le monde.
+      </p>
+    </section>
+
+    <section class="owner">
+      <!-- Remplace "avatar.png" par la vraie photo ou un avatar -->
+      <img
+        src="avatar.png"
+        alt="Photo du propriétaire du site"
+        class="owner-photo"
+      />
+      <div class="owner-text">
+        <h3>Aurelie Curchod, propriétaire du site</h3>
+        <p>Votre texte, mettez ce que vous souhaitez !</p>
+        </div>
+       </div>
+    </section>
+    <script type="module" src="/static/map-key.js"></script>
+    <script type="module" src="/static/mapv2.js"></script>
+    <%- include('partials/Footer')%>
   </body>
 </html>

@@ -1,6 +1,7 @@
 import { queryDatabase } from "../db/dbConnect.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import session from "express-session";
 import "dotenv/config";
 
 const get = (req, res) => {
@@ -54,6 +55,7 @@ const authenticateUser = async (req, res) => {
         }
       );
       // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
+      req.session.user = { username: username };
       res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
       res.redirect("/accueil");
     }
@@ -65,4 +67,11 @@ const authenticateUser = async (req, res) => {
     res.redirect("/login");
   }
 };
-export { get, authenticateUser };
+
+const logout = (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie("token");
+    res.redirect("/login");
+  });
+};
+export { get, authenticateUser, logout };

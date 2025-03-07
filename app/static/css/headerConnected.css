@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 2px solid #ddd;
+}
+
+.logo {
+    height: 50px;
+}
+
+.nav-profile {
+    display: flex;
+    align-items: center;
+}
+
+.nav {
+    display: flex;
+    gap: 15px; /* Réduit l'espace entre les liens */
+    margin-right: 950px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    background-color: gray; /* Couleur du cercle */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
