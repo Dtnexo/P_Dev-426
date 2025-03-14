@@ -90,3 +90,25 @@ body {
   font-size: 14px;
   color: #555;
 }
+
+#map-area {
+  display: flex;
+}
+
+#site_title {
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+#site_description {
+  text-align: center;
+  margin: 10px;
+  line-height: 120%;
+}
+
+#details-area {
+  margin-left: 10px;
+  width: 100%;
+  font-size: large;
+}

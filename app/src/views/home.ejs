@@ -25,8 +25,14 @@
 
     <%- include('partials/Header', { user: user }) %>
     <h1>Accueil</h1>
-    <div id="map" style="width: 1200px; height: 700px"></div>
     <button id="switch-map-button" onclick="switchMaps()">3d</button>
+    <div id="map-area">
+      <div id="map" style="width: 1200px; height: 700px; min-width: 1200px"></div>
+      <div id="details-area">
+        <div id="site_title"></div>
+        <div id="site_description"></div>
+      </div>
+    </div>
 
     <section class="intro">
       <h2>Bienvenue sur UNESCO Explorer</h2>
