@@ -62,7 +62,7 @@ CREATE TABLE `SITES` (
 -- Déchargement des données de la table `SITES`
 --
 
-INSERT INTO `t_sites` (`site_id`, `categorie`, `nom`, `description`, `lon`, `lat`) VALUES
+INSERT INTO `SITES` (`site_id`, `categorie`, `nom`, `description`, `lon`, `lat`) VALUES
 (1, 'Natural', 'Galápagos Islands', 'Situated in the Pacific Ocean some 1,000 km from the South American continent, these 19 islands and the surrounding marine reserve have been called a unique ‘living museum and showcase of evolution’. Located at the confluence of three ocean currents, the Galápagos are a ‘melting pot’ of marine species. Ongoing seismic and volcanic activity reflects the processes that formed the islands. These processes, together with the extreme isolation of the islands, led to the development of unusual animal life – such as the land iguana, the giant tortoise and the many types of finch – that inspired Charles Darwin’s theory of evolution by natural selection following his visit in 1835.', '-90.5013', '-0.6899'),
 (2, 'Cultural', 'City of Quito', 'Quito, the capital of Ecuador, was founded in the 16th century on the ruins of an Inca city and stands at an altitude of 2,850 m. Despite the 1917 earthquake, the city has the best-preserved, least altered historic centre in Latin America. The monasteries of San Francisco and Santo Domingo, and the Church and Jesuit College of La Compañía, with their rich interiors, are pure examples of the \'Baroque school of Quito\', which is a fusion of Spanish, Italian, Moorish, Flemish and indigenous art.', '-78.5121', '-0.2200'),
 (3, 'Cultural', 'Aachen Cathedral', 'Construction of this palatine chapel, with its octagonal basilica and cupola, began c. 790–800 under the Emperor Charlemagne. Originally inspired by the churches of the Eastern part of the Holy Roman Empire, it was splendidly enlarged in the Middle Ages.', '6.0844', '50.7744'),
@@ -1247,8 +1247,6 @@ CREATE TABLE `t_publication` (
 CREATE TABLE `t_user` (
   `user_id` int NOT NULL,
   `username` varchar(50) DEFAULT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `nom` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,

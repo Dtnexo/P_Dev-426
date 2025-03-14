@@ -171,8 +171,18 @@ function switchMaps() {
   }
 }
 
-function showMore(id) {
-  console.log(id);
+async function showMore(id) {
+  const res = await fetch("http://localhost:3003/api/site-details/" + id);
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let site_details = await res.json();
+  const site_title = document.getElementById("site_title");
+  const site_description = document.getElementById("site_description");
+  //clear old content
+  site_title.textContent = "";
+  site_description.textContent = "";
+  site_title.textContent = site_details[0].nom;
+  site_description.textContent = site_details[0].description;
 }
 
 window.switchMaps = switchMaps;
