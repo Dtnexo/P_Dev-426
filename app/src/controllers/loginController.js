@@ -11,59 +11,44 @@ const get = (req, res) => {
 const authenticateUser = async (req, res) => {
   try {
     const username = req.body.username;
+
     const user = await queryDatabase(
-      `SELECT user_id, salt FROM t_user WHERE username = ?`,
+      `SELECT user_id, salt, password FROM t_user WHERE username = ?`,
       [username]
     );
-    // Récupérer le sel de l'utilisateur sur la base de données
-    const sel = await queryDatabase(
-      `SELECT salt FROM t_user WHERE username = ?;`,
-      [username]
-    );
-    // Stocker la valeur du sel
-    const user_id = user[0].user_id; // Extract user_id from the result
-    const selResult = user[0].salt;
+
+    if (user.length === 0) {
+      req.flash("error_msg", "Utilisateur introuvable !");
+      return res.redirect("/login");
+    }
+
+    const { user_id, salt, password } = user[0];
+
+    console.log("User ID Retrieved:", user_id); // Debugging step
 
     const hashedPassword = crypto
       .createHash("sha256")
-      .update(selResult + req.body.password)
+      .update(salt + req.body.password)
       .digest("hex");
 
-    // Récupérer le mot de passe sur le form et la base de donnée,
-    // hasher le mdp du form avec le sel et le comparer au mdp de la db
-    const password = await queryDatabase(
-      `SELECT password FROM t_user WHERE username = ? AND password LIKE ?;`,
-      [username, hashedPassword]
-    );
-    if (password.length === 0) {
+    if (password !== hashedPassword) {
       req.flash(
         "error_msg",
-        "le nom d'utilisateur ou le mot de passe est incorrect !"
+        "Le nom d'utilisateur ou le mot de passe est incorrect !"
       );
-      res.redirect("/login");
-      return;
-    } else if (username == "" || password == "") {
-      req.flash("error_msg", "Les champs ne doivent pas être vides !");
-      res.redirect("/login");
-    } else {
-      console.log(process.env.SECRET_KEY);
-      const token = jwt.sign(
-        { username: username, user_id: user_id },
-        process.env.SECRET_KEY,
-        {
-          expiresIn: "1h",
-        }
-      );
-      // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
-      req.session.user = { username: username };
-      res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-      res.redirect("/accueil");
+      return res.redirect("/login");
     }
+
+    const token = jwt.sign({ username, user_id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    req.session.user = { username };
+    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
+    res.redirect("/accueil");
   } catch (error) {
-    req.flash(
-      "error_msg",
-      "le nom d'utilisateur ou le mot de passe est incorrect !"
-    );
+    console.error("Authentication Error:", error);
+    req.flash("error_msg", "Une erreur s'est produite !");
     res.redirect("/login");
   }
 };
