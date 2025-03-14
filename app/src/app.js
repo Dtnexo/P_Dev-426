@@ -77,6 +77,17 @@ app.get("/api/sites", async (req, res) => {
   }
 });
 
+app.get("/api/site-details/:id", async (req, res) => {
+  try {
+    const site_details = await queryDatabase(
+      "SELECT * FROM SITES WHERE site_id = " + req.params.id
+    );
+    res.json(site_details); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
 app.use(({ res }) => {
