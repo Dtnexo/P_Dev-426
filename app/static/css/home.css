@@ -26,7 +26,12 @@ body {
 .maplibregl-popup {
   max-width: 400px;
   font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
-  height: 100px;
+  max-height: 130px;
+}
+
+.maplibregl-popup-content {
+  max-width: 400px;
+  font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 /* Section d’intro */
@@ -111,4 +116,22 @@ body {
   margin-left: 10px;
   width: 100%;
   font-size: large;
+}
+
+#switch-map-button {
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  color: white;
+  background-color: #444;
+  padding: 8px 13px;
+  border-radius: 5px;
+  font-size: 15px;
+  transition: background 0.3s ease-in-out;
+  position: relative;
+  top: 40px;
+  z-index: 99999;
+}
+
+#switch-map-button:hover {
+  background-color: #666;
 }

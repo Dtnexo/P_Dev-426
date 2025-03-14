@@ -28,7 +28,7 @@ async function fetchAndDisplaySites() {
           site.description +
           "<button onclick='showMore(" +
           site.site_id +
-          ")'>more</button>",
+          ")'>plus</button>",
       },
 
       geometry: {
