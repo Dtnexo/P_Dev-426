@@ -1247,8 +1247,6 @@ CREATE TABLE `t_publication` (
 CREATE TABLE `t_user` (
   `user_id` int NOT NULL,
   `username` varchar(50) DEFAULT NULL,
-  `prenom` varchar(50) NOT NULL,
-  `nom` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
