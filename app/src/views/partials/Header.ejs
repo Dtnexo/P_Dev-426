@@ -1,27 +1,26 @@
 <header class="header">
   <link rel="stylesheet" href="../../../static/css/header.css" />
-  <div class="header-content">
-    <img
-      src="/static/image/logo-ACD.png"
-      alt="ACD Motorsport Logo"
-      class="logo"
-    />
-    <nav class="nav">
-      <a href="/accueil">Accueil</a>
-      <a href="/forum">Forum</a>
-      <% if (user) { %>
-      <a href="/logout" class="deconnexion">Déconnexion</a>
-      <% } else { %>
-      <a href="/login" class="connexion">Connexion</a>
-      <% } %>
-    </nav>
-    <% if (user) { %>
-    <div class="profile-circle">
-      <span>P</span>
-      <!-- Première lettre de "Profile" ou image -->
-    </div>
-    <% } else { %>
-    <div></div>
-    <% } %>
+  <img
+    src="/static/image/logo-ACD.png"
+    alt="ACD Motorsport Logo"
+    class="logo"
+  />
+  <nav class="nav">
+    <ul class="nav-list">
+      <li>
+        <a href="/accueil">Accueil</a>
+      </li>
+      <li>
+        <a href="/forum">Forum</a>
+      </li>
+    </ul>
+  </nav>
+  <% if (user) { %>
+  <div class="profile-circle">
+    <span>P</span>
+    <!-- Première lettre de "Profile" ou image -->
   </div>
+  <% } else { %>
+  <a href="/login" class="connexion">Connexion</a>
+  <% } %>
 </header>
