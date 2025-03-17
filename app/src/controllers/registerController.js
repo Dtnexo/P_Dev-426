@@ -52,7 +52,7 @@ const createUser = async (req, res) => {
   console.log(isEmail);
   if (isName.length === 0 && isEmail.length === 0) {
     await queryDatabase(
-      `INSERT INTO t_user (username, email, salt, password, created_at) VALUES(?,?,?,?, NOW());`,
+      `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
       [username, mail, salt, hashedPassword]
     );
 
