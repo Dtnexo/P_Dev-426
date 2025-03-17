@@ -10,7 +10,7 @@ export const getPosts = async (req, res) => {
        ORDER BY datePublication DESC`
     );
 
-    res.render("forum", { posts, error: null, user: req.user }); // Ensure user is passed
+    res.render("forum", { posts, error: null, user: req.session.user }); // Ensure user is passed
   } catch (err) {
     res.status(500).render("forum", {
       posts: [],

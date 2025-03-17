@@ -1,6 +1,7 @@
 import "dotenv/config";
 const get = (req, res) => {
-  res.render("profile", { user: req.session.user.prenom || null });
+  console.log(req.session.user);
+  res.render("profile", { user: req.session.user || null });
 };
 
 export { get };
