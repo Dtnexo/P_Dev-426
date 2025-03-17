@@ -41,15 +41,13 @@
         justify-content: space-between;
         left: 0;
       }
-       {
-      }
       .info {
         color: white; /* Add text color for links */
         text-decoration: none; /* Remove underline */
         text-align: left;
         padding: 15px;
         text-align: center; /* Corrected property name from align-text to text-align */
-        background-color: #8d6038;
+        background-color: #5a3a1e;
         padding-right: 65px;
         border-radius: 0px 70px 70px 0px;
         transition: transform 0.3s ease-in-out;
@@ -60,12 +58,14 @@
         text-align: center; /* Corrected property name from align-text to text-align */
         padding: 5px 60px 5px 20px;
         text-align: center; /* Corrected property name from align-text to text-align */
-        background-color: #8d6038;
+        background-color: #5a3a1e;
         border-radius: 0px 70px 70px 0px;
         transition: transform 0.3s ease-in-out;
       }
+      .profile {
+        background-color: #8d6038;
+      }
       .navigation-links a:hover {
-        background-color: #775537;
         transform: scale(1.1) translateX(8px);
       }
     </style>
@@ -75,7 +75,7 @@
 
     <section class="user-profile">
       <div class="navigation-links">
-        <a href="/profile" class="info">Mon profil</a>
+        <a href="/profile" class="info profile">Mon profil</a>
         <a href="#" class="infperso"
           >Informations <br />
           personnelles</a
@@ -89,5 +89,7 @@
         <p>Consultez votre historique de visites et gérez vos favoris !</p>
       </div>
     </section>
+    <section class="carte-favoris-historique"></section>
+    <%- include('partials/Footer')%>
   </body>
 </html>
