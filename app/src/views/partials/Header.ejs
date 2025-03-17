@@ -17,8 +17,7 @@
   </nav>
   <% if (user) { %>
   <div class="profile-circle">
-    <span>P</span>
-    <!-- Première lettre de "Profile" ou image -->
+    <a href="/profile"><%= user.username[0] %></a>
   </div>
   <% } else { %>
   <a href="/login" class="connexion">Connexion</a>

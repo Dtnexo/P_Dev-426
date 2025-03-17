@@ -133,3 +133,8 @@ body {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.profile-circle a {
+  text-decoration: none;
+  color: white;
+}

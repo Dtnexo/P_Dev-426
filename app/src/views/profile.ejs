@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/static/image/logoUnesco.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Major Mono Display"
+      rel="stylesheet"
+    />
+    <style>
+      .user-profile {
+        display: flex;
+        background-color: #000000;
+        color: white;
+        padding: 20px;
+      }
+      .img-prenom {
+        width: 50%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .img-prenom img {
+        max-width: 200px;
+        height: auto;
+      }
+
+      .navigation-links {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        height: 300px;
+        justify-content: space-between;
+        left: 0;
+      }
+       {
+      }
+      .info {
+        color: white; /* Add text color for links */
+        text-decoration: none; /* Remove underline */
+        text-align: left;
+        padding: 15px;
+        text-align: center; /* Corrected property name from align-text to text-align */
+        background-color: #8d6038;
+        padding-right: 65px;
+        border-radius: 0px 70px 70px 0px;
+        transition: transform 0.3s ease-in-out;
+      }
+      .infperso {
+        color: white; /* Add text color for links */
+        text-decoration: none; /* Remove underline */
+        text-align: center; /* Corrected property name from align-text to text-align */
+        padding: 5px 60px 5px 20px;
+        text-align: center; /* Corrected property name from align-text to text-align */
+        background-color: #8d6038;
+        border-radius: 0px 70px 70px 0px;
+        transition: transform 0.3s ease-in-out;
+      }
+      .navigation-links a:hover {
+        background-color: #775537;
+        transform: scale(1.1) translateX(8px);
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/Header', { user: user }) %>
+
+    <section class="user-profile">
+      <div class="navigation-links">
+        <a href="/profile" class="info">Mon profil</a>
+        <a href="#" class="infperso"
+          >Informations <br />
+          personnelles</a
+        >
+        <a href="#" class="info">Sécurité</a>
+        <a href="/forum" class="info">Forum</a>
+      </div>
+      <div class="img-prenom">
+        <img src="/static/image/userProfile.png" alt="User Profile Picture" />
+        <h1>Bienvenue <%= user %> !</h1>
+        <p>Consultez votre historique de visites et gérez vos favoris !</p>
+      </div>
+    </section>
+  </body>
+</html>
