@@ -12,12 +12,12 @@ const get = (req, res) => {
 const createUser = async (req, res) => {
   const salt = crypto.randomBytes(25).toString("base64");
 
-  const prenom = req.body.prenom;
+  const username = req.body.username;
   const mail = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  if (!prenom || !mail || !password) {
+  if (!username || !mail || !password) {
     req.flash("error_msg", "Tout les champs doivent être remplis!");
     res.redirect("/register");
     return;
@@ -42,8 +42,8 @@ const createUser = async (req, res) => {
     .digest("hex");
 
   const isName = await queryDatabase(
-    `SELECT prenom FROM t_user WHERE prenom LIKE ?`,
-    [prenom]
+    `SELECT username FROM t_user WHERE username LIKE ?`,
+    [username]
   );
   const isEmail = await queryDatabase(
     `SELECT email FROM t_user WHERE email LIKE ?`,
@@ -52,15 +52,15 @@ const createUser = async (req, res) => {
   console.log(isEmail);
   if (isName.length === 0 && isEmail.length === 0) {
     await queryDatabase(
-      `INSERT INTO t_user (prenom, email, salt, password, created_at) VALUES(?,?,?,?, NOW());`,
-      [prenom, mail, salt, hashedPassword]
+      `INSERT INTO t_user (username, email, salt, password, created_at) VALUES(?,?,?,?, NOW());`,
+      [username, mail, salt, hashedPassword]
     );
 
-    const token = jwt.sign({ prenom: prenom }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ username: username }, process.env.SECRET_KEY, {
       expiresIn: "1h",
     });
     // httpOnly pour que le côté client n'accède pas au cookie, maxAge pour que le cookie expire dans 1h
-    req.session.user = { prenom: isName };
+    req.session.user = { username: isName };
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
     res.redirect("/accueil");
   } else {
