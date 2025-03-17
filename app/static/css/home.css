@@ -135,3 +135,7 @@ body {
 #switch-map-button:hover {
   background-color: #666;
 }
+
+h3 {
+  color: black;
+}
