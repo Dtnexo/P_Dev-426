@@ -1,0 +1,2 @@
+const MAPTILER_KEY = "";
+export { MAPTILER_KEY };
