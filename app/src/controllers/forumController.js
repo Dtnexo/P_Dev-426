@@ -23,7 +23,7 @@ export const getPosts = async (req, res) => {
 export const addPost = async (req, res) => {
   const { sujet, contenu } = req.body;
   const user_id = req.user?.user_id; // Ensure user exists
-
+  console.log(user_id);
   if (!sujet || !contenu) {
     return res.status(400).render("forum", {
       error: "Sujet et contenu sont requis",
