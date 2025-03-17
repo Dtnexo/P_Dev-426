@@ -70,7 +70,7 @@ app.use("/forum", auth, forumRouter);
 
 app.get("/api/sites", async (req, res) => {
   try {
-    const sites = await queryDatabase("SELECT * FROM SITES");
+    const sites = await queryDatabase("SELECT * FROM t_sites");
     res.json(sites); // Renvoie le JSON au client
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -80,7 +80,7 @@ app.get("/api/sites", async (req, res) => {
 app.get("/api/site-details/:id", async (req, res) => {
   try {
     const site_details = await queryDatabase(
-      "SELECT * FROM SITES WHERE site_id = " + req.params.id
+      "SELECT * FROM t_sites WHERE site_id = " + req.params.id
     );
     res.json(site_details); // Renvoie le JSON au client
   } catch (error) {
