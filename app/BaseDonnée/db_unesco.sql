@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : lun. 24 mars 2025 à 12:07
+-- Généré le : lun. 24 mars 2025 à 12:49
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -51,7 +51,7 @@ CREATE TABLE `t_contenir` (
 
 CREATE TABLE `t_historique` (
   `historique_id` int NOT NULL,
-  `siteConsulte` varchar(256) DEFAULT NULL,
+  `site_id` int NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -63,7 +63,7 @@ CREATE TABLE `t_historique` (
 
 CREATE TABLE `t_liste_favoris` (
   `liste_favoris_id` int NOT NULL,
-  `titre` varchar(256) DEFAULT NULL,
+  `site_id` int NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1279,14 +1279,16 @@ ALTER TABLE `t_contenir`
 --
 ALTER TABLE `t_historique`
   ADD PRIMARY KEY (`historique_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `site_id` (`site_id`);
 
 --
 -- Index pour la table `t_liste_favoris`
 --
 ALTER TABLE `t_liste_favoris`
   ADD PRIMARY KEY (`liste_favoris_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `site_id` (`site_id`);
 
 --
 -- Index pour la table `t_publication`
@@ -1358,13 +1360,15 @@ ALTER TABLE `t_contenir`
 -- Contraintes pour la table `t_historique`
 --
 ALTER TABLE `t_historique`
-  ADD CONSTRAINT `t_historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
+  ADD CONSTRAINT `t_historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
+  ADD CONSTRAINT `t_historique_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `t_liste_favoris`
 --
 ALTER TABLE `t_liste_favoris`
-  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
+  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
+  ADD CONSTRAINT `t_liste_favoris_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Contraintes pour la table `t_publication`
