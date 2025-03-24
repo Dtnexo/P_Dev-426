@@ -184,9 +184,20 @@ async function showMore(id) {
   site_title.textContent = site_details[0].nom;
   site_description.textContent = site_details[0].description;
 }
+
 async function countrySearch(country) {
   const res = await fetch(
     "http://localhost:3003/api/country-search?country=" + country
+  );
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let sites = await res.json();
+  updateSites(sites);
+}
+
+async function regionSearch(region) {
+  const res = await fetch(
+    "http://localhost:3003/api/region-search?region=" + region
   );
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
@@ -245,5 +256,17 @@ document
     if (event.key === "Enter") {
       let country = this.value;
       countrySearch(country);
+    }
+  });
+
+//recherche par region
+//note: recherche predictive:
+// mettre <input onInput="func()"
+document
+  .getElementById("region-search")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      let region = this.value;
+      regionSearch(region);
     }
   });
