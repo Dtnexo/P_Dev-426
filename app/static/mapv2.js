@@ -184,6 +184,66 @@ async function showMore(id) {
   site_title.textContent = site_details[0].nom;
   site_description.textContent = site_details[0].description;
 }
+async function countrySearch(country) {
+  const res = await fetch(
+    "http://localhost:3003/api/country-search?country=" + country
+  );
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let sites = await res.json();
+  updateSites(sites);
+}
+
+function updateSites(sites) {
+  const features = sites.map((site) => ({
+    type: "Feature",
+    properties: {
+      description:
+        "<strong>" +
+        site.nom +
+        "</strong>" +
+        site.description +
+        "<button onclick='showMore(" +
+        site.site_id +
+        ")'>plus</button>",
+    },
+
+    geometry: {
+      type: "Point",
+      coordinates: [site.lon, site.lat], // Correction ici
+    },
+  }));
+  map.removeLayer("unescoSitesLayer");
+  map.removeSource("unescoSites");
+  map.addSource("unescoSites", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: features,
+    },
+  });
+  map.addLayer({
+    id: "unescoSitesLayer",
+    type: "circle",
+    source: "unescoSites",
+    paint: {
+      "circle-radius": 6,
+      "circle-color": "#ff0000",
+    },
+  });
+}
 
 window.switchMaps = switchMaps;
 window.showMore = showMore;
+
+//recherche par pays
+//note: recherche predictive:
+// mettre <input onInput="func()"
+document
+  .getElementById("country-search")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      let country = this.value;
+      countrySearch(country);
+    }
+  });

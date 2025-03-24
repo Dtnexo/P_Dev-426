@@ -90,6 +90,17 @@ app.get("/api/site-details/:id", async (req, res) => {
   }
 });
 
+app.get("/api/country-search", async (req, res) => {
+  try {
+    const sites = await queryDatabase(
+      "SELECT * FROM t_sites WHERE states LIKE '-" + req.query.country + "%'"
+    );
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
 app.use(({ res }) => {
