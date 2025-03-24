@@ -11,7 +11,7 @@ import { profileRouter } from "./routes/profile.js";
 import cookie from "cookie-parser";
 import { queryDatabase } from "../src/db/dbConnect.js";
 import cors from "cors";
-
+import { infouserRouter } from "./routes/infouser.js";
 const app = express();
 const port = 3003;
 
@@ -61,6 +61,7 @@ app.use(express.urlencoded()); // Ajouter { extended: true } pour prendre en cha
 
 // Déclaration des routes
 app.use("/accueil", homeRouter);
+app.use("/infouser", auth, infouserRouter);
 app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/register", registerRouter);
@@ -73,6 +74,14 @@ app.use("/forum", auth, forumRouter);
 app.get("/api/sites", async (req, res) => {
   try {
     const sites = await queryDatabase("SELECT * FROM t_sites");
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+app.get("/api/sites-historique", async (req, res) => {
+  try {
+    const sites = await queryDatabase("SELECT * FROM t_avoir JOIN ON");
     res.json(sites); // Renvoie le JSON au client
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mes données</title>
+    <link rel="stylesheet" href="../../static/css/infouser.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <%- include('partials/Header', { user: user }) %>
+      <section class="user-profile">
+        <div class="navigation-links">
+          <a href="/profile" class="info profile">Mon profil</a>
+          <a href="/infouser" class="infperso"
+            >Informations <br />
+            personnelles</a
+          >
+          <a href="#" class="info">Sécurité</a>
+          <a href="/forum" class="info">Forum</a>
+        </div>
+        <div class="infos-perso">
+          <h1>Informations générales</h1>
+          <div class="line"></div>
+          <div class="photo-profil">
+            <p>Photo de profile</p>
+            <img :src="imageProfile" alt="User Profile Picture" />
+            <i
+              class="fa-solid fa-pencil"
+              style="color: #ffffff; font-size: 24px"
+            ></i>
+          </div>
+          <div class="line"></div>
+          <div class="name-user">
+            <p>Nom</p>
+            <p><%= user.username %></p>
+            <i
+              class="fa-solid fa-pencil"
+              style="color: #ffffff; font-size: 24px"
+            ></i>
+          </div>
+          <div class="line"></div>
+          <div class="mdp-user">
+            <p>Mot de passe</p>
+            <p>************</p>
+            <i
+              class="fa-solid fa-pencil"
+              style="color: #ffffff; font-size: 24px"
+            ></i>
+          </div>
+          <div class="line"></div>
+        </div>
+      </section>
+      <%- include('partials/Footer')%>
+    </div>
+    <!-- Import App -->
+    <script src="/static/js/main.js"></script>
+    <!-- Mount App -->
+    <script>
+      const mountedApp = app.mount("#app");
+    </script>
+  </body>
+</html>
