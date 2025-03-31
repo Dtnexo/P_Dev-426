@@ -132,9 +132,9 @@ body {
   align-items: center;
   border-radius: 50%;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.profile-circle a {
+.header a {
   text-decoration: none;
-  color: white;
 }

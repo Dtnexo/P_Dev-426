@@ -16,9 +16,9 @@
     </ul>
   </nav>
   <% if (user) { %>
-  <div class="profile-circle">
-    <a href="/profile"><%= user.username[0] %></a>
-  </div>
+  <a href="/profile">
+    <div class="profile-circle"><%= user.username[0] %></div>
+  </a>
   <% } else { %>
   <a href="/login" class="connexion">Connexion</a>
   <% } %>
