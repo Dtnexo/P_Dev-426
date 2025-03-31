@@ -79,6 +79,7 @@ app.get("/api/sites", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 app.get("/api/sites-historique", async (req, res) => {
   try {
     const sites = await queryDatabase("SELECT * FROM t_avoir JOIN ON");
