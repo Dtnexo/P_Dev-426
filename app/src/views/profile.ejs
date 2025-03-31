@@ -111,8 +111,9 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 70px;
         width: 1036px;
+        padding-top: 20px;
+        padding-bottom: 20px;
         background-color: #13255b;
         color: white;
         text-align: left;
@@ -125,10 +126,12 @@
         padding-left: 20px;
       }
       .hisfav img {
+        margin: auto;
         height: 25px;
         width: 25px;
         padding-right: 20px;
         transition: transform 0.3s ease, opacity 0.3s ease; /* Ajout de la transition */
+        transform-origin: center; /* Définit le centre comme origine de transformation */
       }
       .hisfav {
         display: flex;
@@ -138,23 +141,24 @@
       }
       .rotated {
         margin-top: 2%;
-    transform: scaleY(-1); /* Rotation de 180° */
-  }
+        transform: scaleY(-1); /* Rotation de 180° */
+      }
   .showFav, .showHist {
     height: 200px;
     width: 1036px;
     align-items: normal;
   }
-  .favoImage{
+  .favoImage, .favoHist{
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 1036px;
     height: 25px;
   }
+
     </style>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  </head>
+</head>
   <body >
     <div id="app">
     <%- include('partials/Header', { user: user }) %>
@@ -190,20 +194,25 @@
     <div class="hisfav">
       <button class="carte-favoris" @click="changeImagefav">
         <div class="favoImage">
-        <h2>Favoris</h2>
-        <img class="fav-image" src="/static/image/arrow-bottom.png"alt="next" />
-      </div>
+          <h2>Favoris</h2>
+          <div><img class="fav-image" src="/static/image/arrow-bottom.png"alt="next" /></div>
+        </div>
         <div class="favoris" v-if="showFav">
-          <p>evan les aimes les homes</p>
+          <p>ASDSA</p>
         </div>
       </button>
       <button class="carte-historique" @click="changeImageHist">
+        <div class="favoHist">
         <h2>Historique</h2>
-        <img class="hist-image" src="/static/image/arrow-bottom.png" alt="next" />
+        <div><img class="hist-image" src="/static/image/arrow-bottom.png" alt="next" /></div>
+      </div>
+      <div class="favoris" v-if="showFav">
+        <p>ASDSA</p>
       </div>
     </button>
     <section class="section-progression">
       <h1>Votre progression de visites dans le monde</h1>
+      <canvas id="pieCanvas" aria-label="chart" role="img"></canvas>
     </section>
 
     <script type="module" src="/static/map-key.js"></script>
@@ -213,9 +222,28 @@
   
   <!-- Import App -->
   <script src="/static/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
   <!-- Mount App -->
   <script>
-    const mountedApp = app.mount('#app')
+    const mountedApp = app.mount('#app');
+  </script>
+  <script>
+   document.addEventListener("DOMContentLoaded", () => {
+    const pieCanvas = document.getElementById("pieCanvas");
+
+    const pieChart = new Chart(pieCanvas, {
+      type: "pie",
+      data: {
+        labels: ["Diego", "Aime", "Les", "Hommes"],
+        datasets: [
+          {
+            data: [10, 20, 30, 40],
+            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"], // Ajoutez des couleurs
+          },
+        ],
+      },
+    });
+  });
   </script>
   </body>    
 </html> 
