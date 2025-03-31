@@ -3,32 +3,39 @@
   padding: 20px 0 20px 0;
   width: 100%;
   text-align: center;
-}
-
-.partners h3 {
-  color: white;
-  margin-bottom: 20px;
-  text-align: center;
+  bottom: 0;
+  left: 0;
+  flex: 1;
 }
 
 .partners-grid {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-bottom: 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px; /* espace entre le logo et le texte */
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap; /* pour rester responsive */
 }
 
 .partners-grid img {
-  width: 120px;
-  max-height: 80px;
+  width: 250px;
+  max-height: 180px;
   object-fit: contain;
   padding: 10px;
   border-radius: 5px;
+  margin-left: 200px;
 }
 
 .contact-info {
   color: white;
-  margin-top: 20px;
-  text-align: left;
   font-size: 14px;
+  text-align: left;
+  margin-right: 200px;
 }

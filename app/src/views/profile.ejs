@@ -4,10 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Profile</title>
+    <script src="https://unpkg.com/maplibre-gl@^5.1.0/dist/maplibre-gl.js"></script>
+    <link
+      href="https://unpkg.com/maplibre-gl@^5.1.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
     <link
       rel="shortcut icon"
       type="image/x-icon"
-      href="/static/image/logoUnesco.png"
+      href="/static/image/logo-ACD.png"
     />
     <link
       href="https://fonts.googleapis.com/css?family=Major Mono Display"
@@ -47,7 +52,7 @@
         text-align: left;
         padding: 15px;
         text-align: center; /* Corrected property name from align-text to text-align */
-        background-color: #5a3a1e;
+        background-color: #13255b;
         padding-right: 65px;
         border-radius: 0px 70px 70px 0px;
         transition: transform 0.3s ease-in-out;
@@ -58,25 +63,106 @@
         text-align: center; /* Corrected property name from align-text to text-align */
         padding: 5px 60px 5px 20px;
         text-align: center; /* Corrected property name from align-text to text-align */
-        background-color: #5a3a1e;
+        background-color: #13255b;
         border-radius: 0px 70px 70px 0px;
         transition: transform 0.3s ease-in-out;
       }
       .profile {
-        background-color: #8d6038;
+        background-color: #2c54ce;
+      }
+      .navigation-links a {
+        transition: 0.4s;
       }
       .navigation-links a:hover {
+        background-color: #2c54ce;
         transform: scale(1.1) translateX(8px);
       }
+      .titre-carte-visité,
+      .section-progression h1 {
+        margin-top: 40px;
+        text-align: center;
+      }
+      #map-area {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        position: relative; /* Ajout pour permettre le positionnement absolu des enfants */
+        padding: 15px;
+      }
+
+      #switch-map-button {
+        position: absolute; /* Positionnement absolu */
+        top: 10px; /* Distance depuis le haut */
+        left: 10px; /* Distance depuis la gauche */
+        z-index: 1; /* Assurez-vous qu'il reste au-dessus de la carte */
+        padding: 5px 10px; /* Ajout de padding pour un meilleur rendu */
+        background-color: #2c54ce; /* Couleur de fond */
+        color: white; /* Couleur du texte */
+        border: none; /* Suppression des bordures */
+        border-radius: 5px; /* Coins arrondis */
+        cursor: pointer; /* Curseur pointeur */
+      }
+
+      #switch-map-button:hover {
+        background-color: #13255b; /* Couleur de fond au survol */
+      }
+      .carte-favoris, .carte-historique {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+        width: 1036px;
+        background-color: #13255b;
+        color: white;
+        text-align: left;
+        border-radius: 20px;
+        margin-top: 20px;
+        border: none;
+        cursor: pointer;
+      }
+      .hisfav h2 {
+        padding-left: 20px;
+      }
+      .hisfav img {
+        height: 25px;
+        width: 25px;
+        padding-right: 20px;
+        transition: transform 0.3s ease, opacity 0.3s ease; /* Ajout de la transition */
+      }
+      .hisfav {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+      .rotated {
+        margin-top: 2%;
+    transform: scaleY(-1); /* Rotation de 180° */
+  }
+  .showFav, .showHist {
+    height: 200px;
+    width: 1036px;
+    align-items: normal;
+  }
+  .favoImage{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1036px;
+    height: 25px;
+  }
     </style>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
-  <body>
+  <body >
+    <div id="app">
     <%- include('partials/Header', { user: user }) %>
 
     <section class="user-profile">
       <div class="navigation-links">
         <a href="/profile" class="info profile">Mon profil</a>
-        <a href="#" class="infperso"
+        <a href="/infouser" class="infperso"
           >Informations <br />
           personnelles</a
         >
@@ -84,12 +170,52 @@
         <a href="/forum" class="info">Forum</a>
       </div>
       <div class="img-prenom">
-        <img src="/static/image/userProfile.png" alt="User Profile Picture" />
+        <img  :src="imageProfile" alt="User Profile Picture" />
         <h1>Bienvenue <%= user.username %> !</h1>
         <p>Consultez votre historique de visites et gérez vos favoris !</p>
       </div>
     </section>
-    <section class="carte-favoris-historique"></section>
+    <section class="section-lieux-visités">
+      <h1 class="titre-carte-visité">Votre carte des vos sites visités</h1>
+      <div id="map-area">
+        <div id="map" style="width: 1036px; height: 621px; z-index: 0">
+          <button id="switch-map-button" onclick="switchMaps()">3d</button>
+        </div>
+        <div id="details-area">
+          <div id="site_title"></div>
+          <div id="site_description"></div>
+        </div>
+      </div>
+    </section>
+    <div class="hisfav">
+      <button class="carte-favoris" @click="changeImagefav">
+        <div class="favoImage">
+        <h2>Favoris</h2>
+        <img class="fav-image" src="/static/image/arrow-bottom.png"alt="next" />
+      </div>
+        <div class="favoris" v-if="showFav">
+          <p>evan les aimes les homes</p>
+        </div>
+      </button>
+      <button class="carte-historique" @click="changeImageHist">
+        <h2>Historique</h2>
+        <img class="hist-image" src="/static/image/arrow-bottom.png" alt="next" />
+      </div>
+    </button>
+    <section class="section-progression">
+      <h1>Votre progression de visites dans le monde</h1>
+    </section>
+
+    <script type="module" src="/static/map-key.js"></script>
+    <script type="module" src="/static/mapv2.js"></script>
     <%- include('partials/Footer')%>
-  </body>
-</html>
+  </div>
+  
+  <!-- Import App -->
+  <script src="/static/js/main.js"></script>
+  <!-- Mount App -->
+  <script>
+    const mountedApp = app.mount('#app')
+  </script>
+  </body>    
+</html> 
