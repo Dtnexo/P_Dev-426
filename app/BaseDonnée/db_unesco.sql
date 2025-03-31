@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : lun. 31 mars 2025 à 11:23
+-- Généré le : lun. 31 mars 2025 à 11:39
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -1253,7 +1253,7 @@ CREATE TABLE `t_user` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
-  `photoProfil` text NOT NULL,
+  `photoProfil` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `dateCreation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
