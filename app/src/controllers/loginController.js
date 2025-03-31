@@ -13,7 +13,7 @@ const authenticateUser = async (req, res) => {
     const username = req.body.username;
 
     const user = await queryDatabase(
-      `SELECT user_id, salt, password FROM t_user WHERE username = ?`,
+      `SELECT user_id, salt, password, email FROM t_user WHERE username = ?`,
       [username]
     );
 
@@ -22,7 +22,7 @@ const authenticateUser = async (req, res) => {
       return res.redirect("/login");
     }
 
-    const { user_id, salt, password } = user[0];
+    const { user_id, salt, password, email } = user[0];
 
     console.log("User ID Retrieved:", user_id); // Debugging step
 
@@ -39,13 +39,11 @@ const authenticateUser = async (req, res) => {
       return res.redirect("/login");
     }
 
-    const token = jwt.sign({ username, user_id }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    // Store user info in session before OTP verification
+    req.session.pending2FA = { username, user_id, email };
 
-    req.session.user = { username };
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
-    res.redirect("/accueil");
+    // Redirect user to 2FA OTP page
+    res.redirect("/2fa");
   } catch (error) {
     console.error("Authentication Error:", error);
     req.flash("error_msg", "Une erreur s'est produite !");

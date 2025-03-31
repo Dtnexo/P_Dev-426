@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vérification 2FA</title>
+    <link rel="stylesheet" href="/static/css/2fa.css" />
+    <script>
+      async function sendOTP() {
+        try {
+          const response = await fetch("/2fa/send", { method: "POST" });
+          if (response.ok) {
+            document.getElementById("send-btn").style.display = "none"; // Hide button
+            document.getElementById("otp-form").style.display = "block"; // Show form
+          } else {
+            alert("Erreur lors de l'envoi du code.");
+          }
+        } catch (error) {
+          console.error("Erreur:", error);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Vérification 2FA</h2>
+      <p>Appuyez sur le bouton pour recevoir un code OTP par e-mail.</p>
+
+      <!-- Send Code Button -->
+      <button id="send-btn" onclick="sendOTP()">Envoyer le code</button>
+
+      <!-- OTP Form (Hidden Initially) -->
+      <form
+        id="otp-form"
+        action="/2fa/verify"
+        method="POST"
+        style="display: none"
+      >
+        <input type="text" name="code" placeholder="Code OTP" required />
+        <button type="submit">Vérifier</button>
+      </form>
+
+      <p class="resend">
+        Vous n'avez pas reçu de code ? <a href="/2fa/resend">Renvoyer</a>
+      </p>
+    </div>
+  </body>
+</html>
