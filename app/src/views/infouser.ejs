@@ -29,26 +29,49 @@
           <div class="line"></div>
           <div class="photo-profil">
             <p>Photo de profile</p>
-            <img :src="imageProfile" alt="User Profile Picture" />
+            <img
+              :src="imageProfile"
+              alt="User Profile Picture"
+              id="profile-img"
+            />
+            <input
+              type="file"
+              id="file-input"
+              accept="image/*"
+              style="display: none"
+            />
             <i
               class="fa-solid fa-pencil"
               style="color: #ffffff; font-size: 24px"
+              id="edit-photo"
             ></i>
+            <button id="upload-btn" style="display: none">✅</button>
           </div>
           <div class="line"></div>
           <div class="name-user">
             <p>Nom</p>
-            <p><%= user.username %></p>
+            <p id="display-name"><%= user.username %></p>
+            <input
+              type="text"
+              id="edit-name"
+              style="display: none"
+              placeholder="Entrez un nouveau nom"
+            />
             <i
+              id="edit-btn-name"
               class="fa-solid fa-pencil"
-              style="color: #ffffff; font-size: 24px"
+              style="color: #ffffff; font-size: 24px; cursor: pointer"
             ></i>
+            <button id="save-btn-name" style="display: none">✅</button>
+            <button id="cancel-btn-name" style="display: none">❌</button>
           </div>
+
           <div class="line"></div>
           <div class="mdp-user">
             <p>Mot de passe</p>
             <p>************</p>
             <i
+              id="edit-btn"
               class="fa-solid fa-pencil"
               style="color: #ffffff; font-size: 24px"
             ></i>
@@ -56,6 +79,7 @@
           <div class="line"></div>
         </div>
       </section>
+      <div class="space-black"></div>
       <%- include('partials/Footer')%>
     </div>
     <!-- Import App -->
@@ -63,6 +87,120 @@
     <!-- Mount App -->
     <script>
       const mountedApp = app.mount("#app");
+    </script>
+    <script>
+      const displayName = document.getElementById("display-name");
+      const editName = document.getElementById("edit-name");
+      const editBtnName = document.getElementById("edit-btn-name");
+      const saveBtnName = document.getElementById("save-btn-name");
+      const cancelBtnName = document.getElementById("cancel-btn-name");
+
+      const userId = "<%= user.user_id %>"; // récupéré depuis le template
+
+      editBtnName.addEventListener("click", () => {
+        editName.value = displayName.innerText;
+        displayName.style.display = "none";
+        editBtnName.style.display = "none";
+        editName.style.display = "inline-block";
+        saveBtnName.style.display = "inline-block";
+        cancelBtnName.style.display = "inline-block";
+        editName.focus();
+      });
+
+      saveBtnName.addEventListener("click", () => {
+        const newName = editName.value.trim();
+        if (newName.length === 0) {
+          alert("Le nom ne peut pas être vide !");
+          return;
+        }
+
+        fetch("/infouser/update-name", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: userId, name: newName }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              displayName.innerText = newName;
+            } else {
+              alert("Erreur lors de la mise à jour du nom.");
+            }
+            resetNameEdit();
+          })
+          .catch((err) => {
+            console.error("Erreur:", err);
+            alert("Erreur de connexion.");
+            resetNameEdit();
+          });
+      });
+
+      cancelBtnName.addEventListener("click", () => {
+        resetNameEdit();
+      });
+
+      function resetNameEdit() {
+        displayName.style.display = "inline-block";
+        editName.style.display = "none";
+        editBtnName.style.display = "inline-block";
+        saveBtnName.style.display = "none";
+        cancelBtnName.style.display = "none";
+      }
+    </script>
+
+    <script>
+      //////////////////////////// MODIFIER PHOTO PROFIL ///////////////////////////////////
+      const fileInput = document.getElementById("file-input");
+      const editPhoto = document.getElementById("edit-photo");
+      const profileImg = document.getElementById("profile-img");
+      const uploadBtn = document.getElementById("upload-btn");
+
+      let selectedFile = null;
+
+      // Clic sur l'icône pencil
+      editPhoto.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      // Lorsque l'utilisateur sélectionne un fichier
+      fileInput.addEventListener("change", (event) => {
+        selectedFile = event.target.files[0];
+        if (selectedFile) {
+          // Prévisualisation de l'image
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            profileImg.src = e.target.result;
+            uploadBtn.style.display = "inline-block";
+          };
+          reader.readAsDataURL(selectedFile);
+        }
+      });
+
+      // Bouton de confirmation
+      uploadBtn.addEventListener("click", () => {
+        const formData = new FormData();
+        formData.append("profile_picture", selectedFile);
+        formData.append("user_id", "<%= user.user_id %>"); // envoie l'ID utilisateur
+
+        fetch("/upload_profile_picture", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Photo de profil mise à jour !");
+            } else {
+              alert("Erreur lors de la mise à jour.");
+            }
+            uploadBtn.style.display = "none";
+          })
+          .catch((error) => {
+            console.error("Erreur :", error);
+            alert("Erreur serveur.");
+            uploadBtn.style.display = "none";
+          });
+      });
     </script>
   </body>
 </html>
