@@ -205,6 +205,17 @@ async function regionSearch(region) {
   updateSites(sites);
 }
 
+async function showFavorites() {
+  const res = await fetch("http://localhost:3003/api/favorites");
+  if (res.status == 401) {
+    window.location.replace("http://localhost:3003/login");
+  }
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let sites = await res.json();
+  updateSites(sites);
+}
+
 function updateSites(sites) {
   const features = sites.map((site) => ({
     type: "Feature",
@@ -246,6 +257,7 @@ function updateSites(sites) {
 
 window.switchMaps = switchMaps;
 window.showMore = showMore;
+window.showFavorites = showFavorites;
 
 async function fetchAndDisplayhistorique() {
   try {

@@ -121,6 +121,19 @@ app.get("/api/region-search", async (req, res) => {
   }
 });
 
+app.get("/api/favorites", auth, async (req, res) => {
+  try {
+    const userID = req.session.user.user_id;
+    const sites = await queryDatabase(
+      "SELECT * FROM t_liste_favoris AS lf JOIN t_sites ON lf.titre = t_sites.site_id WHERE lf.user_id = " +
+        userID
+    );
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
 app.use(({ res }) => {
