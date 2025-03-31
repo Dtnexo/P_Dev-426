@@ -172,7 +172,7 @@ function switchMaps() {
 }
 
 async function showMore(id) {
-  const res = await fetch("http://localhost:3003/api/site-fav/" + id);
+  const res = await fetch("http://localhost:3003/api/site-details/" + id);
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
   let site_details = await res.json();
@@ -199,6 +199,17 @@ async function regionSearch(region) {
   const res = await fetch(
     "http://localhost:3003/api/region-search?region=" + region
   );
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let sites = await res.json();
+  updateSites(sites);
+}
+
+async function showFavorites() {
+  const res = await fetch("http://localhost:3003/api/favorites");
+  if (res.status == 401) {
+    window.location.replace("http://localhost:3003/login");
+  }
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
   let sites = await res.json();
@@ -246,6 +257,7 @@ function updateSites(sites) {
 
 window.switchMaps = switchMaps;
 window.showMore = showMore;
+window.showFavorites = showFavorites;
 
 async function fetchAndDisplayhistorique() {
   try {
@@ -253,51 +265,7 @@ async function fetchAndDisplayhistorique() {
     if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
     let sites = await res.json();
-
-    const features = sites.map((site) => ({
-      type: "Feature",
-      properties: {
-        description:
-          "<strong>" +
-          site.nom +
-          "</strong>" +
-          site.description +
-          "<button onclick='showMore(" +
-          site.site_id +
-          ")'>plus</button>",
-      },
-
-      geometry: {
-        type: "Point",
-        coordinates: [site.lon, site.lat], // Correction ici
-      },
-    }));
-
-    // Vérifie si la source existe déjà, sinon la crée
-    if (map.getSource("unescoSites")) {
-      map.getSource("unescoSites").setData({
-        type: "FeatureCollection",
-        features: features,
-      });
-    } else {
-      map.addSource("unescoSites", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: features,
-        },
-      });
-
-      map.addLayer({
-        id: "unescoSitesLayer",
-        type: "circle",
-        source: "unescoSites",
-        paint: {
-          "circle-radius": 6,
-          "circle-color": "#ff0000",
-        },
-      });
-    }
+    updateSites(sites);
   } catch (error) {
     console.error("Erreur lors de la récupération des sites:", error);
   }

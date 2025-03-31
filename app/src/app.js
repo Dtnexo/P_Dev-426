@@ -11,7 +11,10 @@ import { profileRouter } from "./routes/profile.js";
 import cookie from "cookie-parser";
 import { queryDatabase } from "../src/db/dbConnect.js";
 import cors from "cors";
+
 import { infouserRouter } from "./routes/infouser.js";
+
+import { twoFA } from "./routes/2fa.js";
 const app = express();
 const port = 3003;
 
@@ -67,6 +70,7 @@ app.use("/logout", logoutRouter);
 app.use("/register", registerRouter);
 app.use("/forum", auth, forumRouter); // Vérifier si auth doit s'appliquer à toutes les routes du forum
 app.use("/profile", auth, profileRouter);
+app.use("/2fa", twoFA);
 
 // Gestion des erreurs 404
 app.use("/forum", auth, forumRouter);
@@ -79,6 +83,7 @@ app.get("/api/sites", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 app.get("/api/sites-historique", async (req, res) => {
   try {
     const sites = await queryDatabase("SELECT * FROM t_avoir JOIN ON");
@@ -114,6 +119,19 @@ app.get("/api/region-search", async (req, res) => {
   try {
     const sites = await queryDatabase(
       "SELECT * FROM t_sites WHERE region LIKE '%" + req.query.region + "%'"
+    );
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/favorites", auth, async (req, res) => {
+  try {
+    const userID = req.session.user.user_id;
+    const sites = await queryDatabase(
+      "SELECT * FROM t_liste_favoris AS lf JOIN t_sites ON lf.titre = t_sites.site_id WHERE lf.user_id = " +
+        userID
     );
     res.json(sites); // Renvoie le JSON au client
   } catch (error) {
