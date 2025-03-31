@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : lun. 24 mars 2025 à 12:49
+-- Généré le : lun. 31 mars 2025 à 11:23
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -51,7 +51,7 @@ CREATE TABLE `t_contenir` (
 
 CREATE TABLE `t_historique` (
   `historique_id` int NOT NULL,
-  `site_id` int NOT NULL,
+  `siteConsulte` varchar(256) DEFAULT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1253,6 +1253,7 @@ CREATE TABLE `t_user` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
+  `photoProfil` text NOT NULL,
   `dateCreation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1279,8 +1280,7 @@ ALTER TABLE `t_contenir`
 --
 ALTER TABLE `t_historique`
   ADD PRIMARY KEY (`historique_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `site_id` (`site_id`);
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Index pour la table `t_liste_favoris`
@@ -1353,15 +1353,14 @@ ALTER TABLE `t_avoir`
 -- Contraintes pour la table `t_contenir`
 --
 ALTER TABLE `t_contenir`
-  ADD CONSTRAINT `contenir_ibfk_1` FOREIGN KEY (`historique_id`) REFERENCES `t_historique` (`historique_id`),
-  ADD CONSTRAINT `contenir_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`);
+  ADD CONSTRAINT `t_contenir_ibfk_1` FOREIGN KEY (`historique_id`) REFERENCES `t_historique` (`historique_id`),
+  ADD CONSTRAINT `t_contenir_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`);
 
 --
 -- Contraintes pour la table `t_historique`
 --
 ALTER TABLE `t_historique`
-  ADD CONSTRAINT `t_historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
-  ADD CONSTRAINT `t_historique_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `t_historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
 
 --
 -- Contraintes pour la table `t_liste_favoris`
