@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -27,14 +28,14 @@ export const sendCode = async (req, res) => {
 
   const code = Math.floor(Math.random() * (max - min + 1)) + min;
 
-  otpStorage[email] = { code, expiresAt: Date.now() + 5 * 60 * 1000 }; // 5 min
+  otpStorage[email] = { code, expiresAt: Date.now() + 15 * 60 * 1000 }; // 5 min
   console.log(`Sending OTP ${code} to ${email}`); // Debugging
 
   const optionsEmail = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Votre code d'authentification",
-    text: `Votre code est: ${code}. Il expire dans 5 minutes.`,
+    text: `Votre code est: ${code}. Il expire dans 15 minutes.`,
   };
 
   try {
@@ -64,6 +65,20 @@ export const verifyCode = (req, res) => {
     // Clear OTP & 2FA session
     delete otpStorage[email];
     delete req.session.pending2FA;
+
+    // Create JWT token valid for 2 hours
+    const token = jwt.sign(
+      { user_id, username, email },
+      process.env.SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+
+    // Store JWT token in an HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true, // Prevent access from JavaScript
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    });
 
     // Store final session
     req.session.user = { username, user_id };
