@@ -1,4 +1,3 @@
-// routes/forumRoutes.js
 import express from "express";
 import { auth } from "../controllers/authController.js";
 import { getPosts, addPost } from "../controllers/forumController.js";
