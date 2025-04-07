@@ -32,6 +32,12 @@ body {
 .maplibregl-popup-content {
   max-width: 400px;
   font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  border-radius: 5%;
+}
+
+.maplibregl-popup-content button {
+  border-radius: 10%;
+  color: #ffffff;
 }
 
 /* Section d’intro */
@@ -98,18 +104,21 @@ body {
 
 #map-area {
   display: flex;
+  background-color: #333333;
 }
 
 #site_title {
   font-weight: bold;
   text-align: center;
   margin: 10px;
+  color: #ffffff;
 }
 
 #site_description {
   text-align: center;
   margin: 10px;
   line-height: 120%;
+  color: #ffffff;
 }
 
 #details-area {

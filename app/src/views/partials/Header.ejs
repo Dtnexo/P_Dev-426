@@ -1,3 +1,6 @@
+<head>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
 <header class="header">
   <link rel="stylesheet" href="../../../static/css/header.css" />
   <img
@@ -16,10 +19,20 @@
     </ul>
   </nav>
   <% if (user) { %>
-  <a href="/profile">
-    <div class="profile-circle"><%= user.username[0] %></div>
-  </a>
+  <div id="profile-menu">
+    <button class="profile-circle" @click="toggleMenu">
+      <%= user.username[0] %>
+    </button>
+    <div v-show="showMenu" class="dropdown-menu">
+      <a href="/profile">Mon Profil</a>
+      <a href="/logout">Se Déconnecter</a>
+    </div>
+  </div>
   <% } else { %>
   <a href="/login" class="connexion">Connexion</a>
   <% } %>
+  <script src="/static/js/header.js"></script>
+  <script>
+    const mountedApp = app.mount("#header");
+  </script>
 </header>

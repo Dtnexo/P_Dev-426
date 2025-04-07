@@ -138,3 +138,24 @@ body {
 .header a {
   text-decoration: none;
 }
+
+.dropdown-menu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
