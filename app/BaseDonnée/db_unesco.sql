@@ -1254,7 +1254,7 @@ CREATE TABLE `t_user` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
-  `photoProfil` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `photoProfil` BLOB,
   `dateCreation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
