@@ -32,7 +32,7 @@ const updateName = async (req, res) => {
     }
 
     // Met à jour la session si besoin
-    if (req.session.user && req.session.user_id === id) {
+    if (req.session.user && req.session.user.user_id === id) {
       req.session.user.username = name;
     }
 

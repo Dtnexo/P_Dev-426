@@ -1,4 +1,5 @@
 import express from "express";
+
 import { get, updateName } from "../controllers/infouserController.js"; // Assure-toi que updateName est bien exportée
 
 const infouserRouter = express.Router();
