@@ -222,28 +222,16 @@
   
   <!-- Import App -->
   <script src="/static/js/main.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
   <!-- Mount App -->
   <script>
     const mountedApp = app.mount('#app');
   </script>
   <script>
-   document.addEventListener("DOMContentLoaded", () => {
-    const pieCanvas = document.getElementById("pieCanvas");
-
-    const pieChart = new Chart(pieCanvas, {
-      type: "pie",
-      data: {
-        labels: ["Diego", "Aime", "Les", "Hommes"],
-        datasets: [
-          {
-            data: [10, 20, 30, 40],
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"], // Ajoutez des couleurs
-          },
-        ],
-      },
-    });
-  });
+    window.chartDataFromServer = <%- JSON.stringify(chartData) %>;
   </script>
+  <!-- Chart.js depuis CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Ton script -->
+  <script src="/static/js/chart.js"></script>
   </body>    
 </html> 
