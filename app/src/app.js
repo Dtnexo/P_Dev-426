@@ -25,6 +25,8 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(cors());
+app.use(express.json()); // ← AJOUT ICI pour parser le body JSON
+app.use(express.urlencoded({ extended: true })); // pour les formulaires classiques
 
 // Redirige la page d'accueil vers /accueil
 app.get("/", (req, res) => {
@@ -59,9 +61,6 @@ app.use("/static", express.static(path.join(__dirname, "../static")));
 app.set("views", "src/views");
 app.set("view engine", "ejs");
 
-// Active le parsing des données envoyées en formulaire
-app.use(express.urlencoded()); // Ajouter { extended: true } pour prendre en charge les objets imbriqués
-
 // Déclaration des routes
 app.use("/accueil", homeRouter);
 app.use("/infouser", auth, infouserRouter);
@@ -78,15 +77,6 @@ app.use("/forum", auth, forumRouter);
 app.get("/api/sites", async (req, res) => {
   try {
     const sites = await queryDatabase("SELECT * FROM t_sites");
-    res.json(sites); // Renvoie le JSON au client
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get("/api/sites-historique", async (req, res) => {
-  try {
-    const sites = await queryDatabase("SELECT * FROM t_avoir JOIN ON");
     res.json(sites); // Renvoie le JSON au client
   } catch (error) {
     res.status(500).json({ error: error.message });

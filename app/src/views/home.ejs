@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <title>Accueil</title>
@@ -14,6 +14,8 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script> -->
+
+    
     <script src="https://unpkg.com/maplibre-gl@^5.1.0/dist/maplibre-gl.js"></script>
     <link
       href="https://unpkg.com/maplibre-gl@^5.1.0/dist/maplibre-gl.css"
@@ -24,7 +26,7 @@
   <body>
 
     <%- include('partials/Header', { user: user }) %>
-    <h1>Accueil</h1>
+    <div id="background">
     <button id="switch-map-button" onclick="switchMaps()">3d</button>
     <input type="text" placeholder="rechercher pays" id="country-search"/>
     <input type="text" placeholder="rechercher region" id="region-search"/>
@@ -37,7 +39,7 @@
         <div id="site_description"></div>
         <div style="display: none;" id="favoriteId"></div>
         <button style="display: none" id="favoriteButton" onclick="addToFavorites()">Ajouter aux favoris</button>
-      </div>
+    </div>      </div>
     </div>
 
     <section class="intro">
