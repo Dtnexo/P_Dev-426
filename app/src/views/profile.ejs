@@ -182,17 +182,17 @@
     <section class="section-lieux-visités">
       <h1 class="titre-carte-visité">Votre carte des vos sites visités</h1>
       <div id="map-area">
-        <div id="map" style="width: 1036px; height: 621px; z-index: 0">
-          <button id="switch-map-button" onclick="switchMaps()">3d</button>
-        </div>
+        <div id="map" style="width: 1036px; height: 621px; z-index: 0"><button id="switch-map-button" onclick="switchMaps()">3d</button></div>
         <div id="details-area">
           <div id="site_title"></div>
           <div id="site_description"></div>
+          <div style="display: none;" id="favoriteId"></div>
+          <button style="display: none" id="favoriteButton" onclick="addToFavorites()">Ajouter aux favoris</button>
         </div>
       </div>
     </section>
     <div class="hisfav">
-      <button class="carte-favoris" @click="changeImagefav">
+      <button class="carte-favoris" @click="changeImagefav" onclick="showFavorites()">
         <div class="favoImage">
           <h2>Favoris</h2>
           <div><img class="fav-image" src="/static/image/arrow-bottom.png"alt="next" /></div>
