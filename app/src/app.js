@@ -139,6 +139,23 @@ app.get("/api/favorites", auth, async (req, res) => {
   }
 });
 
+app.get("/api/addToFavorites", auth, async (req, res) => {
+  try {
+    const userID = req.session.user.user_id;
+    const site_id = req.query.site_id;
+    await queryDatabase(
+      "INSERT INTO t_liste_favoris (titre, user_id) VALUES (" +
+        site_id +
+        "," +
+        userID +
+        ");"
+    );
+    res.status(200).json({ message: "Favori ajouté avec succes" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
 app.use(({ res }) => {

@@ -178,11 +178,43 @@ async function showMore(id) {
   let site_details = await res.json();
   const site_title = document.getElementById("site_title");
   const site_description = document.getElementById("site_description");
+  const favoriteButton = document.getElementById("favoriteButton");
+  const favoriteId = document.getElementById("favoriteId");
+
+  //get favorites to disable button if needed
+  const favRes = await fetch("http://localhost:3003/api/favorites");
+  if (favRes.status == 401) {
+    window.location.replace("http://localhost:3003/login");
+  }
+  if (!favRes.ok) throw new Error(`Erreur HTTP: ${favRes.status}`);
+  let favSites = await favRes.json();
+  let buttonDisabled = true;
+  for (let site of favSites) {
+    if (site.titre == id) {
+      buttonDisabled = true;
+      break;
+    } else {
+      buttonDisabled = false;
+    }
+  }
+
+  if (buttonDisabled == true) {
+    favoriteButton.textContent = "";
+    favoriteButton.textContent = "Deja dans les favoris";
+    favoriteButton.disabled = true;
+  } else {
+    favoriteButton.textContent = "";
+    favoriteButton.textContent = "Ajouter au favoris";
+    favoriteButton.disabled = false;
+  }
   //clear old content
   site_title.textContent = "";
   site_description.textContent = "";
+  favoriteId.textContent = "";
   site_title.textContent = site_details[0].nom;
   site_description.textContent = site_details[0].description;
+  favoriteId.textContent = site_details[0].site_id;
+  favoriteButton.style = "display: block";
 }
 
 async function countrySearch(country) {
@@ -255,9 +287,25 @@ function updateSites(sites) {
   });
 }
 
+async function addToFavorites() {
+  const favoriteId = document.getElementById("favoriteId");
+  const site_id = favoriteId.textContent;
+  const res = await fetch(
+    "http://localhost:3003/api/addToFavorites?site_id=" + site_id
+  );
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+  if (res.status == 200) {
+    const favoriteButton = document.getElementById("favoriteButton");
+    favoriteButton.textContent = "";
+    favoriteButton.textContent = "Deja dans les favoris";
+    favoriteButton.disabled = true;
+  }
+}
+
 window.switchMaps = switchMaps;
 window.showMore = showMore;
 window.showFavorites = showFavorites;
+window.addToFavorites = addToFavorites;
 
 async function fetchAndDisplayhistorique() {
   try {
