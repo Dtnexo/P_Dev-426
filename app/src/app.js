@@ -120,7 +120,7 @@ app.get("/api/favorites", auth, async (req, res) => {
   try {
     const userID = req.session.user.user_id;
     const sites = await queryDatabase(
-      "SELECT * FROM t_liste_favoris AS lf JOIN t_sites ON lf.titre = t_sites.site_id WHERE lf.user_id = " +
+      "SELECT * FROM t_liste_favoris AS lf JOIN t_sites ON lf.site_id = t_sites.site_id WHERE lf.user_id = " +
         userID
     );
     res.json(sites); // Renvoie le JSON au client
