@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `db_unesco`
+-- Base de données : db_unesco
 --
 
 -- --------------------------------------------------------
@@ -26,6 +26,9 @@ SET time_zone = "+00:00";
 --
 -- Structure de la table `t_avoir`
 --
+Create database db_unesco;
+
+Use db_unesco;
 
 CREATE TABLE `t_avoir` (
   `liste_favoris_id` int NOT NULL,
@@ -52,6 +55,18 @@ CREATE TABLE `t_contenir` (
 CREATE TABLE `t_historique` (
   `historique_id` int NOT NULL,
   `siteConsulte` varchar(256) DEFAULT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+
+-- Structure de la table `t_liste_favoris`
+--
+
+CREATE TABLE `t_liste_favoris` (
+  `liste_favoris_id` int NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1275,7 +1290,6 @@ CREATE TABLE `t_wishlist` (
 ALTER TABLE `t_avoir`
   ADD PRIMARY KEY (`liste_favoris_id`,`site_id`),
   ADD KEY `site_id` (`site_id`);
-
 --
 -- Index pour la table `t_contenir`
 --
@@ -1288,6 +1302,13 @@ ALTER TABLE `t_contenir`
 --
 ALTER TABLE `t_historique`
   ADD PRIMARY KEY (`historique_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Index pour la table `t_liste_favoris`
+--
+ALTER TABLE `t_liste_favoris`
+  ADD PRIMARY KEY (`liste_favoris_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -1369,6 +1390,12 @@ ALTER TABLE `t_contenir`
 --
 ALTER TABLE `t_historique`
   ADD CONSTRAINT `t_historique_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
+
+--
+-- Contraintes pour la table `t_liste_favoris`
+--
+ALTER TABLE `t_liste_favoris`
+  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
 
 --
 -- Contraintes pour la table `t_publication`
