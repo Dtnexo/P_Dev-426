@@ -21,52 +21,13 @@
             >Informations <br />
             personnelles</a
           >
-          <a href="#" class="security">Sécurité</a>
+          <a href="/security" class="security">Sécurité</a>
           <a href="/forum" class="info">Forum</a>
         </div>
         <div class="infos-perso">
-          <h1>Informations générales</h1>
+          <h1>securité</h1>
           <div class="line"></div>
-          <div class="photo-profil">
-            <p>Photo de profile</p>
-            <img
-              :src="imageProfile"
-              alt="User Profile Picture"
-              id="profile-img"
-            />
-            <input
-              type="file"
-              id="file-input"
-              accept="image/*"
-              style="display: none"
-            />
-            <i
-              class="fa-solid fa-pencil"
-              style="color: #ffffff; font-size: 24px"
-              id="edit-photo"
-            ></i>
-            <button id="upload-btn" style="display: none">✅</button>
-          </div>
-          <div class="line"></div>
-          <div class="name-user">
-            <p>Nom</p>
-            <p id="display-name"><%= user.username %></p>
-            <input
-              type="text"
-              id="edit-name"
-              style="display: none"
-              placeholder="Entrez un nouveau nom"
-            />
-            <i
-              id="edit-btn-name"
-              class="fa-solid fa-pencil"
-              style="color: #ffffff; font-size: 24px; cursor: pointer"
-            ></i>
-            <button id="save-btn-name" style="display: none">✅</button>
-            <button id="cancel-btn-name" style="display: none">❌</button>
-          </div>
-
-          <div class="line"></div>
+        
           <div class="mdp-user">
             <p>Mot de passe</p>
             <p>************</p>
