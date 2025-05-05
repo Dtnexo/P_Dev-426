@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : lun. 07 avr. 2025 à 12:15
+-- Généré le : lun. 05 mai 2025 à 11:10
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -61,12 +61,12 @@ CREATE TABLE `t_historique` (
 -- --------------------------------------------------------
 
 --
+
 -- Structure de la table `t_liste_favoris`
 --
 
 CREATE TABLE `t_liste_favoris` (
   `liste_favoris_id` int NOT NULL,
-  `site_id` int NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1257,7 +1257,7 @@ CREATE TABLE `t_user` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
-  `photoProfil` BLOB,
+  `photoProfil` blob,
   `dateCreation` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1266,7 +1266,19 @@ CREATE TABLE `t_user` (
 --
 
 INSERT INTO `t_user` (`user_id`, `username`, `email`, `password`, `salt`, `photoProfil`, `dateCreation`) VALUES
-(2, 'Mathieu', 'mathieu.bamert08@gmail.com', '47284d836eb960cf16509671ca8036350f45420fd13587cd3deab77c2f8fb803', '68eunvZM03pn8MO/eNjyNhqPdBgcB328gA==', NULL, '2025-04-07 10:40:31');
+(3, 'Mathieu', 'mathieu.bamert08@gmail.com', '6acb15d2be6ce0ceca197ae4f849147c63b3083e84c01a7e26cc553e4aec89c7', 'XQMG1BWHUTr+UHqGUPmKZWlFg4cqNO8uxw==', NULL, '2025-04-28 10:51:07');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `t_wishlist`
+--
+
+CREATE TABLE `t_wishlist` (
+  `wishlist_id` int NOT NULL,
+  `site_id` int NOT NULL,
+  `user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Index pour les tables déchargées
@@ -1278,7 +1290,6 @@ INSERT INTO `t_user` (`user_id`, `username`, `email`, `password`, `salt`, `photo
 ALTER TABLE `t_avoir`
   ADD PRIMARY KEY (`liste_favoris_id`,`site_id`),
   ADD KEY `site_id` (`site_id`);
-
 --
 -- Index pour la table `t_contenir`
 --
@@ -1298,8 +1309,7 @@ ALTER TABLE `t_historique`
 --
 ALTER TABLE `t_liste_favoris`
   ADD PRIMARY KEY (`liste_favoris_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `site_id` (`site_id`);
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Index pour la table `t_publication`
@@ -1322,6 +1332,14 @@ ALTER TABLE `t_user`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Index pour la table `t_wishlist`
+--
+ALTER TABLE `t_wishlist`
+  ADD PRIMARY KEY (`wishlist_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `site_id` (`site_id`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
@@ -1330,12 +1348,6 @@ ALTER TABLE `t_user`
 --
 ALTER TABLE `t_historique`
   MODIFY `historique_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `t_liste_favoris`
---
-ALTER TABLE `t_liste_favoris`
-  MODIFY `liste_favoris_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `t_publication`
@@ -1347,7 +1359,13 @@ ALTER TABLE `t_publication`
 -- AUTO_INCREMENT pour la table `t_user`
 --
 ALTER TABLE `t_user`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pour la table `t_wishlist`
+--
+ALTER TABLE `t_wishlist`
+  MODIFY `wishlist_id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées
@@ -1357,7 +1375,7 @@ ALTER TABLE `t_user`
 -- Contraintes pour la table `t_avoir`
 --
 ALTER TABLE `t_avoir`
-  ADD CONSTRAINT `avoir_ibfk_1` FOREIGN KEY (`liste_favoris_id`) REFERENCES `t_liste_favoris` (`liste_favoris_id`),
+  ADD CONSTRAINT `avoir_ibfk_1` FOREIGN KEY (`liste_favoris_id`) REFERENCES `t_wishlist` (`wishlist_id`),
   ADD CONSTRAINT `avoir_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`);
 
 --
@@ -1377,14 +1395,20 @@ ALTER TABLE `t_historique`
 -- Contraintes pour la table `t_liste_favoris`
 --
 ALTER TABLE `t_liste_favoris`
-  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
-  ADD CONSTRAINT `t_liste_favoris_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
 
 --
 -- Contraintes pour la table `t_publication`
 --
 ALTER TABLE `t_publication`
   ADD CONSTRAINT `t_publication_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
+
+--
+-- Contraintes pour la table `t_wishlist`
+--
+ALTER TABLE `t_wishlist`
+  ADD CONSTRAINT `t_wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
+  ADD CONSTRAINT `t_wishlist_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
