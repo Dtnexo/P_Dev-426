@@ -1,44 +1,38 @@
 import "dotenv/config";
-import { queryDatabase } from "../db/dbConnect.js"; // <-- Ton fichier de connexion
+import { queryDatabase } from "../db/dbConnect.js";
 
 // Rendu de la page "infouser"
 const get = (req, res) => {
-  console.log(req.session.user);
+  // console.log(req.session.user);
   res.render("infouser", { user: req.session.user || null });
 };
 
 // Mise à jour du nom
 const updateName = async (req, res) => {
   try {
-    console.log("BODY REÇU :", req.body);
-    const { id, name } = req.body;
+    const id = req.session.user.user_id;
+    const name = req.body.name;
+    const username = req.session.user.username;
 
-    if (!id || !name) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Champs manquants" });
-    }
-
+    console.log("user : ", id);
     const result = await queryDatabase(
       "UPDATE t_user SET username = ? WHERE user_id = ?",
       [name, id]
     );
     console.log("Résultat SQL:", result);
 
-    if (result.affectedRows === 0) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Utilisateur non trouvé" });
-    }
-
-    // Met à jour la session si besoin
-    if (req.session.user && req.session.user.user_id === id) {
-      req.session.user.username = name;
-    }
+    req.session.user.username = name;
+    req.session.user.user_id = id;
+    req.session.save((err) => {
+      if (err) {
+        console.error("Erreur lors de la sauvegarde de la session :", err);
+      }
+    });
+    console.log(req.session.user.username);
 
     return res.json({ success: true });
   } catch (error) {
-    console.error("Erreur updateName:", error);
+    //console.error("Erreur updateName:", error);
     return res.status(500).json({ success: false, error: "Erreur serveur" });
   }
 };
