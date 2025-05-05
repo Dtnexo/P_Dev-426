@@ -50,15 +50,20 @@ const createUser = async (req, res) => {
   );
 
   if (isName.length === 0 && isEmail.length === 0) {
-    await queryDatabase(
+    const result = await queryDatabase(
       `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
       [username, mail, salt, hashedPassword]
     );
 
-    // Store email in session for 2FA
-    req.session.pending2FA = { email: mail, username: username };
+    // Récupérer l'utilisateur inséré avec insertId
+    const [newUser] = await queryDatabase(
+      "SELECT user_id, username, email FROM t_user WHERE user_id = ?",
+      [result.insertId]
+    );
 
-    // Redirect to 2FA page
+    // Stocker l'utilisateur dans la session pour 2FA
+    req.session.pending2FA = newUser;
+
     return res.redirect("/2fa");
   } else {
     req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
