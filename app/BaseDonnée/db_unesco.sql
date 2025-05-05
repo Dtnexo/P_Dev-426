@@ -63,7 +63,6 @@ CREATE TABLE `t_historique` (
 
 CREATE TABLE `t_liste_favoris` (
   `liste_favoris_id` int NOT NULL,
-  `site_id` int NOT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -1275,7 +1274,6 @@ INSERT INTO `t_user` (`user_id`, `username`, `email`, `password`, `salt`, `photo
 ALTER TABLE `t_avoir`
   ADD PRIMARY KEY (`liste_favoris_id`,`site_id`),
   ADD KEY `site_id` (`site_id`);
-
 --
 -- Index pour la table `t_contenir`
 --
@@ -1295,8 +1293,7 @@ ALTER TABLE `t_historique`
 --
 ALTER TABLE `t_liste_favoris`
   ADD PRIMARY KEY (`liste_favoris_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `site_id` (`site_id`);
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Index pour la table `t_publication`
@@ -1374,8 +1371,7 @@ ALTER TABLE `t_historique`
 -- Contraintes pour la table `t_liste_favoris`
 --
 ALTER TABLE `t_liste_favoris`
-  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`),
-  ADD CONSTRAINT `t_liste_favoris_ibfk_2` FOREIGN KEY (`site_id`) REFERENCES `t_sites` (`site_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `t_liste_favoris_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`user_id`);
 
 --
 -- Contraintes pour la table `t_publication`
