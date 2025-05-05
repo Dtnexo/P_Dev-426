@@ -30,7 +30,7 @@
           <div class="photo-profil">
             <p>Photo de profile</p>
             <img
-              :src="imageProfile"
+              :src="'/infouser/photo/<%= user.user_id %>'"
               alt="User Profile Picture"
               id="profile-img"
             />
@@ -182,7 +182,7 @@
         formData.append("profile_picture", selectedFile);
         formData.append("user_id", "<%= user.user_id %>"); // envoie l'ID utilisateur
 
-        fetch("/upload_profile_picture", {
+        fetch("/infouser/upload_profile_picture", {
           method: "POST",
           body: formData,
         })
