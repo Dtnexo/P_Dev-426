@@ -19,11 +19,11 @@
     </ul>
   </nav>
   <% if (user) { %>
-  <div id="profile-menu">
+  <div onclick="showMenu()" id="profile-menu">
     <button class="profile-circle" @click="toggleMenu">
       <%= user.username[0] %>
     </button>
-    <div v-show="showMenu" class="dropdown-menu">
+    <div id="dropdown-menu" class="dropdown-menu">
       <a href="/profile">Mon Profil</a>
       <a href="/logout">Se Déconnecter</a>
     </div>
@@ -31,5 +31,11 @@
   <% } else { %>
   <a href="/login" class="connexion">Connexion</a>
   <% } %>
-  <script src="/static/js/header.js"></script>
+  <script>
+    const showMenu = () => {
+      console.log("hi");
+      const menu = document.getElementById("dropdown-menu");
+      menu.style.display = menu.style.display === "none" ? "block" : "none";
+    };
+  </script>
 </header>
