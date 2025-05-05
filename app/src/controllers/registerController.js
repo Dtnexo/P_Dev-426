@@ -68,6 +68,9 @@ const createUser = async (req, res) => {
         return res.redirect("/2fa"); // Redirect to 2FA page if enabled
       }
 
+      // Log the user in (create a session)
+      req.session.user = newUser; // Store user info in session (now they are logged in)
+
       // If 2FA is not enabled, redirect to homepage or a dashboard
       req.flash("success_msg", "Compte créé avec succès!");
       return res.redirect("/accueil"); // Redirect to homepage or user dashboard after registration
