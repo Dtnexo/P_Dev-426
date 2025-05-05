@@ -2,8 +2,6 @@ import { queryDatabase } from "../db/dbConnect.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import { Session } from "inspector/promises";
-import { error } from "console";
 
 const get = (req, res) => {
   res.render("../views/register");
@@ -16,6 +14,7 @@ const createUser = async (req, res) => {
   const mail = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const enable2FA = req.body.enable2FA === "on"; // Check if user has opted in for 2FA
 
   if (!username || !mail || !password) {
     req.flash("error_msg", "Tous les champs doivent être remplis!");
@@ -40,33 +39,48 @@ const createUser = async (req, res) => {
     .update(salt + req.body.password)
     .digest("hex");
 
-  const isName = await queryDatabase(
-    `SELECT username FROM t_user WHERE username LIKE ?`,
-    [username]
-  );
-  const isEmail = await queryDatabase(
-    `SELECT email FROM t_user WHERE email LIKE ?`,
-    [mail]
-  );
-
-  if (isName.length === 0 && isEmail.length === 0) {
-    const result = await queryDatabase(
-      `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
-      [username, mail, salt, hashedPassword]
+  try {
+    // Check if the username or email already exists
+    const isName = await queryDatabase(
+      `SELECT username FROM t_user WHERE username = ?`,
+      [username]
+    );
+    const isEmail = await queryDatabase(
+      `SELECT email FROM t_user WHERE email = ?`,
+      [mail]
     );
 
-    // Récupérer l'utilisateur inséré avec insertId
-    const [newUser] = await queryDatabase(
-      "SELECT user_id, username, email FROM t_user WHERE user_id = ?",
-      [result.insertId]
-    );
+    if (isName.length === 0 && isEmail.length === 0) {
+      const result = await queryDatabase(
+        `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
+        [username, mail, salt, hashedPassword]
+      );
 
-    // Stocker l'utilisateur dans la session pour 2FA
-    req.session.pending2FA = newUser;
+      // Retrieve the inserted user with insertId
+      const [newUser] = await queryDatabase(
+        "SELECT user_id, username, email FROM t_user WHERE user_id = ?",
+        [result.insertId]
+      );
 
-    return res.redirect("/2fa");
-  } else {
-    req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
+      // If user has opted for 2FA, store the user in session for 2FA
+      if (enable2FA) {
+        req.session.pending2FA = newUser; // Store user info in session for 2FA
+        return res.redirect("/2fa"); // Redirect to 2FA page if enabled
+      }
+
+      // Log the user in (create a session)
+      req.session.user = newUser; // Store user info in session (now they are logged in)
+
+      // If 2FA is not enabled, redirect to homepage or a dashboard
+      req.flash("success_msg", "Compte créé avec succès!");
+      return res.redirect("/accueil"); // Redirect to homepage or user dashboard after registration
+    } else {
+      req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
+      return res.redirect("/register");
+    }
+  } catch (error) {
+    console.error("Error during user creation:", error);
+    req.flash("error_msg", "Une erreur s'est produite, veuillez réessayer.");
     return res.redirect("/register");
   }
 };

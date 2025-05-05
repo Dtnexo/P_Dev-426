@@ -12,8 +12,9 @@ const authenticateUser = async (req, res) => {
   try {
     const username = req.body.username;
 
+    // Fetch user with has_2_fa flag
     const user = await queryDatabase(
-      `SELECT user_id, salt, password, email FROM t_user WHERE username = ?`,
+      `SELECT user_id, salt, password, email, has_2_fa FROM t_user WHERE username = ?`,
       [username]
     );
 
@@ -22,9 +23,7 @@ const authenticateUser = async (req, res) => {
       return res.redirect("/login");
     }
 
-    const { user_id, salt, password, email } = user[0];
-
-    console.log("User ID Retrieved:", user_id); // Debugging step
+    const { user_id, salt, password, email, has_2_fa } = user[0];
 
     const hashedPassword = crypto
       .createHash("sha256")
@@ -39,11 +38,31 @@ const authenticateUser = async (req, res) => {
       return res.redirect("/login");
     }
 
-    // Store user info in session before OTP verification
-    req.session.pending2FA = { username, user_id, email };
+    // Use Boolean to properly handle values like 0, 'false', etc.
+    if (Boolean(has_2_fa)) {
+      req.session.pending2FA = {
+        username,
+        user_id,
+        email,
+        has_2_fa: true,
+      };
+      return res.redirect("/2fa");
+    }
 
-    // Redirect user to 2FA OTP page
-    res.redirect("/2fa");
+    const token = jwt.sign(
+      { user_id, username, email },
+      process.env.SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 2 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    req.session.user = { username, user_id };
+    return res.redirect("/accueil");
   } catch (error) {
     console.error("Authentication Error:", error);
     req.flash("error_msg", "Une erreur s'est produite !");
