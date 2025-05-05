@@ -27,7 +27,7 @@
         <div class="infos-perso">
           <h1>securité</h1>
           <div class="line"></div>
-        
+
           <div class="mdp-user">
             <p>Mot de passe</p>
             <p>************</p>
@@ -36,6 +36,17 @@
               class="fa-solid fa-pencil"
               style="color: #ffffff; font-size: 24px"
             ></i>
+          </div>
+          <div class="line"></div>
+          <!-- 2FA toggle section -->
+          <div class="2fa-toggle">
+            <p>Activer 2FA</p>
+            <label class="switch">
+              <input type="checkbox" id="enable-2fa" <%= user.has_2_fa ?
+              "checked" : "" %> />
+
+              <span class="slider round"></span>
+            </label>
           </div>
           <div class="line"></div>
         </div>
@@ -161,6 +172,43 @@
             alert("Erreur serveur.");
             uploadBtn.style.display = "none";
           });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const enable2FAToggle = document.getElementById("enable-2fa");
+        if (enable2FAToggle) {
+          enable2FAToggle.addEventListener("change", () => {
+            const enable2FA = enable2FAToggle.checked;
+            const userId = "<%= user.user_id %>"; // Use the current user's ID
+
+            fetch("/update-2fa", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                enable_2fa: enable2FA, // Send the updated 2FA setting
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  alert(
+                    `2FA ${enable2FA ? "activé" : "désactivé"} avec succès !`
+                  );
+                } else {
+                  alert("Erreur lors de la mise à jour de 2FA.");
+                  enable2FAToggle.checked = !enable2FA; // Reset the toggle if failed
+                }
+              })
+              .catch((err) => {
+                console.error("Erreur:", err);
+                alert("Erreur de connexion.");
+                enable2FAToggle.checked = !enable2FA; // Reset the toggle if failed
+              });
+          });
+        }
       });
     </script>
   </body>

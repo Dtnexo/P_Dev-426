@@ -65,7 +65,7 @@ app.set("view engine", "ejs");
 // Déclaration des routes
 app.use("/accueil", homeRouter);
 app.use("/infouser", auth, infouserRouter);
-app.use("/security", auth, securitypageRouter)
+app.use("/security", auth, securitypageRouter);
 app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/register", registerRouter);

@@ -1,6 +1,10 @@
 import express from "express";
 
-import { get, updateName } from "../controllers/securitypageController.js"; // Assure-toi que updateName est bien exportée
+import {
+  get,
+  updateName,
+  update2FA,
+} from "../controllers/securitypageController.js"; // Assure-toi que updateName est bien exportée
 
 const securitypageRouter = express.Router();
 
@@ -9,5 +13,7 @@ securitypageRouter.get("/", get);
 
 // Route API pour modifier le nom
 securitypageRouter.post("/update-name", updateName);
+
+securitypageRouter.post("/security", update2FA);
 
 export { securitypageRouter };
