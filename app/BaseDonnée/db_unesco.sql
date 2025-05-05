@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `db_unesco`
+-- Base de données : db_unesco
 --
 
 -- --------------------------------------------------------
@@ -26,6 +26,9 @@ SET time_zone = "+00:00";
 --
 -- Structure de la table `t_avoir`
 --
+Create database db_unesco;
+
+Use db_unesco;
 
 CREATE TABLE `t_avoir` (
   `liste_favoris_id` int NOT NULL,

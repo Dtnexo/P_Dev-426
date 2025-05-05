@@ -4,7 +4,7 @@ import "dotenv/config";
 const auth = (req, res, next) => {
   if (!req.cookies.token) {
     const message = `Vous n'avez pas fourni de jeton d'authentification. Ajoutez-en un dans les cookies.`;
-    return res.status(401).json({ message });
+    return res.redirect("/login");
   } else {
     jwt.verify(
       req.cookies.token,
