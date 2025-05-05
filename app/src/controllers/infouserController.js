@@ -32,8 +32,10 @@ const updateName = async (req, res) => {
     }
 
     // Met à jour la session si besoin
-    if (req.session.user && req.session.user.user_id === id) {
+    if (req.session.user && Number(req.session.user.user_id) === Number(id)) {
       req.session.user.username = name;
+    } else {
+      console.warn("Avertissement : user_id non trouvé dans la session.");
     }
 
     return res.json({ success: true });
