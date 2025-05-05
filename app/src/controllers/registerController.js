@@ -2,8 +2,6 @@ import { queryDatabase } from "../db/dbConnect.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import { Session } from "inspector/promises";
-import { error } from "console";
 
 const get = (req, res) => {
   res.render("../views/register");
@@ -16,6 +14,7 @@ const createUser = async (req, res) => {
   const mail = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
+  const enable2FA = req.body.enable2FA === "on"; // Check if user has opted in for 2FA
 
   if (!username || !mail || !password) {
     req.flash("error_msg", "Tous les champs doivent être remplis!");
@@ -40,14 +39,16 @@ const createUser = async (req, res) => {
     .update(salt + req.body.password)
     .digest("hex");
 
-  const isName = await queryDatabase(
-    `SELECT username FROM t_user WHERE username LIKE ?`,
-    [username]
-  );
-  const isEmail = await queryDatabase(
-    `SELECT email FROM t_user WHERE email LIKE ?`,
-    [mail]
-  );
+  try {
+    // Check if the username or email already exists
+    const isName = await queryDatabase(
+      `SELECT username FROM t_user WHERE username = ?`,
+      [username]
+    );
+    const isEmail = await queryDatabase(
+      `SELECT email FROM t_user WHERE email = ?`,
+      [mail]
+    );
 
   if (isName.length === 0 && isEmail.length === 0) {
     const result = await queryDatabase(
