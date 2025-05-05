@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { queryDatabase } from "../db/dbConnect.js";
+
 import multer from "multer";
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -10,12 +11,19 @@ const get = (req, res) => {
     "[GET /infouser] Chargement de la page avec session :",
     req.session.user
   );
+
+
+// Rendu de la page "infouser"
+const get = (req, res) => {
+  // console.log(req.session.user);
+
   res.render("infouser", { user: req.session.user || null });
 };
 
 // Mise à jour du nom
 const updateName = async (req, res) => {
   try {
+
     console.log("[POST /infouser/update-name] Données reçues :", req.body);
     const { id, name } = req.body;
 
@@ -26,11 +34,18 @@ const updateName = async (req, res) => {
         .json({ success: false, error: "Champs manquants" });
     }
 
+    const id = req.session.user.user_id;
+    const name = req.body.name;
+    const username = req.session.user.username;
+
+
+    console.log("user : ", id);
     const result = await queryDatabase(
       "UPDATE t_user SET username = ? WHERE user_id = ?",
       [name, id]
     );
     console.log("[updateName] Résultat SQL :", result);
+
 
     if (result.affectedRows === 0) {
       console.warn("[updateName] Aucun utilisateur mis à jour pour ID :", id);
@@ -50,6 +65,20 @@ const updateName = async (req, res) => {
     return res.json({ success: true });
   } catch (error) {
     console.error("[updateName] Erreur serveur :", error);
+
+    req.session.user.username = name;
+    req.session.user.user_id = id;
+    req.session.save((err) => {
+      if (err) {
+        console.error("Erreur lors de la sauvegarde de la session :", err);
+      }
+    });
+    console.log(req.session.user.username);
+
+    return res.json({ success: true });
+  } catch (error) {
+    //console.error("Erreur updateName:", error);
+
     return res.status(500).json({ success: false, error: "Erreur serveur" });
   }
 };
