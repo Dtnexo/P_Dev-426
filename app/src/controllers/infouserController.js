@@ -1,74 +1,61 @@
 import "dotenv/config";
 import { queryDatabase } from "../db/dbConnect.js";
-import multer from "multer";
 
-const storage = multer.memoryStorage(); // stockage en RAM pour le blob
+import multer from "multer";
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// ==========================
-// Rendu de la page infouser
-// ==========================
-const get = (req, res) => {
+// Rendu de la page "infouser"
+const get = async (req, res) => {
   console.log(
     "[GET /infouser] Chargement de la page avec session :",
     req.session.user
   );
+
+  const name = await queryDatabase(
+    `SELECT username FROM t_user Where user_id='${req.session.user.user_id}'`
+  );
+  console.log("get", name);
+  req.session.user.username = name[0].username;
+  // console.log(req.session.user);
+
   res.render("infouser", { user: req.session.user || null });
 };
 
-// ==============================
-// Mise à jour du nom d'utilisateur
-// ==============================
+// Mise à jour du nom
 const updateName = async (req, res) => {
-  const id = req.session.user?.user_id;
-  const name = req.body.name;
-
   try {
-    console.log("[POST /infouser/update-name] Données reçues :", { id, name });
+    const id = req.session.user.user_id;
+    const name = req.body.name;
+    const username = req.session.user.username;
 
-    if (!id || !name) {
-      console.warn("[updateName] Champs manquants :", { id, name });
-      return res
-        .status(400)
-        .json({ success: false, error: "Champs manquants" });
-    }
-
+    console.log("user : ", id);
     const result = await queryDatabase(
       "UPDATE t_user SET username = ? WHERE user_id = ?",
       [name, id]
     );
+    console.log("Résultat SQL:", result);
 
-    console.log("[updateName] Résultat SQL :", result);
-
-    if (result.affectedRows === 0) {
-      console.warn("[updateName] Aucun utilisateur mis à jour pour ID :", id);
-      return res
-        .status(404)
-        .json({ success: false, error: "Utilisateur non trouvé" });
-    }
-
-    if (req.session.user && Number(req.session.user.user_id) === Number(id)) {
-      req.session.user.username = name;
-      console.log(
-        "[updateName] Session mise à jour avec le nouveau nom :",
-        name
-      );
-    }
+    req.session.user.username = name;
+    req.session.user.user_id = id;
+    req.session.save((err) => {
+      if (err) {
+        console.error("Erreur lors de la sauvegarde de la session :", err);
+      }
+    });
+    console.log("mise a jour ", req.session.user.username);
 
     return res.json({ success: true });
   } catch (error) {
-    console.error("[updateName] Erreur serveur :", error);
+    //console.error("Erreur updateName:", error);
     return res.status(500).json({ success: false, error: "Erreur serveur" });
   }
 };
 
-// ==========================
 // Upload de la photo de profil
-// ==========================
 const uploadProfilePicture = async (req, res) => {
   try {
     console.log("[POST /infouser/upload_profile_picture] Requête reçue");
-
     const { user_id } = req.body;
     const file = req.file;
 
@@ -90,7 +77,6 @@ const uploadProfilePicture = async (req, res) => {
       "UPDATE t_user SET photoProfil = ? WHERE user_id = ?",
       [file.buffer, user_id]
     );
-
     console.log("[uploadProfilePicture] Résultat SQL :", result);
 
     if (result.affectedRows === 0) {
@@ -113,9 +99,7 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
-// ==================================
 // Récupération de la photo de profil
-// ==================================
 const getProfilePicture = async (req, res) => {
   try {
     const { id } = req.params;
@@ -142,7 +126,7 @@ const getProfilePicture = async (req, res) => {
     }
 
     console.log("[getProfilePicture] Image trouvée et envoyée pour ID :", id);
-    res.set("Content-Type", "image/png"); // ou image/jpeg selon ce que tu stockes
+    res.set("Content-Type", "image/png");
     res.send(imageBuffer);
   } catch (error) {
     console.error("[getProfilePicture] Erreur serveur :", error);
@@ -150,7 +134,4 @@ const getProfilePicture = async (req, res) => {
   }
 };
 
-// ==================
-// Exports
-// ==================
 export { get, updateName, uploadProfilePicture, getProfilePicture, upload };
