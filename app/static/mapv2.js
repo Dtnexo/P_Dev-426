@@ -172,49 +172,50 @@ function switchMaps() {
 }
 
 async function showMore(id) {
-  const res = await fetch("http://localhost:3003/api/site-details/" + id);
+  // Récupérer les détails du site
+  const res = await fetch(`http://localhost:3003/api/site-details/${id}`);
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-
   let site_details = await res.json();
+
+  // Sélectionner les éléments du DOM
   const site_title = document.getElementById("site_title");
   const site_description = document.getElementById("site_description");
   const favoriteButton = document.getElementById("favoriteButton");
   const favoriteId = document.getElementById("favoriteId");
 
-  //get favorites to disable button if needed
+  // Vérifier les favoris pour désactiver le bouton si nécessaire
   const favRes = await fetch("http://localhost:3003/api/favorites");
-  if (favRes.status == 401) {
+  if (favRes.status === 401) {
     window.location.replace("http://localhost:3003/login");
   }
   if (!favRes.ok) throw new Error(`Erreur HTTP: ${favRes.status}`);
   let favSites = await favRes.json();
-  let buttonDisabled = true;
+
+  // Vérifier si le site est déjà dans les favoris
+  let buttonDisabled = false; // Par défaut, le bouton est activé
   for (let site of favSites) {
-    if (site.titre == id) {
-      buttonDisabled = true;
+    if (site.titre === id) {
+      buttonDisabled = true; // Site trouvé dans les favoris, désactiver le bouton
       break;
-    } else {
-      buttonDisabled = false;
     }
   }
 
-  if (buttonDisabled == true) {
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Deja dans les favoris";
-    favoriteButton.disabled = true;
-  } else {
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Ajouter au favoris";
-    favoriteButton.disabled = false;
-  }
-  //clear old content
+  // Mettre à jour le bouton selon l'état
+  favoriteButton.textContent = buttonDisabled
+    ? "Déjà dans les favoris"
+    : "Ajouter aux favoris";
+  favoriteButton.disabled = buttonDisabled;
+  favoriteButton.style.display = "block";
+
+  // Effacer l'ancien contenu
   site_title.textContent = "";
   site_description.textContent = "";
   favoriteId.textContent = "";
+
+  // Mettre à jour avec les nouveaux détails
   site_title.textContent = site_details[0].nom;
   site_description.textContent = site_details[0].description;
   favoriteId.textContent = site_details[0].site_id;
-  favoriteButton.style = "display: block";
 }
 
 async function countrySearch(country) {
