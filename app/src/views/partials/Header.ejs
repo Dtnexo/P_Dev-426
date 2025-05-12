@@ -1,5 +1,11 @@
 <header class="header">
   <link rel="stylesheet" href="../../../static/css/header.css" />
+  <style>
+    /* Assurez-vous que le menu est masqué par défaut */
+    #dropdown-menu {
+      display: none;
+    }
+  </style>
   <img
     src="/static/image/logo-ACD.png"
     alt="ACD Motorsport Logo"
@@ -16,8 +22,8 @@
     </ul>
   </nav>
   <% if (user) { %>
-  <div onclick="showMenu()" id="profile-menu">
-    <button class="profile-circle" @click="toggleMenu">
+  <div id="profile-menu">
+    <button class="profile-circle" onclick="showMenu()">
       <%= user.username[0] %>
     </button>
     <div id="dropdown-menu" class="dropdown-menu">
@@ -31,7 +37,11 @@
   <script>
     const showMenu = () => {
       const menu = document.getElementById("dropdown-menu");
-      menu.style.display = menu.style.display === "none" ? "block" : "none";
+      if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "block"; // Affiche le menu
+      } else {
+        menu.style.display = "none"; // Masque le menu
+      }
     };
   </script>
 </header>
