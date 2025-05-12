@@ -24,7 +24,7 @@ body {
 .map-image {
   max-width: 90%;
   height: auto;
-  border: 2px solid #ccc; /* Optionnel, pour donner un petit cadre */
+  border: 2px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 

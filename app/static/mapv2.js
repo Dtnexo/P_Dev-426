@@ -1,8 +1,26 @@
 import { MAPTILER_KEY } from "./map-key.js";
 
+function getUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(
+        new Error("La géolocalisation n'est pas supportée par ce navigateur.")
+      );
+    } else {
+      navigator.geolocation.getCurrentPosition(resolve, () => {
+        reject(new Error("Impossible d'obtenir la position de l'utilisateur."));
+      });
+    }
+  });
+}
+
+// Position par défaut (ETML)
+const defaultCenter = [6.615623, 46.524281];
+
+// Création de la carte avec la position par défaut
 const map = new maplibregl.Map({
   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-  center: [-74.0066, 40.7135],
+  center: defaultCenter,
   zoom: 15.5,
   pitch: 0,
   maxPitch: 0,
@@ -10,6 +28,23 @@ const map = new maplibregl.Map({
   container: "map",
   canvasContextAttributes: { antialias: true },
 });
+
+// Tente de récupérer la position utilisateur
+try {
+  const position = await getUserLocation();
+  const { latitude, longitude } = position.coords;
+
+  // Recentrer la carte
+  map.setCenter([longitude, latitude]);
+
+  // Optionnel : ajouter un marqueur sur la position de l'utilisateur
+  //new maplibregl.Marker().setLngLat([longitude, latitude]).addTo(map);
+
+  console.log("Position utilisateur :", latitude, longitude);
+} catch (error) {
+  console.warn(error.message);
+}
+
 const pathToJson = "/static/sites.json";
 async function fetchAndDisplaySites() {
   try {
