@@ -5,6 +5,12 @@ const wishlistRouter = express.Router();
 
 wishlistRouter.post("/", async (req, res) => {
   const { site_id } = req.body;
+  const username = req.session.user.username; // Assuming you have the username in the session
+  console.log("Username:", username);
+  /*const userId = await queryDatabase(
+    `SELECT user_id FROM t_user WHERE username = ?`,
+    [username]
+  );*/
 
   if (!site_id) {
     return res.status(400).json({ error: "site_id is required" });
@@ -12,7 +18,7 @@ wishlistRouter.post("/", async (req, res) => {
 
   try {
     // Example: Fetch `liste_favoris_id` based on the user (e.g., from session or token)
-    const userId = req.session.user_id; // Assuming you use sessions
+    const userId = req.session.user.user_id; // Assuming you use sessions
     console.log("User ID:", userId);
     const result = await queryDatabase(
       "SELECT wishlist_id FROM t_wishlist WHERE user_id = ?",

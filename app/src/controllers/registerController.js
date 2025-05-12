@@ -55,14 +55,17 @@ const createUser = async (req, res) => {
         [usernamenew, mail, salt, hashedPassword]
       );
 
+      const user_id = await queryDatabase(
+        `SELECT user_id FROM t_user WHERE username = ?`,
+        [usernamenew]
+      );
+
       // Retrieve the inserted user with insertId
       const [newUser] = await queryDatabase(
         "SELECT user_id, username, email FROM t_user WHERE user_id = ?",
         [result.insertId]
       );
 
-      console.log("New user created:", newUser);
-      const user_id = newUser.user_id;
       const username = newUser.username;
 
       const token = jwt.sign(
