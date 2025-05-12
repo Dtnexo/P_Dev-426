@@ -10,13 +10,12 @@ const get = (req, res) => {
 const createUser = async (req, res) => {
   const salt = crypto.randomBytes(25).toString("base64");
 
-  const username = req.body.username;
+  const usernamenew = req.body.username;
   const mail = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  const enable2FA = req.body.enable2FA === "on"; // Check if user has opted in for 2FA
 
-  if (!username || !mail || !password) {
+  if (!usernamenew || !mail || !password) {
     req.flash("error_msg", "Tous les champs doivent être remplis!");
     return res.redirect("/register");
   }
@@ -43,7 +42,7 @@ const createUser = async (req, res) => {
     // Check if the username or email already exists
     const isName = await queryDatabase(
       `SELECT username FROM t_user WHERE username = ?`,
-      [username]
+      [usernamenew]
     );
     const isEmail = await queryDatabase(
       `SELECT email FROM t_user WHERE email = ?`,
@@ -53,7 +52,7 @@ const createUser = async (req, res) => {
     if (isName.length === 0 && isEmail.length === 0) {
       const result = await queryDatabase(
         `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
-        [username, mail, salt, hashedPassword]
+        [usernamenew, mail, salt, hashedPassword]
       );
 
       // Retrieve the inserted user with insertId
@@ -62,15 +61,22 @@ const createUser = async (req, res) => {
         [result.insertId]
       );
 
-      // If user has opted for 2FA, store the user in session for 2FA
-      if (enable2FA) {
-        req.session.pending2FA = newUser; // Store user info in session for 2FA
-        return res.redirect("/2fa"); // Redirect to 2FA page if enabled
-      }
+      console.log("New user created:", newUser);
+      const user_id = newUser.user_id;
+      const username = newUser.username;
 
-      // Log the user in (create a session)
-      req.session.user = newUser; // Store user info in session (now they are logged in)
+      const token = jwt.sign(
+        { user_id: newUser.user_id, username, email: mail },
+        process.env.SECRET_KEY,
+        { expiresIn: "2h" }
+      );
 
+      res.cookie("P_Dev", token, {
+        httpOnly: true,
+        maxAge: 2 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production",
+      });
+      req.session.user = { username, user_id };
       // If 2FA is not enabled, redirect to homepage or a dashboard
       req.flash("success_msg", "Compte créé avec succès!");
       return res.redirect("/accueil"); // Redirect to homepage or user dashboard after registration
