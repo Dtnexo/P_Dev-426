@@ -173,7 +173,7 @@ function switchMaps() {
 
 async function showMore(id) {
   // Récupérer les détails du site
-  const res = await fetch(`http://localhost:3003/api/site-details/${id}`);
+  const res = await fetch(`http://localhost:3003/api/site-details/` + id);
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
   let site_details = await res.json();
 
@@ -185,7 +185,7 @@ async function showMore(id) {
 
   // Vérifier les favoris pour désactiver le bouton si nécessaire
   const favRes = await fetch("http://localhost:3003/api/favorites");
-  if (favRes.status === 401) {
+  if (favRes.status == 401) {
     window.location.replace("http://localhost:3003/login");
   }
   if (!favRes.ok) throw new Error(`Erreur HTTP: ${favRes.status}`);
@@ -194,7 +194,7 @@ async function showMore(id) {
   // Vérifier si le site est déjà dans les favoris
   let buttonDisabled = false; // Par défaut, le bouton est activé
   for (let site of favSites) {
-    if (site.titre === id) {
+    if (site.titre == id) {
       buttonDisabled = true; // Site trouvé dans les favoris, désactiver le bouton
       break;
     }
