@@ -2,7 +2,7 @@ import express from "express";
 
 import {
   get,
-  updateName,
+  updatePassword,
   update2FA,
 } from "../controllers/securitypageController.js"; // Assure-toi que updateName est bien exportée
 
@@ -11,8 +11,8 @@ const securitypageRouter = express.Router();
 // Route pour afficher la page
 securitypageRouter.get("/", get);
 
-// Route API pour modifier le nom
-securitypageRouter.post("/update-name", updateName);
+// Route API pour modifier le password
+securitypageRouter.post("/update-password", updatePassword);
 
 securitypageRouter.post("/security", update2FA);
 
