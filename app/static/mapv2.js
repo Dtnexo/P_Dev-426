@@ -346,23 +346,27 @@ window.addToFavorites = addToFavorites;
 //recherche par pays
 //note: recherche predictive:
 // mettre <input onInput="func()"
-document
-  .getElementById("country-search")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      let country = this.value;
-      countrySearch(country);
-    }
-  });
+if (document.getElementById("country-search")) {
+  document
+    .getElementById("country-search")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        let country = this.value;
+        countrySearch(country);
+      }
+    });
+}
 
 //recherche par region
 //note: recherche predictive:
 // mettre <input onInput="func()"
-document
-  .getElementById("region-search")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      let region = this.value;
-      regionSearch(region);
-    }
-  });
+if (document.getElementById("region-search")) {
+  document
+    .getElementById("region-search")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        let region = this.value;
+        regionSearch(region);
+      }
+    });
+}
