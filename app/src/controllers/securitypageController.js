@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { queryDatabase } from "../db/dbConnect.js"; // <-- Ton fichier de connexion
+import { updateName } from "./infouserController.js";
 
 const get = (req, res) => {
   console.log(req.session.user);
