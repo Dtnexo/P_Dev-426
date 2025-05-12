@@ -8,6 +8,7 @@ import { auth } from "./controllers/authController.js";
 import { forumRouter } from "./routes/forum.js";
 import { logoutRouter } from "./routes/logout.js";
 import { profileRouter } from "./routes/profile.js";
+import { wishlistRouter } from "./routes/addWishlist.js";
 import cookie from "cookie-parser";
 import { queryDatabase } from "../src/db/dbConnect.js";
 import cors from "cors";
@@ -70,6 +71,7 @@ app.use("/register", registerRouter);
 app.use("/forum", auth, forumRouter); // Vérifier si auth doit s'appliquer à toutes les routes du forum
 app.use("/profile", auth, profileRouter);
 app.use("/2fa", twoFA);
+app.use("/addToWishlist", wishlistRouter);
 
 // Gestion des erreurs 404
 app.use("/forum", auth, forumRouter);
