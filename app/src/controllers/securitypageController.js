@@ -1,10 +1,59 @@
 import "dotenv/config";
 import { queryDatabase } from "../db/dbConnect.js"; // <-- Ton fichier de connexion
 import { updateName } from "./infouserController.js";
+import crypto from "crypto";
 
 const get = (req, res) => {
   console.log(req.session.user);
   res.render("securitypage", { user: req.session.user || null });
+};
+
+const updatePassword = async (req, res) => {
+  const salt = crypto.randomBytes(25).toString("base64");
+
+  try {
+    console.log("BODY REÇU :", req.body);
+    const { id, password } = req.body;
+
+    if (!id || !password) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Champs manquants" });
+    }
+
+    const hashedPassword = crypto
+      .createHash("sha256")
+      .update(salt + password)
+      .digest("hex");
+
+    const result = await queryDatabase(
+      "UPDATE t_user SET password = ? WHERE user_id = ?",
+      [hashedPassword, id]
+    );
+
+    const result2 = await queryDatabase(
+      "UPDATE t_user SET salt = ? WHERE user_id = ?",
+      [salt, id]
+    );
+    console.log("PASSWORD CHANGED:", result2);
+    console.log("SALT CHANGED", result);
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Utilisateur non trouvé" });
+    }
+
+    // Met à jour la session si besoin
+    if (req.session.user && req.session.user.user_id === id) {
+      req.session.user.username = name;
+    }
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.error("Erreur updatePassword:", error);
+    return res.status(500).json({ success: false, error: "Erreur serveur" });
+  }
 };
 
 const update2FA = async (req, res) => {
@@ -26,4 +75,4 @@ const update2FA = async (req, res) => {
   }
 };
 
-export { get, updateName, update2FA };
+export { get, updateName, update2FA, updatePassword };
