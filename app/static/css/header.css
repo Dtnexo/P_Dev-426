@@ -133,6 +133,14 @@ body {
   border-radius: 50%;
   cursor: pointer;
   text-decoration: none;
+  border: none;
+  transition: background-color 0.3s ease-in-out, scale 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+.profile-circle:hover {
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  scale: 1.05;
+  background-color: #444;
 }
 
 .header a {
