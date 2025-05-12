@@ -32,10 +32,20 @@
             <p>Mot de passe</p>
             <p>************</p>
             <i
-              id="edit-btn"
+              id="edit-btn-password"
               class="fa-solid fa-pencil"
-              style="color: #ffffff; font-size: 24px"
+              style="color: #ffffff; font-size: 24px; cursor: pointer"
             ></i>
+
+            <div id="password-form" style="display: none; margin-top: 10px">
+              <input
+                type="password"
+                id="new-password"
+                placeholder="Nouveau mot de passe"
+              />
+              <button id="save-password-btn">✅</button>
+              <button id="cancel-password-btn">❌</button>
+            </div>
           </div>
           <div class="line"></div>
           <!-- 2FA toggle section -->
@@ -60,11 +70,59 @@
     <script>
       const mountedApp = app.mount("#app");
     </script>
-  
+    <script>
+      const editBtnPassword = document.getElementById("edit-btn-password");
+      const passwordForm = document.getElementById("password-form");
+      const savePasswordBtn = document.getElementById("save-password-btn");
+      const cancelPasswordBtn = document.getElementById("cancel-password-btn");
+
+      editBtnPassword.addEventListener("click", () => {
+        passwordForm.style.display = "block";
+      });
+
+      cancelPasswordBtn.addEventListener("click", () => {
+        document.getElementById("new-password").value = "";
+        passwordForm.style.display = "none";
+      });
+
+      savePasswordBtn.addEventListener("click", async () => {
+        const newPassword = document
+          .getElementById("new-password")
+          .value.trim();
+
+        if (newPassword.length < 6) {
+          alert("Le mot de passe doit contenir au moins 6 caractères.");
+          return;
+        }
+
+        try {
+          const res = await fetch("/security/update-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: "<%= user.user_id %>",
+              password: newPassword,
+            }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            alert("Mot de passe modifié avec succès !");
+            document.getElementById("new-password").value = "";
+            passwordForm.style.display = "none";
+          } else {
+            alert("Erreur : " + (data.error || "inconnue"));
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Erreur de connexion au serveur.");
+        }
+      });
+    </script>
 
     <script>
-
-
       document.addEventListener("DOMContentLoaded", () => {
         const enable2FAToggle = document.getElementById("enable-2fa");
         if (enable2FAToggle) {
