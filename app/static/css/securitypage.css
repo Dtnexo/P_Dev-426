@@ -134,6 +134,11 @@
 #display-name {
 }
 
+.takeSpace {
+  margin: 100px;
+  margin-left: 0%;
+  margin-right: 0%;
+}
 #edit-name {
   display: none;
   padding: 5px;
