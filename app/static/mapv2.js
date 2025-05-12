@@ -182,6 +182,7 @@ async function showMore(id) {
   const site_description = document.getElementById("site_description");
   const favoriteButton = document.getElementById("favoriteButton");
   const favoriteId = document.getElementById("favoriteId");
+  const wishlistId = document.getElementById("wishlistId");
 
   // Vérifier les favoris pour désactiver le bouton si nécessaire
   const favRes = await fetch("http://localhost:3003/api/favorites");
@@ -206,6 +207,7 @@ async function showMore(id) {
     : "Ajouter aux favoris";
   favoriteButton.disabled = buttonDisabled;
   favoriteButton.style.display = "block";
+  wishlistId.style.display = "block";
 
   // Effacer l'ancien contenu
   site_title.textContent = "";
@@ -288,25 +290,47 @@ function updateSites(sites) {
   });
 }
 
-async function addToFavorites() {
-  const favoriteId = document.getElementById("favoriteId");
-  const site_id = favoriteId.textContent;
-  const res = await fetch(
-    "http://localhost:3003/api/addToFavorites?site_id=" + site_id
-  );
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-  if (res.status == 200) {
-    const favoriteButton = document.getElementById("favoriteButton");
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Deja dans les favoris";
-    favoriteButton.disabled = true;
+async function addToWishlist() {
+  const wishlistId = document.getElementById("wishlistId");
+  if (!wishlistId) {
+    console.error("Élément wishlistId introuvable !");
+    return;
+  }
+
+  const site_id = wishlistId.textContent.trim();
+  if (!site_id) {
+    console.error("L'ID du site est vide !");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3003/addToWishlist", {
+      method: "POST", // Use POST for database modifications
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ site_id }), // Send the site_id in the request body
+    });
+
+    if (!res.ok) {
+      throw new Error(`Erreur HTTP: ${res.status}`);
+    }
+
+    if (res.status === 200) {
+      const wishlistButton = document.getElementById("wishlistButton");
+      wishlistButton.textContent = "Déjà dans les favoris";
+      wishlistButton.disabled = true;
+      console.log("Site ajouté aux favoris avec succès !");
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'ajout aux favoris :", error.message);
   }
 }
 
 window.switchMaps = switchMaps;
 window.showMore = showMore;
 window.showFavorites = showFavorites;
-window.addToFavorites = addToFavorites;
+window.addToWishlist = addToWishlist;
 
 //recherche par pays
 //note: recherche predictive:
