@@ -71,7 +71,7 @@ const createUser = async (req, res) => {
         { expiresIn: "2h" }
       );
 
-      res.cookie("P_Dev", token, {
+      res.cookie("token", token, {
         httpOnly: true,
         maxAge: 2 * 60 * 60 * 1000,
         secure: process.env.NODE_ENV === "production",

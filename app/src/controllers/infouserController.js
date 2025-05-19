@@ -15,7 +15,6 @@ const get = async (req, res) => {
   const name = await queryDatabase(
     `SELECT username FROM t_user Where user_id='${req.session.user.user_id}'`
   );
-  console.log("get", name);
   req.session.user.username = name[0].username;
   // console.log(req.session.user);
 
@@ -34,7 +33,6 @@ const updateName = async (req, res) => {
       "UPDATE t_user SET username = ? WHERE user_id = ?",
       [name, id]
     );
-    console.log("Résultat SQL:", result);
 
     req.session.user.username = name;
     req.session.user.user_id = id;
