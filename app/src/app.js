@@ -157,7 +157,7 @@ app.get("/api/continentWheel", async (req, res) => {
     }
     const query = `
       SELECT s.continent, COUNT(*) AS nombre_sites
-      FROM t_liste_favoris lf
+      FROM t_historique lf
       JOIN t_sites s ON lf.site_id = s.site_id
       WHERE lf.user_id = ?
       GROUP BY s.continent;
@@ -179,7 +179,7 @@ app.get("/api/countryWheel", async (req, res) => {
     }
     const query = `
       SELECT s.states, COUNT(*) AS nombre_sites
-      FROM t_liste_favoris lf
+      FROM t_historique lf
       JOIN t_sites s ON lf.site_id = s.site_id
       WHERE lf.user_id = ? AND s.continent = ?
       GROUP BY s.states;
