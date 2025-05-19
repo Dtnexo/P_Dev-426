@@ -34,6 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
               chart.data.labels[i]
           );
           const rawData = await response.json();
+          if (rawData.length == 0) {
+            return;
+          }
           console.log(rawData);
           (pieChart.data.labels = rawData.map((item) => item.states)),
             (pieChart.data.datasets[0].data = rawData.map(
