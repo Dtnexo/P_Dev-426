@@ -35,12 +35,17 @@
       <div id="map" style="width: 1200px; height: 700px; min-width: 1200px; border-radius: 20px; margin-top: 2%;"></div>
 
       <div id="details-area">
-        <div id="site_title"></div>
-        <div id="site_description"></div>
+        <div id="site_title">Sélectionnez un site sur la carte</div>
+        <div id="site_description">
+          Découvrez ici la description du site UNESCO sélectionné.<br>
+          Cliquez sur un point de la carte pour afficher les détails.
+        </div>
         <div style="display: none;" id="favoriteId"></div>
-        <button style="display: none" id="favoriteButton" onclick="addToWishlist()">Ajouter aux favoris</button>
-                <button style="display: none" id="wishlistId" onclick="addToWishlist()">Ajouter à la Wishlist</button>
-    </div>      </div>
+        <div id="buttonSearch">
+          <button style="display: none" id="favoriteButton" onclick="addToWishlist()">Ajouter aux favoris</button>
+          <button style="display: none" id="wishlistId" onclick="addToWishlist()">Ajouter à la Wishlist</button>
+        </div>
+      </div>      </div>
     </div>
 
     <section class="intro">

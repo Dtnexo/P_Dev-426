@@ -13,6 +13,12 @@ body {
 #background {
   background-color: #333333;
   padding: 3%;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 /* Section carte */
@@ -38,6 +44,13 @@ body {
   max-width: 400px;
   font: 12px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
   border-radius: 5%;
+  background: #fff;
+  color: #222;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .maplibregl-popup-content button {
@@ -111,24 +124,78 @@ body {
   display: flex;
 }
 
+#details-area {
+  margin-left: 20px;
+  width: 100%;
+  max-width: none;
+  font-size: large;
+  padding: 28px 24px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 180px;
+  transition: box-shadow 0.2s;
+}
+
 #site_title {
   font-weight: bold;
   text-align: center;
-  margin: 10px;
-  color: #ffffff;
+  margin: 40px 0 8px 0;
+  color: #3756a6;
+  font-size: 1.4em;
+  letter-spacing: 1px;
 }
 
 #site_description {
   text-align: center;
-  margin: 10px;
-  line-height: 120%;
-  color: #ffffff;
+  margin: 10px 0 18px 0;
+  line-height: 1.4;
+  color: #f5f5f5;
+  font-size: 1.05em;
 }
 
-#details-area {
-  margin-left: 10px;
+#buttonSearch {
   width: 100%;
-  font-size: large;
+  display: flex;
+  justify-content: center; /* centre les boutons horizontalement */
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  gap: 10px; /* espace entre les boutons */
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+#favoriteButton,
+#wishlistId {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 22px;
+  background: #11255a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(17, 37, 90, 0.08);
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+/* Ajoute ce bloc pour aligner les boutons côte à côte */
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+#favoriteButton:hover,
+#wishlistId:hover {
+  background: #3756a6;
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
 }
 
 #switch-map-button {
@@ -164,4 +231,14 @@ body {
 
 h3 {
   color: black;
+}
+
+.popup-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  margin-bottom: 8px;
 }
