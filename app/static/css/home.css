@@ -24,7 +24,7 @@ body {
 .map-image {
   max-width: 90%;
   height: auto;
-  border: 2px solid #ccc; /* Optionnel, pour donner un petit cadre */
+  border: 2px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -135,18 +135,31 @@ body {
   font-family: "Roboto", sans-serif;
   text-decoration: none;
   color: white;
-  background-color: #444;
+  background-color: #11255a;
   padding: 8px 13px;
   border-radius: 5px;
   font-size: 15px;
   transition: background 0.3s ease-in-out;
   position: relative;
-  top: 40px;
+  left: 25px;
+  top: 95px;
   z-index: 99999;
 }
 
 #switch-map-button:hover {
   background-color: #666;
+}
+
+#country-search,
+#region-search {
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  width: 300px;
+  box-sizing: border-box;
+  margin-right: 2%;
 }
 
 h3 {

@@ -158,6 +158,7 @@
 
     </style>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 </head>
   <body >
     <div id="app">
@@ -179,6 +180,8 @@
         <p>Consultez votre historique de visites et gérez vos favoris !</p>
       </div>
     </section>
+
+
     <section class="section-lieux-visités">
       <h1 class="titre-carte-visité">Votre carte des vos sites visités</h1>
       <div id="map-area">
@@ -187,14 +190,14 @@
           <div id="site_title"></div>
           <div id="site_description"></div>
           <div style="display: none;" id="favoriteId"></div>
-          <button style="display: none" id="favoriteButton" onclick="addToFavorites()">Ajouter aux favoris</button>
+          <button style="display: none" id="favoriteButton" onclick="addToFavorites()">Ajouter à la wishlist</button>
         </div>
       </div>
     </section>
     <div class="hisfav">
       <button class="carte-favoris" @click="changeImagefav" onclick="showFavorites()">
         <div class="favoImage">
-          <h2>Favoris</h2>
+          <h2>Wishlist</h2>
           <div><img class="fav-image" src="/static/image/arrow-bottom.png"alt="next" /></div>
         </div>
         <div class="favoris" v-if="showFav">
@@ -210,6 +213,7 @@
         <p>ASDSA</p>
       </div>
     </button>
+
     <section class="section-progression">
       <h1>Votre progression de visites dans le monde</h1>
       <canvas id="pieCanvas" aria-label="chart" role="img"></canvas>

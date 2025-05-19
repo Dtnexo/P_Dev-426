@@ -6,8 +6,8 @@ const app = Vue.createApp({
       imagefav: "static/image/arrow-bottom.png",
       imageHist: "static/image/arrow-bottom.png",
       imageProfile: "./static/image/userProfile.png",
-      isFavOpen: false, // État pour Favoris
-      isHistOpen: false, // État pour Historique
+      isFavOpen: false,
+      isHistOpen: false,
       showFav: false,
       showHsit: false,
     };

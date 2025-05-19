@@ -133,6 +133,14 @@ body {
   border-radius: 50%;
   cursor: pointer;
   text-decoration: none;
+  border: none;
+  transition: background-color 0.3s ease-in-out, scale 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+.profile-circle:hover {
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  scale: 1.05;
+  background-color: #444;
 }
 
 .header a {
@@ -141,12 +149,14 @@ body {
 
 .dropdown-menu {
   position: absolute;
+  right: 40px;
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  display: none;
 }
 
 .dropdown-menu a {

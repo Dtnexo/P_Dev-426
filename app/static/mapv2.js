@@ -1,8 +1,26 @@
 import { MAPTILER_KEY } from "./map-key.js";
 
+function getUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(
+        new Error("La géolocalisation n'est pas supportée par ce navigateur.")
+      );
+    } else {
+      navigator.geolocation.getCurrentPosition(resolve, () => {
+        reject(new Error("Impossible d'obtenir la position de l'utilisateur."));
+      });
+    }
+  });
+}
+
+// Position par défaut (ETML)
+const defaultCenter = [6.615623, 46.524281];
+
+// Création de la carte avec la position par défaut
 const map = new maplibregl.Map({
   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-  center: [-74.0066, 40.7135],
+  center: defaultCenter,
   zoom: 15.5,
   pitch: 0,
   maxPitch: 0,
@@ -10,6 +28,23 @@ const map = new maplibregl.Map({
   container: "map",
   canvasContextAttributes: { antialias: true },
 });
+
+// Tente de récupérer la position utilisateur
+try {
+  const position = await getUserLocation();
+  const { latitude, longitude } = position.coords;
+
+  // Recentrer la carte
+  map.setCenter([longitude, latitude]);
+
+  // Optionnel : ajouter un marqueur sur la position de l'utilisateur
+  //new maplibregl.Marker().setLngLat([longitude, latitude]).addTo(map);
+
+  console.log("Position utilisateur :", latitude, longitude);
+} catch (error) {
+  console.warn(error.message);
+}
+
 const pathToJson = "/static/sites.json";
 async function fetchAndDisplaySites() {
   try {
@@ -172,49 +207,52 @@ function switchMaps() {
 }
 
 async function showMore(id) {
-  const res = await fetch("http://localhost:3003/api/site-details/" + id);
+  // Récupérer les détails du site
+  const res = await fetch(`http://localhost:3003/api/site-details/` + id);
   if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-
   let site_details = await res.json();
+
+  // Sélectionner les éléments du DOM
   const site_title = document.getElementById("site_title");
   const site_description = document.getElementById("site_description");
   const favoriteButton = document.getElementById("favoriteButton");
   const favoriteId = document.getElementById("favoriteId");
+  const wishlistId = document.getElementById("wishlistId");
 
-  //get favorites to disable button if needed
+  // Vérifier les favoris pour désactiver le bouton si nécessaire
   const favRes = await fetch("http://localhost:3003/api/favorites");
   if (favRes.status == 401) {
     window.location.replace("http://localhost:3003/login");
   }
   if (!favRes.ok) throw new Error(`Erreur HTTP: ${favRes.status}`);
   let favSites = await favRes.json();
-  let buttonDisabled = true;
+
+  // Vérifier si le site est déjà dans les favoris
+  let buttonDisabled = false; // Par défaut, le bouton est activé
   for (let site of favSites) {
     if (site.titre == id) {
-      buttonDisabled = true;
+      buttonDisabled = true; // Site trouvé dans les favoris, désactiver le bouton
       break;
-    } else {
-      buttonDisabled = false;
     }
   }
 
-  if (buttonDisabled == true) {
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Deja dans les favoris";
-    favoriteButton.disabled = true;
-  } else {
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Ajouter au favoris";
-    favoriteButton.disabled = false;
-  }
-  //clear old content
+  // Mettre à jour le bouton selon l'état
+  favoriteButton.textContent = buttonDisabled
+    ? "Déjà dans les favoris"
+    : "Ajouter aux favoris";
+  favoriteButton.disabled = buttonDisabled;
+  favoriteButton.style.display = "block";
+  wishlistId.style.display = "block";
+
+  // Effacer l'ancien contenu
   site_title.textContent = "";
   site_description.textContent = "";
   favoriteId.textContent = "";
+
+  // Mettre à jour avec les nouveaux détails
   site_title.textContent = site_details[0].nom;
   site_description.textContent = site_details[0].description;
   favoriteId.textContent = site_details[0].site_id;
-  favoriteButton.style = "display: block";
 }
 
 async function countrySearch(country) {
@@ -287,25 +325,47 @@ function updateSites(sites) {
   });
 }
 
-async function addToFavorites() {
-  const favoriteId = document.getElementById("favoriteId");
-  const site_id = favoriteId.textContent;
-  const res = await fetch(
-    "http://localhost:3003/api/addToFavorites?site_id=" + site_id
-  );
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-  if (res.status == 200) {
-    const favoriteButton = document.getElementById("favoriteButton");
-    favoriteButton.textContent = "";
-    favoriteButton.textContent = "Deja dans les favoris";
-    favoriteButton.disabled = true;
+async function addToWishlist() {
+  const wishlistId = document.getElementById("wishlistId");
+  if (!wishlistId) {
+    console.error("Élément wishlistId introuvable !");
+    return;
+  }
+
+  const site_id = wishlistId.textContent.trim();
+  if (!site_id) {
+    console.error("L'ID du site est vide !");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3003/addToWishlist", {
+      method: "POST", // Use POST for database modifications
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ site_id }), // Send the site_id in the request body
+    });
+
+    if (!res.ok) {
+      throw new Error(`Erreur HTTP: ${res.status}`);
+    }
+
+    if (res.status === 200) {
+      const wishlistButton = document.getElementById("wishlistButton");
+      wishlistButton.textContent = "Déjà dans les favoris";
+      wishlistButton.disabled = true;
+      console.log("Site ajouté aux favoris avec succès !");
+    }
+  } catch (error) {
+    console.error("Erreur lors de l'ajout aux favoris :", error.message);
   }
 }
 
 window.switchMaps = switchMaps;
 window.showMore = showMore;
 window.showFavorites = showFavorites;
-window.addToFavorites = addToFavorites;
+window.addToWishlist = addToWishlist;
 
 async function fetchAndDisplayhistorique() {
   try {
@@ -324,23 +384,27 @@ async function fetchAndDisplayhistorique() {
 //recherche par pays
 //note: recherche predictive:
 // mettre <input onInput="func()"
-document
-  .getElementById("country-search")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      let country = this.value;
-      countrySearch(country);
-    }
-  });
+if (document.getElementById("country-search")) {
+  document
+    .getElementById("country-search")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        let country = this.value;
+        countrySearch(country);
+      }
+    });
+}
 
 //recherche par region
 //note: recherche predictive:
 // mettre <input onInput="func()"
-document
-  .getElementById("region-search")
-  .addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      let region = this.value;
-      regionSearch(region);
-    }
-  });
+if (document.getElementById("region-search")) {
+  document
+    .getElementById("region-search")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        let region = this.value;
+        regionSearch(region);
+      }
+    });
+}

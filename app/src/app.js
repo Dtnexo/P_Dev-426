@@ -8,6 +8,7 @@ import { auth } from "./controllers/authController.js";
 import { forumRouter } from "./routes/forum.js";
 import { logoutRouter } from "./routes/logout.js";
 import { profileRouter } from "./routes/profile.js";
+import { wishlistRouter } from "./routes/addWishlist.js";
 import cookie from "cookie-parser";
 import { queryDatabase } from "../src/db/dbConnect.js";
 import cors from "cors";
@@ -70,6 +71,7 @@ app.use("/register", registerRouter);
 app.use("/forum", auth, forumRouter); // Vérifier si auth doit s'appliquer à toutes les routes du forum
 app.use("/profile", auth, profileRouter);
 app.use("/2fa", twoFA);
+app.use("/addToWishlist", wishlistRouter);
 
 // Gestion des erreurs 404
 app.use("/forum", auth, forumRouter);
@@ -120,7 +122,7 @@ app.get("/api/favorites", auth, async (req, res) => {
   try {
     const userID = req.session.user.user_id;
     const sites = await queryDatabase(
-      "SELECT * FROM t_liste_favoris AS lf JOIN t_sites ON lf.site_id = t_sites.site_id WHERE lf.user_id = " +
+      "SELECT * FROM t_avoir av JOIN t_sites si ON si.site_id = av.site_id JOIN t_wishlist fav ON fav.wishlist_id = av.liste_favoris_id WHERE fav.user_id = " +
         userID
     );
     res.json(sites); // Renvoie le JSON au client
@@ -134,7 +136,7 @@ app.get("/api/addToFavorites", auth, async (req, res) => {
     const userID = req.session.user.user_id;
     const site_id = req.query.site_id;
     await queryDatabase(
-      "INSERT INTO t_liste_favoris (titre, user_id) VALUES (" +
+      "INSERT INTO t_wishlist (titre, user_id) VALUES (" +
         site_id +
         "," +
         userID +

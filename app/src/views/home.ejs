@@ -32,12 +32,14 @@
     <input type="text" placeholder="rechercher region" id="region-search"/>
 
     <div id="map-area">
-      <div id="map" style="width: 1200px; height: 700px; min-width: 1200px"></div>
+      <div id="map" style="width: 1200px; height: 700px; min-width: 1200px; border-radius: 20px; margin-top: 2%;"></div>
+
       <div id="details-area">
         <div id="site_title"></div>
         <div id="site_description"></div>
         <div style="display: none;" id="favoriteId"></div>
-        <button style="display: none" id="favoriteButton" onclick="addToFavorites()">Ajouter aux favoris</button>
+        <button style="display: none" id="favoriteButton" onclick="addToWishlist()">Ajouter aux favoris</button>
+                <button style="display: none" id="wishlistId" onclick="addToWishlist()">Ajouter à la Wishlist</button>
     </div>      </div>
     </div>
 

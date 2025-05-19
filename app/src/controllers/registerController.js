@@ -2,8 +2,6 @@ import { queryDatabase } from "../db/dbConnect.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import { Session } from "inspector/promises";
-import { error } from "console";
 
 const get = (req, res) => {
   res.render("../views/register");
@@ -12,12 +10,12 @@ const get = (req, res) => {
 const createUser = async (req, res) => {
   const salt = crypto.randomBytes(25).toString("base64");
 
-  const username = req.body.username;
+  const usernamenew = req.body.username;
   const mail = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  if (!username || !mail || !password) {
+  if (!usernamenew || !mail || !password) {
     req.flash("error_msg", "Tous les champs doivent être remplis!");
     return res.redirect("/register");
   }
@@ -40,28 +38,55 @@ const createUser = async (req, res) => {
     .update(salt + req.body.password)
     .digest("hex");
 
-  const isName = await queryDatabase(
-    `SELECT username FROM t_user WHERE username LIKE ?`,
-    [username]
-  );
-  const isEmail = await queryDatabase(
-    `SELECT email FROM t_user WHERE email LIKE ?`,
-    [mail]
-  );
-
-  if (isName.length === 0 && isEmail.length === 0) {
-    await queryDatabase(
-      `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
-      [username, mail, salt, hashedPassword]
+  try {
+    // Check if the username or email already exists
+    const isName = await queryDatabase(
+      `SELECT username FROM t_user WHERE username = ?`,
+      [usernamenew]
+    );
+    const isEmail = await queryDatabase(
+      `SELECT email FROM t_user WHERE email = ?`,
+      [mail]
     );
 
-    // Store email in session for 2FA
-    req.session.pending2FA = { email: mail, username: username };
+    if (isName.length === 0 && isEmail.length === 0) {
+      const result = await queryDatabase(
+        `INSERT INTO t_user (username, email, salt, password, dateCreation) VALUES(?,?,?,?, NOW());`,
+        [usernamenew, mail, salt, hashedPassword]
+      );
 
-    // Redirect to 2FA page
-    return res.redirect("/2fa");
-  } else {
-    req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
+      // Retrieve the inserted user with insertId
+      const [newUser] = await queryDatabase(
+        "SELECT user_id, username, email FROM t_user WHERE user_id = ?",
+        [result.insertId]
+      );
+
+      console.log("New user created:", newUser);
+      const user_id = newUser.user_id;
+      const username = newUser.username;
+
+      const token = jwt.sign(
+        { user_id: newUser.user_id, username, email: mail },
+        process.env.SECRET_KEY,
+        { expiresIn: "2h" }
+      );
+
+      res.cookie("P_Dev", token, {
+        httpOnly: true,
+        maxAge: 2 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production",
+      });
+      req.session.user = { username, user_id };
+      // If 2FA is not enabled, redirect to homepage or a dashboard
+      req.flash("success_msg", "Compte créé avec succès!");
+      return res.redirect("/accueil"); // Redirect to homepage or user dashboard after registration
+    } else {
+      req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
+      return res.redirect("/register");
+    }
+  } catch (error) {
+    console.error("Error during user creation:", error);
+    req.flash("error_msg", "Une erreur s'est produite, veuillez réessayer.");
     return res.redirect("/register");
   }
 };

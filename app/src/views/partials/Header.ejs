@@ -1,8 +1,11 @@
-<head>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
 <header class="header">
   <link rel="stylesheet" href="../../../static/css/header.css" />
+  <style>
+    /* Assurez-vous que le menu est masqué par défaut */
+    #dropdown-menu {
+      display: none;
+    }
+  </style>
   <img
     src="/static/image/logo-ACD.png"
     alt="ACD Motorsport Logo"
@@ -20,10 +23,10 @@
   </nav>
   <% if (user) { %>
   <div id="profile-menu">
-    <button class="profile-circle" @click="toggleMenu">
+    <button class="profile-circle" onclick="showMenu()">
       <%= user.username[0] %>
     </button>
-    <div v-show="showMenu" class="dropdown-menu">
+    <div id="dropdown-menu" class="dropdown-menu">
       <a href="/profile">Mon Profil</a>
       <a href="/logout">Se Déconnecter</a>
     </div>
@@ -31,5 +34,14 @@
   <% } else { %>
   <a href="/login" class="connexion">Connexion</a>
   <% } %>
-  <script src="/static/js/header.js"></script>
+  <script>
+    const showMenu = () => {
+      const menu = document.getElementById("dropdown-menu");
+      if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "block"; // Affiche le menu
+      } else {
+        menu.style.display = "none"; // Masque le menu
+      }
+    };
+  </script>
 </header>

@@ -30,7 +30,7 @@
           <div class="photo-profil">
             <p>Photo de profile</p>
             <img
-              :src="imageProfile"
+              :src="'/infouser/photo/<%= user.user_id %>'"
               alt="User Profile Picture"
               id="profile-img"
             />
@@ -66,16 +66,6 @@
             <button id="cancel-btn-name" style="display: none">❌</button>
           </div>
 
-          <div class="line"></div>
-          <div class="mdp-user">
-            <p>Mot de passe</p>
-            <p>************</p>
-            <i
-              id="edit-btn"
-              class="fa-solid fa-pencil"
-              style="color: #ffffff; font-size: 24px"
-            ></i>
-          </div>
           <div class="line"></div>
         </div>
       </section>
@@ -182,7 +172,7 @@
         formData.append("profile_picture", selectedFile);
         formData.append("user_id", "<%= user.user_id %>"); // envoie l'ID utilisateur
 
-        fetch("/upload_profile_picture", {
+        fetch("/infouser/upload_profile_picture", {
           method: "POST",
           body: formData,
         })

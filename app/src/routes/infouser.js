@@ -1,6 +1,12 @@
 import express from "express";
 
-import { get, updateName } from "../controllers/infouserController.js"; // Assure-toi que updateName est bien exportée
+import {
+  get,
+  updateName,
+  uploadProfilePicture,
+  getProfilePicture,
+  upload,
+} from "../controllers/infouserController.js";
 
 const infouserRouter = express.Router();
 
@@ -9,5 +15,12 @@ infouserRouter.get("/", get);
 
 // Route API pour modifier le nom
 infouserRouter.post("/update-name", updateName);
+
+infouserRouter.post(
+  "/upload_profile_picture",
+  upload.single("profile_picture"),
+  uploadProfilePicture
+);
+infouserRouter.get("/photo/:id", getProfilePicture);
 
 export { infouserRouter };
