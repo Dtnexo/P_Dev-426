@@ -14,6 +14,6 @@ securitypageRouter.get("/", get);
 // Route API pour modifier le password
 securitypageRouter.post("/update-password", updatePassword);
 
-securitypageRouter.post("/security", update2FA);
+securitypageRouter.post("/update-2fa", update2FA);
 
 export { securitypageRouter };

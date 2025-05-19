@@ -25,12 +25,10 @@
           <a href="/forum" class="info">Forum</a>
         </div>
         <div class="infos-perso">
-          <div class="takeSpace">
-          </div>
+          <div class="takeSpace"></div>
           <h1>Securité</h1>
-          
+
           <div class="line"></div>
-          
 
           <div class="mdp-user">
             <p>Mot de passe</p>
@@ -53,7 +51,7 @@
           </div>
           <div class="line"></div>
           <!-- 2FA toggle section -->
-          <div class="2fa-toggle">
+          <div class="twofa-toggle">
             <p>Activer 2FA</p>
             <label class="switch">
               <input type="checkbox" id="enable-2fa" <%= user.has_2_fa ?
@@ -134,7 +132,7 @@
             const enable2FA = enable2FAToggle.checked;
             const userId = "<%= user.user_id %>"; // Use the current user's ID
 
-            fetch("/update-2fa", {
+            fetch("/security/update-2fa", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

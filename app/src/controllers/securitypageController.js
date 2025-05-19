@@ -57,6 +57,7 @@ const updatePassword = async (req, res) => {
 };
 
 const update2FA = async (req, res) => {
+  console.log("Requête reçue pour update2FA :", req.body);
   const { user_id, enable_2fa } = req.body;
 
   if (!user_id) {
