@@ -3,6 +3,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const data = window.chartDataFromServer;
   const user = window.userFromServer;
 
+  //fonction pour revenir au camembert des continent
+  async function camembertbackbutton() {
+    let response = await fetch(
+      "http://localhost:3003/api/continentWheel?user_id=" + user.user_id
+    );
+    const rawData = await response.json();
+    if (rawData.length == 0) {
+      return;
+    }
+    console.log(rawData);
+    (pieChart.data.labels = rawData.map((item) => item.continent)),
+      (pieChart.data.datasets[0].data = rawData.map(
+        (item) => item.nombre_sites
+      )),
+      pieChart.update();
+  }
+  window.camembertbackbutton = camembertbackbutton;
+
   if (!pieCanvas || !data) {
     console.error("Canvas ou données manquantes !");
     return;
