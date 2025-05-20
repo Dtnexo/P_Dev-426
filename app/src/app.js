@@ -14,6 +14,7 @@ import { queryDatabase } from "../src/db/dbConnect.js";
 import cors from "cors";
 
 import { infouserRouter } from "./routes/infouser.js";
+import { securitypageRouter } from "./routes/securitypage.js";
 
 import { twoFA } from "./routes/2fa.js";
 const app = express();
@@ -65,6 +66,7 @@ app.set("view engine", "ejs");
 // Déclaration des routes
 app.use("/accueil", homeRouter);
 app.use("/infouser", auth, infouserRouter);
+app.use("/security", auth, securitypageRouter);
 app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/register", registerRouter);
