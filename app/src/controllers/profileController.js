@@ -7,7 +7,6 @@ const get = async (req, res) => {
     const name = await queryDatabase(
       `SELECT username FROM t_user Where user_id='${req.session.user.user_id}'`
     );
-    console.log(name);
     req.session.user.username = name[0].username;
     const listFav = await queryDatabase(
       `SELECT * FROM t_avoir av JOIN t_sites si ON si.site_id = av.site_id JOIN t_wishlist fav ON fav.wishlist_id = av.liste_favoris_id WHERE fav.user_id = '${req.session.user.user_id}'`

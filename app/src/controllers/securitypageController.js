@@ -4,7 +4,8 @@ import { updateName } from "./infouserController.js";
 import crypto from "crypto";
 
 const get = (req, res) => {
-  console.log(req.session.user);
+  console.log("session :", JSON.stringify(req.session.user, null, 2));
+
   res.render("securitypage", { user: req.session.user || null });
 };
 
@@ -69,6 +70,14 @@ const update2FA = async (req, res) => {
       enable_2fa ? 1 : 0,
       user_id,
     ]);
+    if (req.session.user && req.session.user.user_id == user_id) {
+      req.session.user.has_2_fa = enable_2fa ? 1 : 0;
+      req.session.save((err) => {
+        if (err) {
+          console.error("Erreur lors de la sauvegarde de la session :", err);
+        }
+      });
+    }
     res.json({ success: true });
   } catch (err) {
     console.error("Error updating 2FA:", err);
