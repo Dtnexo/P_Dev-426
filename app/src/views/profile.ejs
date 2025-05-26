@@ -82,31 +82,98 @@
         margin-top: 40px;
         text-align: center;
       }
-      #map-area {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        position: relative; /* Ajout pour permettre le positionnement absolu des enfants */
-        padding: 15px;
-      }
+      /* Section carte */
+.map-section {
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
 
-      #switch-map-button {
-        position: absolute; /* Positionnement absolu */
-        top: 10px; /* Distance depuis le haut */
-        left: 10px; /* Distance depuis la gauche */
-        z-index: 1; /* Assurez-vous qu'il reste au-dessus de la carte */
-        padding: 5px 10px; /* Ajout de padding pour un meilleur rendu */
-        background-color: #2c54ce; /* Couleur de fond */
-        color: white; /* Couleur du texte */
-        border: none; /* Suppression des bordures */
-        border-radius: 5px; /* Coins arrondis */
-        cursor: pointer; /* Curseur pointeur */
-      }
+#map-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(44, 84, 206, 0.08);
+  padding: 24px 0 32px 0;
+  margin-bottom: 32px;
+}
 
-      #switch-map-button:hover {
-        background-color: #13255b; /* Couleur de fond au survol */
-      }
+#map {
+  width: 1036px;
+  height: 621px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(44, 84, 206, 0.10);
+  margin-bottom: 16px;
+  background: #e6eaf6;
+  position: relative;
+}
+
+.map-image {
+  max-width: 90%;
+  height: auto;
+  border: 2px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+#switch-map-button {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+  padding: 7px 18px;
+  background-color: #13255b;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(44, 84, 206, 0.08);
+  transition: background 0.2s;
+}
+
+#switch-map-button:hover {
+  background-color: #2e4999;
+}
+
+.maplibregl-popup {
+  max-width: 400px;
+  font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  max-height: 60px;
+}
+
+.maplibregl-popup-content {
+  max-width: 400px;
+  font: 13px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  padding: 14px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 12px rgba(44, 84, 206, 0.10);
+}
+
+.maplibregl-popup-content button {
+  border-radius: 6px;
+  background-color: #2c54ce;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.maplibregl-popup-content button:hover {
+  background-color: #13255b;
+}
       .carte-favoris, .carte-historique {
         display: flex;
         justify-content: space-between;
@@ -130,8 +197,8 @@
         height: 25px;
         width: 25px;
         padding-right: 20px;
-        transition: transform 0.3s ease, opacity 0.3s ease; /* Ajout de la transition */
-        transform-origin: center; /* Définit le centre comme origine de transformation */
+        transition: transform 0.3s ease, opacity 0.3s ease; 
+        transform-origin: center; 
       }
       .hisfav {
         display: flex;
@@ -141,21 +208,68 @@
       }
       .rotated {
         margin-top: 2%;
-        transform: scaleY(-1); /* Rotation de 180° */
+        transform: scaleY(-1); 
       }
-  .showFav, .showHist {
-    height: 200px;
-    width: 1036px;
-    align-items: normal;
-  }
-  .favoImage, .favoHist{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 1036px;
-    height: 25px;
-  }
+      .showFav, .showHist {
+        height: 200px;
+        width: 1036px;
+        align-items: normal;
+      }
+      .favoImage, .favoHist{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 1036px;
+        height: 25px;
+      }
 
+      /* Chart.js styles */
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+        .user-profile {
+          flex-direction: column;
+          align-items: center;
+        }
+        .img-prenom {
+          width: 100%;
+        }
+        .navigation-links {
+          position: static;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-top: 20px;
+        }
+        .info, .infperso {
+          padding: 10px;
+          width: auto;
+          margin: 5px;
+        }
+        #map {
+          width: 100%;
+          height: 400px;
+        }
+        .carte-favoris, .carte-historique {
+          flex-direction: column;
+          align-items: flex-start;
+          width: 100%;
+          padding: 15px;
+        }
+        .hisfav h2 {
+          font-size: 18px;
+        }
+        .hisfav img {
+          height: 20px;
+          width: 20px;
+        }
+      }
     </style>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -238,4 +352,4 @@
   <!-- Ton script -->
   <script src="/static/js/chart.js"></script>
   </body>    
-</html> 
+</html>

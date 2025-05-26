@@ -54,8 +54,14 @@ body {
 }
 
 .maplibregl-popup-content button {
-  border-radius: 10%;
-  background-color: #ffffff;
+  border-radius: 6px;
+  background-color: #2c54ce;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 /* Section d’intro */
