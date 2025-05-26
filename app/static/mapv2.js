@@ -29,48 +29,41 @@ const map = new maplibregl.Map({
   canvasContextAttributes: { antialias: true },
 });
 
-// Tente de récupérer la position utilisateur
-try {
-  const position = await getUserLocation();
-  const { latitude, longitude } = position.coords;
+// Immediately Invoked Async Function to get user position and center map
+(async () => {
+  try {
+    const position = await getUserLocation();
+    const { latitude, longitude } = position.coords;
 
-  // Recentrer la carte
-  map.setCenter([longitude, latitude]);
+    // Recentrer la carte
+    map.setCenter([longitude, latitude]);
 
-  // Optionnel : ajouter un marqueur sur la position de l'utilisateur
-  //new maplibregl.Marker().setLngLat([longitude, latitude]).addTo(map);
+    // Optionnel : ajouter un marqueur sur la position de l'utilisateur
+    // new maplibregl.Marker().setLngLat([longitude, latitude]).addTo(map);
 
-  console.log("Position utilisateur :", latitude, longitude);
-} catch (error) {
-  console.warn(error.message);
-}
+    console.log("Position utilisateur :", latitude, longitude);
+  } catch (error) {
+    console.warn(error.message);
+  }
+})();
 
-const pathToJson = "/static/sites.json";
 async function fetchAndDisplaySites() {
   try {
     const res = await fetch("http://localhost:3003/api/sites"); // Appelle l'API
     if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
-    let sites = await res.json();
+    const sites = await res.json();
 
     const features = sites.map((site) => ({
       type: "Feature",
       properties: {
         description:
-          "<div class='popup-text'>" +
-          "<strong>" +
-          site.nom +
-          "</strong>" +
-          site.description +
-          "</div>" +
-          "<button onclick='showMore(" +
-          site.site_id +
-          ")'>plus</button>",
+          `<div class='popup-text'><strong>${site.nom}</strong><br>${site.description}</div>` +
+          `<button onclick='showMore(${site.site_id})'>plus</button>`,
       },
-
       geometry: {
         type: "Point",
-        coordinates: [site.lon, site.lat], // Correction ici
+        coordinates: [site.lon, site.lat],
       },
     }));
 
@@ -78,14 +71,14 @@ async function fetchAndDisplaySites() {
     if (map.getSource("unescoSites")) {
       map.getSource("unescoSites").setData({
         type: "FeatureCollection",
-        features: features,
+        features,
       });
     } else {
       map.addSource("unescoSites", {
         type: "geojson",
         data: {
           type: "FeatureCollection",
-          features: features,
+          features,
         },
       });
 
@@ -104,8 +97,6 @@ async function fetchAndDisplaySites() {
   }
 }
 
-// The 'building' layer in the streets vector source contains building-height
-// data from OpenStreetMap.
 map.on("load", () => {
   fetchAndDisplaySites();
 });
@@ -114,47 +105,40 @@ map.on("click", "unescoSitesLayer", (e) => {
   const coordinates = e.features[0].geometry.coordinates.slice();
   const description = e.features[0].properties.description;
 
-  // Ensure that if the map is zoomed out such that multiple
-  // copies of the feature are visible, the popup appears
-  // over the copy being pointed to.
   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
   }
 
   new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
 });
+
 map.on("mouseenter", "unescoSitesLayer", () => {
   map.getCanvas().style.cursor = "pointer";
 });
-
-// Change it back to a pointer when it leaves.
 map.on("mouseleave", "unescoSitesLayer", () => {
   map.getCanvas().style.cursor = "";
 });
 
-// document
-//   .getElementById("switch-map-button")
-//   .addEventListener("click", switchMaps());
-
 function switchMaps() {
   if (map.getLayer("3d-buildings")) {
-    // remove 3d layer, set pitch to 90, lock rightclick
-    //console.log(map.getPitch());
     map.removeLayer("3d-buildings");
     map.setPitch(0);
     map.setMaxPitch(0);
     document.getElementById("switch-map-button").innerText = "3d";
   } else {
-    // add a 3d layer, unlock pitch and rightclcik
     map.setMaxPitch(80);
     map.setPitch(45);
     document.getElementById("switch-map-button").innerText = "2d";
-    const layers = map.getStyle().layers;
 
+    const layers = map.getStyle().layers;
     let labelLayerId;
-    for (let i = 0; i < layers.length; i++) {
-      if (layers[i].type === "symbol" && layers[i].layout["text-field"]) {
-        labelLayerId = layers[i].id;
+    for (const layer of layers) {
+      if (
+        layer.type === "symbol" &&
+        layer.layout &&
+        layer.layout["text-field"]
+      ) {
+        labelLayerId = layer.id;
         break;
       }
     }
@@ -166,115 +150,110 @@ function switchMaps() {
       });
     }
 
-    map.addLayer(
-      {
-        id: "3d-buildings",
-        source: "openmaptiles",
-        "source-layer": "building",
-        type: "fill-extrusion",
-        minzoom: 15,
-        filter: ["!=", ["get", "hide_3d"], true],
-        paint: {
-          "fill-extrusion-color": [
-            "interpolate",
-            ["linear"],
-            ["get", "render_height"],
-            0,
-            "lightgray",
-            200,
-            "royalblue",
-            400,
-            "lightblue",
-          ],
-          "fill-extrusion-height": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            15,
-            0,
-            16,
-            ["get", "render_height"],
-          ],
-          "fill-extrusion-base": [
-            "case",
-            [">=", ["get", "zoom"], 16],
-            ["get", "render_min_height"],
-            0,
-          ],
+    if (!map.getLayer("3d-buildings")) {
+      map.addLayer(
+        {
+          id: "3d-buildings",
+          source: "openmaptiles",
+          "source-layer": "building",
+          type: "fill-extrusion",
+          minzoom: 15,
+          filter: ["!=", ["get", "hide_3d"], true],
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "render_height"],
+              0,
+              "lightgray",
+              200,
+              "royalblue",
+              400,
+              "lightblue",
+            ],
+            "fill-extrusion-height": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              15,
+              0,
+              16,
+              ["get", "render_height"],
+            ],
+            "fill-extrusion-base": [
+              "case",
+              [">=", ["get", "zoom"], 16],
+              ["get", "render_min_height"],
+              0,
+            ],
+          },
         },
-      },
-      labelLayerId
-    );
+        labelLayerId
+      );
+    }
   }
 }
 
 async function showMore(id) {
-  // Récupérer les détails du site
-  const res = await fetch(`http://localhost:3003/api/site-details/` + id);
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-  let site_details = await res.json();
+  try {
+    const res = await fetch(`http://localhost:3003/api/site-details/${id}`);
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
-  // Sélectionner les éléments du DOM
-  const site_title = document.getElementById("site_title");
-  const site_description = document.getElementById("site_description");
-  const favoriteButton = document.getElementById("favoriteButton");
-  const favoriteId = document.getElementById("favoriteId");
-  const wishlistId = document.getElementById("wishlistId");
+    const site_details = await res.json();
 
-  // Vérifier les favoris pour désactiver le bouton si nécessaire
-  const favRes = await fetch("http://localhost:3003/api/favorites");
-  if (favRes.status == 401) {
-    window.location.replace("http://localhost:3003/login");
+    const site_title = document.getElementById("site_title");
+    const site_description = document.getElementById("site_description");
+    const historiqueButton = document.getElementById("historiqueButton");
+    const wishlistButton = document.getElementById("wishlistButton");
+    const wishlistId = document.getElementById("wishlistId");
+
+    // Show buttons
+    historiqueButton.style.display = "inline-block";
+    wishlistButton.style.display = "inline-block";
+    wishlistButton.disabled = false;
+    wishlistButton.textContent = "Ajouter à la Wishlist";
+
+    // Update site details
+    if (wishlistId) wishlistId.textContent = site_details[0].site_id;
+    site_title.textContent = site_details[0].nom;
+    site_description.textContent = site_details[0].description;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des détails du site:", error);
   }
-  if (!favRes.ok) throw new Error(`Erreur HTTP: ${favRes.status}`);
-  let favSites = await favRes.json();
-
-  // Vérifier si le site est déjà dans les favoris
-  let buttonDisabled = false; // Par défaut, le bouton est activé
-  for (let site of favSites) {
-    if (site.titre == id) {
-      buttonDisabled = true; // Site trouvé dans les favoris, désactiver le bouton
-      break;
-    }
-  }
-
-  // Mettre à jour le bouton selon l'état
-  favoriteButton.textContent = buttonDisabled
-    ? "Déjà dans les favoris"
-    : "Ajouter aux favoris";
-  favoriteButton.disabled = buttonDisabled;
-  favoriteButton.style.display = "block";
-  wishlistId.style.display = "block";
-
-  // Effacer l'ancien contenu
-  site_title.textContent = "";
-  site_description.textContent = "";
-  favoriteId.textContent = "";
-
-  // Mettre à jour avec les nouveaux détails
-  site_title.textContent = site_details[0].nom;
-  site_description.textContent = site_details[0].description;
-  favoriteId.textContent = site_details[0].site_id;
 }
 
-async function countrySearch(country) {
-  const res = await fetch(
-    "http://localhost:3003/api/country-search?country=" + country
-  );
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+window.showMore = showMore;
 
-  let sites = await res.json();
-  updateSites(sites);
+async function countrySearch(country) {
+  try {
+    const res = await fetch(
+      `http://localhost:3003/api/country-search?country=${encodeURIComponent(
+        country
+      )}`
+    );
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+    const sites = await res.json();
+    updateSites(sites);
+  } catch (error) {
+    console.error("Erreur lors de la recherche par pays:", error);
+  }
 }
 
 async function regionSearch(region) {
-  const res = await fetch(
-    "http://localhost:3003/api/region-search?region=" + region
-  );
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+  try {
+    const res = await fetch(
+      `http://localhost:3003/api/region-search?region=${encodeURIComponent(
+        region
+      )}`
+    );
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
-  let sites = await res.json();
-  updateSites(sites);
+    const sites = await res.json();
+    updateSites(sites);
+  } catch (error) {
+    console.error("Erreur lors de la recherche par région:", error);
+  }
 }
 let isWishlistShown = false;
 async function showFavorites() {
@@ -292,51 +271,32 @@ async function showFavorites() {
   let sites = await res.json();
   updateSites(sites);
 }
-let isHistoriqueShown = false;
-async function showHistorique() {
-  // si on clique une deuxieme fois sur le bouton historique on montre tout les sites
-  if (isHistoriqueShown) {
-    fetchAndDisplaySites();
-  }
-  isHistoriqueShown = !isHistoriqueShown;
-  const res = await fetch("http://localhost:3003/api/historique");
-  if (res.status == 401) {
-    window.location.replace("http://localhost:3003/login");
-  }
-  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
-
-  let sites = await res.json();
-  updateSites(sites);
-}
 
 function updateSites(sites) {
   const features = sites.map((site) => ({
     type: "Feature",
     properties: {
       description:
-        "<strong>" +
-        site.nom +
-        "</strong>" +
-        site.description +
-        "<button onclick='showMore(" +
-        site.site_id +
-        ")'>plus</button>",
+        `<strong>${site.nom}</strong><br>${site.description}` +
+        `<button onclick='showMore(${site.site_id})'>plus</button>`,
     },
-
     geometry: {
       type: "Point",
-      coordinates: [site.lon, site.lat], // Correction ici
+      coordinates: [site.lon, site.lat],
     },
   }));
-  map.removeLayer("unescoSitesLayer");
-  map.removeSource("unescoSites");
+
+  if (map.getLayer("unescoSitesLayer")) map.removeLayer("unescoSitesLayer");
+  if (map.getSource("unescoSites")) map.removeSource("unescoSites");
+
   map.addSource("unescoSites", {
     type: "geojson",
     data: {
       type: "FeatureCollection",
-      features: features,
+      features,
     },
   });
+
   map.addLayer({
     id: "unescoSitesLayer",
     type: "circle",
@@ -349,13 +309,13 @@ function updateSites(sites) {
 }
 
 async function addToWishlist() {
-  const wishlistId = document.getElementById("wishlistId");
-  if (!wishlistId) {
+  const wishlistIdElem = document.getElementById("wishlistId");
+  if (!wishlistIdElem) {
     console.error("Élément wishlistId introuvable !");
     return;
   }
 
-  const site_id = wishlistId.textContent.trim();
+  const site_id = wishlistIdElem.textContent.trim();
   if (!site_id) {
     console.error("L'ID du site est vide !");
     return;
@@ -367,17 +327,18 @@ async function addToWishlist() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ site_id }), // Send the site_id in the request body
+      credentials: "include",
+      body: JSON.stringify({ site_id }),
     });
 
-    if (!res.ok) {
-      throw new Error(`Erreur HTTP: ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
     if (res.status === 200) {
       const wishlistButton = document.getElementById("wishlistButton");
-      wishlistButton.textContent = "Déjà dans les favoris";
-      wishlistButton.disabled = true;
+      if (wishlistButton) {
+        wishlistButton.textContent = "Déjà dans la Wishlist";
+        wishlistButton.disabled = true;
+      }
       console.log("Site ajouté aux favoris avec succès !");
     }
   } catch (error) {
@@ -391,44 +352,40 @@ window.showFavorites = showFavorites;
 window.showHistorique = showHistorique;
 window.addToWishlist = addToWishlist;
 
-async function fetchAndDisplayhistorique() {
+async function fetchAndDisplayHistorique() {
   try {
-    const res = await fetch("http://localhost:3003/api/sites-historique"); // Appelle l'API
-
+    const res = await fetch("http://localhost:3003/api/sites-historique");
     if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
 
-    let sites = await res.json();
-
+    const sites = await res.json();
     updateSites(sites);
   } catch (error) {
-    console.error("Erreur lors de la récupération des sites:", error);
+    console.error("Erreur lors de la récupération de l'historique :", error);
   }
 }
 
-//recherche par pays
-//note: recherche predictive:
-// mettre <input onInput="func()"
-if (document.getElementById("country-search")) {
-  document
-    .getElementById("country-search")
-    .addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        let country = this.value;
-        countrySearch(country);
-      }
-    });
-}
+// Event listeners for search forms (if you have search inputs)
+document
+  .getElementById("countrySearchForm")
+  ?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const country = e.target.elements["countryInput"].value;
+    countrySearch(country);
+  });
 
-//recherche par region
-//note: recherche predictive:
-// mettre <input onInput="func()"
-if (document.getElementById("region-search")) {
-  document
-    .getElementById("region-search")
-    .addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        let region = this.value;
-        regionSearch(region);
-      }
-    });
-}
+document.getElementById("regionSearchForm")?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const region = e.target.elements["regionInput"].value;
+  regionSearch(region);
+});
+
+// Export functions if using modules (optional)
+export {
+  showMore,
+  switchMaps,
+  addToWishlist,
+  showFavorites,
+  fetchAndDisplayHistorique,
+  countrySearch,
+  regionSearch,
+};

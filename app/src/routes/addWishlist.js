@@ -3,32 +3,40 @@ import { queryDatabase } from "../db/dbConnect.js";
 
 const wishlistRouter = express.Router();
 
-wishlistRouter.post("/", async (req, res) => {
+import jwt from "jsonwebtoken";
+
+// Middleware to verify token and attach user info to request
+function authenticateToken(req, res, next) {
+  const token = req.cookies?.P_Dev;
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: No token provided" });
+  }
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Forbidden: Invalid token" });
+    }
+    req.user = user; // Attach decoded token payload to request
+    next();
+  });
+}
+
+// Use this middleware in your wishlistRouter POST handler
+
+wishlistRouter.post("/", authenticateToken, async (req, res) => {
   const { site_id } = req.body;
 
   if (!site_id) {
     return res.status(400).json({ error: "site_id is required" });
   }
 
+  const userId = req.user.user_id; // from token
+
   try {
-    // Example: Fetch `liste_favoris_id` based on the user (e.g., from session or token)
-    const userId = req.session.user_id; // Assuming you use sessions
-    console.log("User ID:", userId);
-    const result = await queryDatabase(
-      "SELECT wishlist_id FROM t_wishlist WHERE user_id = ?",
-      [userId]
-    );
-
-    if (result.length === 0) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const liste_favoris_id = result[0].liste_favoris_id;
-
-    // Insert into the wishlist table
     await queryDatabase(
-      "INSERT INTO t_avoir (site_id, liste_favoris_id) VALUES (?, ?)",
-      [site_id, liste_favoris_id]
+      "INSERT INTO t_wishlist (user_id, site_id) VALUES (?, ?)",
+      [userId, site_id]
     );
 
     res.status(200).json({ message: "Site added to wishlist" });
