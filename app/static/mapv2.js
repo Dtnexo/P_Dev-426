@@ -276,8 +276,13 @@ async function regionSearch(region) {
   let sites = await res.json();
   updateSites(sites);
 }
-
+let isWishlistShown = false;
 async function showFavorites() {
+  // si on clique une deuxieme fois sur le bouton wishlist on montre tout les sites
+  if (isWishlistShown) {
+    fetchAndDisplaySites();
+  }
+  isWishlistShown = !isWishlistShown;
   const res = await fetch("http://localhost:3003/api/favorites");
   if (res.status == 401) {
     window.location.replace("http://localhost:3003/login");
@@ -287,8 +292,13 @@ async function showFavorites() {
   let sites = await res.json();
   updateSites(sites);
 }
-
+let isHistoriqueShown = false;
 async function showHistorique() {
+  // si on clique une deuxieme fois sur le bouton historique on montre tout les sites
+  if (isHistoriqueShown) {
+    fetchAndDisplaySites();
+  }
+  isHistoriqueShown = !isHistoriqueShown;
   const res = await fetch("http://localhost:3003/api/historique");
   if (res.status == 401) {
     window.location.replace("http://localhost:3003/login");
