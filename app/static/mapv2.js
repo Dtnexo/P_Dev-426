@@ -57,10 +57,12 @@ async function fetchAndDisplaySites() {
       type: "Feature",
       properties: {
         description:
+          "<div class='popup-text'>" +
           "<strong>" +
           site.nom +
           "</strong>" +
           site.description +
+          "</div>" +
           "<button onclick='showMore(" +
           site.site_id +
           ")'>plus</button>",

@@ -9,6 +9,10 @@ const get = async (req, res) => {
     const user_id = await queryDatabase(
       `SELECT user_id FROM t_user Where username='${req.session.user.username}'`
     );
+    req.session.user.username = name[0].username;
+    const listFav = await queryDatabase(
+      `SELECT * FROM t_avoir av JOIN t_sites si ON si.site_id = av.site_id JOIN t_wishlist fav ON fav.wishlist_id = av.liste_favoris_id WHERE fav.user_id = '${req.session.user.user_id}'`
+    );
     historique = await queryDatabase(
       `SELECT * FROM t_contenir co JOIN t_sites si ON si.site_id = co.site_id JOIN t_historique hist ON hist.historique_id = co.historique_id WHERE hist.user_id = '${req.session.user.user_id}'`
     );

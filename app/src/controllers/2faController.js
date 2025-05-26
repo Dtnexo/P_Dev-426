@@ -82,7 +82,7 @@ export const verifyCode = (req, res) => {
     return res.redirect("/login");
   }
 
-  const { email, username, user_id } = req.session.pending2FA;
+  const { email, username, user_id, has_2_fa } = req.session.pending2FA;
 
   const storedOTP = otpStorage[email];
   const isValid =
@@ -104,7 +104,7 @@ export const verifyCode = (req, res) => {
       secure: process.env.NODE_ENV === "production",
     });
 
-    req.session.user = { username, user_id };
+    req.session.user = { username, user_id, has_2_fa };
     return res.redirect("/accueil");
   } else {
     req.flash("error_msg", "Code invalide ou expiré.");

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mes données</title>
+    <link rel="stylesheet" href="../../static/css/securitypage.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <%- include('partials/Header', { user: user }) %>
+      <section class="user-profile">
+        <div class="navigation-links">
+          <a href="/profile" class="info profile">Mon profil</a>
+          <a href="/infouser" class="infperso"
+            >Informations <br />
+            personnelles</a
+          >
+          <a href="/security" class="security">Sécurité</a>
+          <a href="/forum" class="info">Forum</a>
+        </div>
+        <div class="infos-perso">
+          <div class="takeSpace"></div>
+          <h1>Securité</h1>
+
+          <div class="line"></div>
+
+          <div class="mdp-user">
+            <p>Mot de passe</p>
+            <p>************</p>
+            <i
+              id="edit-btn-password"
+              class="fa-solid fa-pencil"
+              style="color: #ffffff; font-size: 24px; cursor: pointer"
+            ></i>
+
+            <div id="password-form" style="display: none; margin-top: 10px">
+              <input
+                type="password"
+                id="new-password"
+                placeholder="Nouveau mot de passe"
+              />
+              <button id="save-password-btn">✅</button>
+              <button id="cancel-password-btn">❌</button>
+            </div>
+          </div>
+          <div class="line"></div>
+          <!-- 2FA toggle section -->
+          <div class="twofa-toggle">
+            <p>Activer 2FA</p>
+            <label class="switch">
+              <input type="checkbox" id="enable-2fa" <%= Number(user.has_2_fa)
+              === 1 ? "checked" : "" %> />
+
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="line"></div>
+        </div>
+      </section>
+      <div class="space-black"></div>
+      <%- include('partials/Footer')%>
+    </div>
+    <!-- Import App -->
+    <script src="/static/js/main.js"></script>
+    <!-- Mount App -->
+    <script>
+      const mountedApp = app.mount("#app");
+    </script>
+    <script>
+      const editBtnPassword = document.getElementById("edit-btn-password");
+      const passwordForm = document.getElementById("password-form");
+      const savePasswordBtn = document.getElementById("save-password-btn");
+      const cancelPasswordBtn = document.getElementById("cancel-password-btn");
+
+      editBtnPassword.addEventListener("click", () => {
+        passwordForm.style.display = "block";
+      });
+
+      cancelPasswordBtn.addEventListener("click", () => {
+        document.getElementById("new-password").value = "";
+        passwordForm.style.display = "none";
+      });
+
+      savePasswordBtn.addEventListener("click", async () => {
+        const newPassword = document
+          .getElementById("new-password")
+          .value.trim();
+
+        if (newPassword.length < 6) {
+          alert("Le mot de passe doit contenir au moins 6 caractères.");
+          return;
+        }
+
+        try {
+          const res = await fetch("/security/update-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: "<%= user.user_id %>",
+              password: newPassword,
+            }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            alert("Mot de passe modifié avec succès !");
+            document.getElementById("new-password").value = "";
+            passwordForm.style.display = "none";
+          } else {
+            alert("Erreur : " + (data.error || "inconnue"));
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Erreur de connexion au serveur.");
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const enable2FAToggle = document.getElementById("enable-2fa");
+        if (enable2FAToggle) {
+          enable2FAToggle.addEventListener("change", () => {
+            const enable2FA = enable2FAToggle.checked;
+            const userId = "<%= user.user_id %>"; // Use the current user's ID
+
+            fetch("/security/update-2fa", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userId,
+                enable_2fa: enable2FA, // Send the updated 2FA setting
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  alert(
+                    `2FA ${enable2FA ? "activé" : "désactivé"} avec succès !`
+                  );
+                } else {
+                  alert("Erreur lors de la mise à jour de 2FA.");
+                  enable2FAToggle.checked = !enable2FA; // Reset the toggle if failed
+                }
+              })
+              .catch((err) => {
+                console.error("Erreur:", err);
+                alert("Erreur de connexion.");
+                enable2FAToggle.checked = !enable2FA; // Reset the toggle if failed
+              });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
