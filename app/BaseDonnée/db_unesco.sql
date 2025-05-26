@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : lun. 05 mai 2025 à 11:10
+-- Généré le : lun. 26 mai 2025 à 10:59
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : db_unesco
+-- Base de données : `db_unesco`
 --
 
 -- --------------------------------------------------------
@@ -26,9 +26,6 @@ SET time_zone = "+00:00";
 --
 -- Structure de la table `t_avoir`
 --
-Create database db_unesco;
-
-Use db_unesco;
 
 CREATE TABLE `t_avoir` (
   `liste_favoris_id` int NOT NULL,
@@ -54,14 +51,13 @@ CREATE TABLE `t_contenir` (
 
 CREATE TABLE `t_historique` (
   `historique_id` int NOT NULL,
-  `siteConsulte` varchar(256) DEFAULT NULL,
+  `site_id` int DEFAULT NULL,
   `user_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
 --
-
 -- Structure de la table `t_liste_favoris`
 --
 
@@ -1257,17 +1253,18 @@ CREATE TABLE `t_user` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   `salt` varchar(50) NOT NULL,
-  `photoProfil` MEDIUMBLOB,
+  `photoProfil` mediumblob,
   `dateCreation` datetime DEFAULT NULL,
-  `has_2_fa` BOOLEAN NOT NULL DEFAULT false
+  `has_2_fa` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `t_user`
 --
 
-INSERT INTO `t_user` (`user_id`, `username`, `email`, `password`, `salt`, `photoProfil`, `dateCreation`) VALUES
-(3, 'Mathieu', 'mathieu.bamert08@gmail.com', '6acb15d2be6ce0ceca197ae4f849147c63b3083e84c01a7e26cc553e4aec89c7', 'XQMG1BWHUTr+UHqGUPmKZWlFg4cqNO8uxw==', NULL, '2025-04-28 10:51:07');
+INSERT INTO `t_user` (`user_id`, `username`, `email`, `password`, `salt`, `photoProfil`, `dateCreation`, `has_2_fa`) VALUES
+(3, 'Mathieu', 'mathieu.bamert08@gmail.com', '6acb15d2be6ce0ceca197ae4f849147c63b3083e84c01a7e26cc553e4aec89c7', 'XQMG1BWHUTr+UHqGUPmKZWlFg4cqNO8uxw==', NULL, '2025-04-28 10:51:07', 0),
+(4, 'etml', 'etml@etml.com', 'efc3dda6d7d2b533dcfef323d2132ea20ed6ce9ba20e71fa2d2c194d3e869340', 'WXaI110naLyalW/MUEAQ62r+4+AUt3x+KQ==', NULL, '2025-05-26 10:55:51', 0);
 
 -- --------------------------------------------------------
 
@@ -1291,6 +1288,7 @@ CREATE TABLE `t_wishlist` (
 ALTER TABLE `t_avoir`
   ADD PRIMARY KEY (`liste_favoris_id`,`site_id`),
   ADD KEY `site_id` (`site_id`);
+
 --
 -- Index pour la table `t_contenir`
 --
@@ -1360,7 +1358,7 @@ ALTER TABLE `t_publication`
 -- AUTO_INCREMENT pour la table `t_user`
 --
 ALTER TABLE `t_user`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `t_wishlist`
