@@ -1,5 +1,35 @@
 # P_Dev-426
 
+## Démarrage avec Docker
+
+Utilisez le fichier `docker-compose.yml` pour lancer le projet.
+
+### Commande :
+
+```bash
+docker-compose up -d
+```
+Cette commande va démarrer les services définis dans le fichier docker-compose.yml en mode détaché.
+
+Remarque :
+Assurez-vous d’être positionné dans le dossier où se trouve le fichier docker-compose.yml avant d’exécuter la commande.
+
+---
+
+## Base de Données
+
+Vous trouverez la base de données à l’emplacement suivant : `\app\BaseDonnée\db_unesco.sql`.
+
+
+Vous pouvez ensuite l’ouvrir et la gérer à l’aide de votre gestionnaire de base de données préféré, comme :
+
+- **DBeaver**
+- **phpMyAdmin**
+- **MySQL Workbench**
+- ou tout autre outil compatible.
+
+---
+
 ## démarrer l'application
 
 executer ces commandes
