@@ -21,6 +21,12 @@ SET time_zone = "+00:00";
 -- Base de données : `db_unesco`
 --
 
+-- Création de la base de données `db_unesco`
+CREATE DATABASE IF NOT EXISTS `db_unesco` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Utilisation de la base de données `db_unesco`
+USE db_unesco;
+
 -- --------------------------------------------------------
 
 --
