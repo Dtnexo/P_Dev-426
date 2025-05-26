@@ -79,7 +79,7 @@ const createUser = async (req, res) => {
       req.session.user = { username, user_id };
       // If 2FA is not enabled, redirect to homepage or a dashboard
       req.flash("success_msg", "Compte créé avec succès!");
-      return res.redirect("/accueil"); // Redirect to homepage or user dashboard after registration
+      return res.redirect("/login"); // Redirect to homepage or user dashboard after registration
     } else {
       req.flash("error_msg", "Le prénom ou l'email est déjà utilisé!");
       return res.redirect("/register");

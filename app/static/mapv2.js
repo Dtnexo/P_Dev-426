@@ -369,6 +369,20 @@ window.showMore = showMore;
 window.showFavorites = showFavorites;
 window.addToWishlist = addToWishlist;
 
+async function fetchAndDisplayhistorique() {
+  try {
+    const res = await fetch("http://localhost:3003/api/sites-historique"); // Appelle l'API
+
+    if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+    let sites = await res.json();
+
+    updateSites(sites);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sites:", error);
+  }
+}
+
 //recherche par pays
 //note: recherche predictive:
 // mettre <input onInput="func()"

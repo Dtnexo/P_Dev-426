@@ -149,6 +149,50 @@ app.get("/api/addToFavorites", auth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+//todo finir le cambertert: lier les donnnées de la route au frontend
+//route pour le camembert
+app.get("/api/continentWheel", async (req, res) => {
+  try {
+    const userId = req.query.user_id;
+    if (!userId) {
+      return res.status(400).json({ error: "user_id is required" });
+    }
+    const query = `
+      SELECT s.continent, COUNT(*) AS nombre_sites
+      FROM t_historique lf
+      JOIN t_sites s ON lf.site_id = s.site_id
+      WHERE lf.user_id = ?
+      GROUP BY s.continent;
+    `;
+
+    const sites = await queryDatabase(query, [userId]);
+    res.json(sites);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/countryWheel", async (req, res) => {
+  try {
+    const userId = req.query.user_id;
+    const continent = req.query.continent;
+    if (!userId) {
+      return res.status(400).json({ error: "user_id is required" });
+    }
+    const query = `
+      SELECT s.states, COUNT(*) AS nombre_sites
+      FROM t_historique lf
+      JOIN t_sites s ON lf.site_id = s.site_id
+      WHERE lf.user_id = ? AND s.continent = ?
+      GROUP BY s.states;
+    `;
+
+    const sites = await queryDatabase(query, [userId, continent]);
+    res.json(sites);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 // On place le code a la fin, car la requette passera d'abord par les autres route, et si aucune ne correspond la route n'est pas trouvé donc 404
