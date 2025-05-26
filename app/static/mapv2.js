@@ -288,6 +288,17 @@ async function showFavorites() {
   updateSites(sites);
 }
 
+async function showHistorique() {
+  const res = await fetch("http://localhost:3003/api/historique");
+  if (res.status == 401) {
+    window.location.replace("http://localhost:3003/login");
+  }
+  if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+
+  let sites = await res.json();
+  updateSites(sites);
+}
+
 function updateSites(sites) {
   const features = sites.map((site) => ({
     type: "Feature",
@@ -367,6 +378,7 @@ async function addToWishlist() {
 window.switchMaps = switchMaps;
 window.showMore = showMore;
 window.showFavorites = showFavorites;
+window.showHistorique = showHistorique;
 window.addToWishlist = addToWishlist;
 
 async function fetchAndDisplayhistorique() {

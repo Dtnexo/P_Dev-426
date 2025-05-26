@@ -124,7 +124,20 @@ app.get("/api/favorites", auth, async (req, res) => {
   try {
     const userID = req.session.user.user_id;
     const sites = await queryDatabase(
-      "SELECT * FROM t_avoir av JOIN t_sites si ON si.site_id = av.site_id JOIN t_wishlist fav ON fav.wishlist_id = av.liste_favoris_id WHERE fav.user_id = " +
+      "SELECT * FROM t_sites sites JOIN t_wishlist wl ON wl.site_id = sites.site_id WHERE wl.user_id = " +
+        userID
+    );
+    res.json(sites); // Renvoie le JSON au client
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/historique", auth, async (req, res) => {
+  try {
+    const userID = req.session.user.user_id;
+    const sites = await queryDatabase(
+      "SELECT * FROM t_sites sites JOIN t_historique hi ON hi.site_id = sites.site_id WHERE hi.user_id = " +
         userID
     );
     res.json(sites); // Renvoie le JSON au client
